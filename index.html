@@ -2250,68 +2250,124 @@
             color: var(--secondary-text-color);
         }
 
-        /* Exit Popup */
-        .exit-popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
+    
+        /* ----------------------------------------------------------- */
+        /* VIP PROFESSIONAL SERVICES & ABOUT STYLES (ENGLISH VERSION)  */
+        /* ----------------------------------------------------------- */
+        
+        .services-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            display: none; /* Hidden by default */
-        }
-        .exit-box {
-            background-color: var(--white);
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            max-width: 400px;
-            width: 90%;
-        }
-        .exit-box h3 {
-            color: var(--dark-blue);
-            margin-top: 0;
-            font-size: 1.8em;
-            margin-bottom: 15px;
-        }
-        .exit-box p {
-            color: var(--text-color);
-            margin-bottom: 25px;
-            font-size: 1.1em;
-        }
-        .exit-btns {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-        .exit-btns button {
-            padding: 12px 25px;
-            font-size: 1.1em;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .exit-stay {
-            background-color: var(--primary-blue);
-            color: var(--white);
-        }
-        .exit-stay:hover {
-            background-color: var(--dark-blue);
-        }
-        .exit-leave {
-            background-color: var(--light-gray);
-            color: var(--danger-color);
-            border: 1px solid var(--danger-color);
-        }
-        .exit-leave:hover {
-            background-color: #fce4e4;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 40px;
+            padding-bottom: 60px;
         }
 
+        .project-horizontal-card {
+            display: flex;
+            align-items: stretch;
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border: 1px solid #f0f0f0;
+            transition: all 0.4s ease;
+        }
+
+        .project-horizontal-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+        }
+
+        .project-horizontal-card img {
+            width: 45%;
+            min-height: 350px;
+            object-fit: cover;
+        }
+
+        .project-horizontal-info {
+            padding: 40px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .project-horizontal-info .tag {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+            width: fit-content;
+            margin-bottom: 15px;
+        }
+
+        .project-horizontal-info h3 {
+            font-size: 2rem;
+            color: var(--dark-blue);
+            margin: 0 0 15px 0;
+        }
+
+        .project-horizontal-info p {
+            color: var(--secondary-text-color);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .ceo-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f9fcff 100%);
+            border-radius: 25px;
+            padding: 50px;
+            display: flex;
+            gap: 50px;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 50px;
+            margin-top: 30px;
+        }
+
+        .ceo-img-wrap {
+            flex: 0 0 350px;
+        }
+
+        .ceo-img-wrap img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 5px solid #fff;
+        }
+
+        .ceo-content h2 {
+            font-size: 2.5rem;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+        }
+
+        .ceo-content p {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* Mobile Adjustments for Services & About */
+        @media (max-width: 992px) {
+            .project-horizontal-card, .ceo-card { 
+                flex-direction: column; 
+                padding: 20px; 
+            }
+            .project-horizontal-card img, .ceo-img-wrap { 
+                width: 100%; 
+                min-height: 250px; 
+                flex: unset; 
+            }
+            .ceo-card {
+                text-align: center;
+            }
+        }
 
         /* Responsive Design */
         @media (max-width: 992px) {
@@ -2476,11 +2532,96 @@
                 font-size: 1.8em;
             }
         }
+        
+
+        /* MOBILE HAMBURGER MENU */
+        .hamburger-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            width: 40px; height: 40px;
+            background: none; border: none;
+            cursor: pointer; padding: 6px;
+            border-radius: 8px;
+            transition: background .2s;
+            z-index: 1001;
+        }
+        .hamburger-btn:hover { background: var(--light-blue); }
+        .hamburger-btn span {
+            display: block; width: 22px; height: 2.5px;
+            background: var(--dark-blue); border-radius: 2px;
+            transition: all .3s cubic-bezier(.22,1,.36,1);
+        }
+        .hamburger-btn.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .hamburger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger-btn.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+ 
+        /* SLIDE-IN NAV PANEL */
+        .mobile-nav-panel {
+            position: fixed; top: 0; right: -100%; width: 78%; max-width: 300px;
+            height: 100vh; background: white; z-index: 1200;
+            box-shadow: -8px 0 40px rgba(0,0,0,0.18);
+            transition: right .4s cubic-bezier(.22,1,.36,1);
+            display: flex; flex-direction: column;
+            overflow-y: auto;
+        }
+        .mobile-nav-panel.open { right: 0; }
+ 
+        .mnp-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 20px;
+            background: linear-gradient(135deg, var(--dark-blue), #1565C0);
+            flex-shrink: 0;
+        }
+        .mnp-logo { display: flex; align-items: center; gap: 10px; }
+        .mnp-logo img { width: 36px; height: 36px; border-radius: 50%; object-fit: contain; background: white; padding: 2px; }
+        .mnp-logo span { color: white; font-weight: 800; font-size: 15px; }
+        .mnp-close {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: rgba(255,255,255,.15); border: none;
+            color: white; font-size: 18px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .2s;
+        }
+        .mnp-close:hover { background: rgba(255,255,255,.3); }
+ 
+        .mnp-links { padding: 12px 0; flex: 1; }
+        .mnp-link {
+            display: flex; align-items: center; gap: 14px;
+            padding: 14px 22px; color: var(--text-color);
+            font-size: 15px; font-weight: 600; text-decoration: none;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background .15s, color .15s;
+        }
+        .mnp-link:hover { background: var(--light-blue); color: var(--primary-blue); }
+        .mnp-link .mnp-icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+ 
+        .mnp-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #eee;
+            background: #f9f9f9;
+            flex-shrink: 0;
+        }
+        .mnp-contact-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; color: #555; }
+        .mnp-contact-row a { color: var(--primary-blue); font-weight: 700; text-decoration: none; }
+ 
+        .mob-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,.45);
+            z-index: 1100; opacity: 0; visibility: hidden;
+            transition: opacity .3s, visibility .3s;
+        }
+        .mob-overlay.open { opacity: 1; visibility: visible; }
+ 
+        @media (max-width: 992px) {
+            .hamburger-btn { display: flex; }
+        }
+
     </style>
 </head>
 <body>
-<style>
-    <style>
+ <style>
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap');
 
 :root {
@@ -2803,27 +2944,6 @@
 .short-desc { font-size:12px; color:#888; margin:0; }
 .more-text { max-height:0; opacity:0; overflow:hidden; transition:.4s; font-size:12px; color:#1565c0; margin-top:10px; }
 
-/* ════ EXIT POPUP ════ */
-#exitPopup { display:none; position:fixed; inset:0; z-index:99999;
-  background:rgba(0,0,0,.6); backdrop-filter:blur(5px);
-  justify-content:center; align-items:center; }
-#exitPopup.show { display:flex; animation:fadeIn .3s ease; }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-.exit-box { background:#fff; border-radius:20px; padding:40px 36px; max-width:420px;
-  width:90%; text-align:center; box-shadow:0 24px 60px rgba(0,0,0,.3);
-  animation:popIn .35s cubic-bezier(.22,1,.36,1); }
-@keyframes popIn { from{opacity:0;transform:scale(.85) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
-.exit-box .exit-icon { font-size:52px; margin-bottom:14px; }
-.exit-box h2 { font-size:1.5rem; font-weight:700; color:#111; margin:0 0 8px; }
-.exit-box p  { color:#666; font-size:.95rem; margin:0 0 28px; }
-.exit-btns { display:flex; gap:14px; justify-content:center; }
-.btn-stay { background:#1565c0; color:#fff; border:none; padding:12px 32px;
-  border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; transition:all .25s; flex:1; }
-.btn-stay:hover { background:#0a2040; transform:translateY(-2px); }
-.btn-exit-real { background:#ef5350; color:#fff; border:none; padding:12px 32px;
-  border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; transition:all .25s; flex:1; }
-.btn-exit-real:hover { background:#c62828; transform:translateY(-2px); }
-
 /* ════ ANIMATIONS ════ */
 @keyframes imgFloat {
   0%,100%{ transform:translateY(0) scale(1); }
@@ -2858,28 +2978,20 @@
   .promo-slide-title { font-size:1.3rem; }
   .promo-dots { right:16px; }
 }
-</style>
 
-<!-- EXIT POPUP -->
-<div id="exitPopup">
-  <div class="exit-box">
-    <div class="exit-icon">😊</div>
-    <h2>Leaving Already?</h2>
-    <p>Are you sure you want to exit AL Noor Solar Energy?</p>
-    <div class="exit-btns">
-      <button class="btn-stay"      onclick="closeExitPopup()">Stay</button>
-      <button class="btn-exit-real" onclick="doExit()">Exit</button>
-    </div>
-  </div>
-</div>
+</style>
 
 <div id="app-wrapper">
 
   <!-- Header Top -->
   <div class="header-top">
-    <span><i class="fas fa-map-marker-alt"></i> Masoom Shah Road, Near Raheem Chock, Multan</span>
-    <span><i class="fas fa-phone"></i> Call us: <a href="tel:03040666937">03040666937</a></span>
-    <span><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection#541518741a3b3b2633263b21247a243f143339353d387a373b39">AL <span class="__cf_email__" data-cfemail="95dbfafae7f2e7fae0e5bbe5fed5f2f8f4fcf9bbf6faf8">[email&#160;protected]</span></a></span>
+    <span><i class="fas fa-map-marker-alt"></i> 
+155 A , Opposite Bank Alfalah Model Town Chowk Multan, Multan, Pakistan</span>
+    <span><i class="fas fa-phone"></i> Call us: <a href="tel:03006771013">03006771013</a></span>
+<span>
+  <i class="fas fa-envelope"></i> 
+  <a href="mailto:alnoorse786@gmail.com">alnoorse786@gmail.com</a>
+</span>
     <span><i class="fas fa-clock"></i> Sat-Thu 09:00AM to 07:00PM ✨ Friday OFF</span>
   </div>
 
@@ -2911,6 +3023,8 @@
         </li>
         <li class="nav-item"><a href="#lithium-batteries"   class="nav-link">Lithium Batteries</a></li>
         <li class="nav-item"><a href="#module-authenticity" class="nav-link">Module Authenticity</a></li>
+        <li class="nav-item"><a href="#services" class="nav-link">Our Services</a></li>
+<li class="nav-item"><a href="#about" class="nav-link">About Us</a></li>
       </ul>
       <div class="search-cart">
         <div class="search-bar">
@@ -2922,6 +3036,10 @@
           <span class="cart-count">0</span>
         </a>
       </div>
+       <!-- HAMBURGER BUTTON -->
+      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
       <div class="hdr-icons">
         <div class="hdr-icon" onclick="toggleSearch()"><i class="fas fa-search"></i></div>
         <div class="hdr-icon" onclick="openMiniCart()">
@@ -2947,7 +3065,7 @@
       <!-- Hero -->
       <section class="hero-section">
         <div class="hero-carousel" id="heroCarousel">
-          `<img src="..." alt="Solar Energy" class="active">`
+          `<img src="https://scontent.flhe2-4.fna.fbcdn.net/v/t39.30808-6/650372276_927700843343095_6940458157978706973_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=2a1932&_nc_eui2=AeHsdo0w7QVwsbN2-vbGrjuwo0fuUanAAAmjR-5RqcAACXcKq2ycMmyHX6cBKt0CXblE6HoNYG4kwKP8NoT4mlnT&_nc_ohc=KQzuomwHJxMQ7kNvwFyc19_&_nc_oc=AdpMVbCyT3eVMLjOKOI8nBGCum16GsmY9KvdTE7nFWby6O1wuzBwaa8wxmgYzRQI-lU&_nc_zt=23&_nc_ht=scontent.flhe2-4.fna&_nc_gid=UWn4QQecbMA9aOs9W5awdg&_nc_ss=7a32e&oh=00_AfwIrJsr7Z-JzyryeE3t61w-PfAoHDzZPdnOcTppUGLArg&oe=69C802CA" alt="Solar Energy" class="active">`
         </div>
       </section>
 
@@ -3011,19 +3129,19 @@
               <a href="#solar-inverters?brand=Growatt" class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_177_930x.png?v=1737729038" alt="Growatt"></a>
               <a href="#solar-panels?brand=Canadian"   class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_174_930x.png?v=1737729038" alt="Canadian Solar"></a>
               <a href="#solar-panels?brand=Trina"      class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_178_930x.png?v=1737729038" alt="Trina Solar"></a>
-              <a href="#solar-inverters?brand=Huawei"  class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_177_930x.png?v=1737729038" alt="Huawei"></a>
+              <a href="#solar-inverters?brand=Huawei"  class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_174_930x.png?v=1737729038" alt="Huawei"></a>
               <a href="#solar-inverters?brand=Inverex" class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_176_930x.png?v=1737729038" alt="Inverex"></a>
               <!-- duplicate for seamless loop -->
-              <a href="#solar-panels?brand=Longi"      class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_178_930x.png?v=1737729038" alt="Longi"></a>
+              <a href="#solar-panels?brand=Longi"      class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_173_930x.png?v=1737729038" alt="Longi"></a>
               <a href="#solar-panels?brand=JASolar"    class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_174_930x.png?v=1737729038" alt="JA Solar"></a>
               <a href="#solar-inverters?brand=Solis"   class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_177_930x.png?v=1737729038" alt="Solis"></a>
               <a href="#solar-inverters?brand=Knox"    class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_176_930x.png?v=1737729038" alt="Knox"></a>
-              <a href="#solar-inverters?brand=Goodwe"  class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_178_930x.png?v=1737729038" alt="Goodwe"></a>
+              <a href="#solar-inverters?brand=Goodwe"  class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_174_930x.png?v=1737729038" alt="Goodwe"></a>
               <a href="#solar-inverters?brand=Growatt" class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_177_930x.png?v=1737729038" alt="Growatt"></a>
-              <a href="#solar-panels?brand=Canadian"   class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_174_930x.png?v=1737729038" alt="Canadian Solar"></a>
+              <a href="#solar-panels?brand=Canadian"   class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_175_930x.png?v=1737729038" alt="Canadian Solar"></a>
               <a href="#solar-panels?brand=Trina"      class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_178_930x.png?v=1737729038" alt="Trina Solar"></a>
               <a href="#solar-inverters?brand=Huawei"  class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_177_930x.png?v=1737729038" alt="Huawei"></a>
-              <a href="#solar-inverters?brand=Inverex" class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_176_930x.png?v=1737729038" alt="Inverex"></a>
+              <a href="#solar-inverters?brand=Inverex" class="brand-logo nav-link"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_175_930x.png?v=1737729038" alt="Inverex"></a>
             </div>
           </div>
         </div>
@@ -3051,38 +3169,38 @@
                 <!-- Slide 1 — 4 cards -->
                 <div class="cards-slide grid4">
                   <a href="#solar-panels?type=new" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_178_930x.png?v=1737729038" alt="Jinko"></div>
-                    <div class="pc-body"><h3>Jinko Tiger Neo</h3><p>Double Glass Bifacial</p><p class="pc-price">Rs. 18,500</p><span class="pc-btn">View Detail</span></div>
+                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/longi-horizon-225W-front_870x.png?v=1738082522" alt="Jinko"></div>
+                    <div class="pc-body"><h3>Jinko Tiger Neo</h3><p>Double Glass Bifacial</p><p class="pc-price">Rs. 10,500</p><span class="pc-btn">View Detail</span></div>
                   </a>
                   <a href="#solar-panels" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_174_930x.png?v=1737729038" alt="Longi"></div>
+                    <div class="pc-img"><img src="https://as2.ftcdn.net/v2/jpg/04/40/70/41/1000_F_440704131_EFZAB3Dhv6TKhEoPbNM0K6OevFVHDkep.jpg" alt="Longi"></div>
                     <div class="pc-body"><h3>Longi Hi-MO 6</h3><p>High Efficiency Panel</p><p class="pc-price">Rs. 19,200</p><span class="pc-btn">View Detail</span></div>
                   </a>
                   <a href="#solar-panels" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_178_930x.png?v=1737729038" alt="Canadian"></div>
+                    <div class="pc-img"><img src="https://as2.ftcdn.net/v2/jpg/06/97/42/13/1000_F_697421378_Uty8CrKYDVo0IsOCR81CcgM3YG4udGsz.webp" alt="Canadian"></div>
                     <div class="pc-body"><h3>Canadian Solar</h3><p>Top Rated Quality</p><p class="pc-price">Rs. 17,800</p><span class="pc-btn">View Detail</span></div>
                   </a>
                   <a href="#solar-panels?type=new" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_174_930x.png?v=1737729038" alt="Trina"></div>
+                    <div class="pc-img"><img src="https://as2.ftcdn.net/v2/jpg/03/44/42/69/1000_F_344426997_HyMa1OV2oVp53KM0Qqtn50vqjiPFaszh.jpg" alt="Trina"></div>
                     <div class="pc-body"><h3>Trina Solar</h3><p>Vertex S+ Series</p><p class="pc-price">Rs. 16,500</p><span class="pc-btn">View Detail</span></div>
                   </a>
                 </div>
                 <!-- Slide 2 — 4 cards -->
                 <div class="cards-slide grid4">
                   <a href="#solar-panels" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_178_930x.png?v=1737729038" alt="JA Solar"></div>
+                    <div class="pc-img"><img src="https://t4.ftcdn.net/jpg/03/24/07/85/240_F_324078546_0djvv4y7pbO9FdzGSB5zl5JqwJDLnFCe.jpg" alt="JA Solar"></div>
                     <div class="pc-body"><h3>JA Solar</h3><p>Deep Blue 4.0</p><p class="pc-price">Rs. 17,000</p><span class="pc-btn">View Detail</span></div>
                   </a>
                   <a href="#solar-panels?type=new" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_174_930x.png?v=1737729038" alt="Risen"></div>
+                    <div class="pc-img"><img src="https://t3.ftcdn.net/jpg/04/96/15/42/240_F_496154205_SSN7m8XzMYiLqYsAka0aZ321sGRz48mv.jpg" alt="Risen"></div>
                     <div class="pc-body"><h3>Risen Energy</h3><p>Titan Series</p><p class="pc-price">Rs. 15,900</p><span class="pc-btn">View Detail</span></div>
                   </a>
                   <a href="#solar-panels" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_178_930x.png?v=1737729038" alt="Astronergy"></div>
+                    <div class="pc-img"><img src="https://t3.ftcdn.net/jpg/05/36/49/26/240_F_536492602_3nG9hPdsy1NGdj3uJETSMdAeKikCQoE7.jpg" alt="Astronergy"></div>
                     <div class="pc-body"><h3>Astronergy</h3><p>CHSM72M(BF)</p><p class="pc-price">Rs. 16,200</p><span class="pc-btn">View Detail</span></div>
                   </a>
                   <a href="#solar-panels?type=new" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_174_930x.png?v=1737729038" alt="Seraphim"></div>
+                    <div class="pc-img"><img src="https://t3.ftcdn.net/jpg/03/16/90/16/240_F_316901683_Biz4WZy12zLIysQMWUBGlp9CcfW2M57N.jpg" alt="Seraphim"></div>
                     <div class="pc-body"><h3>Seraphim</h3><p>Eclipse Series</p><p class="pc-price">Rs. 15,500</p><span class="pc-btn">View Detail</span></div>
                   </a>
                 </div>
@@ -3121,37 +3239,37 @@
               <div class="cards-track" id="ct-inverters">
                 <div class="cards-slide grid4">
                   <a href="#solar-inverters?type=OnGrid" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_174_930x.png?v=1737729038" alt="OnGrid"></div>
+                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/CrownArceus5.8KWsolarinverterHybrid_1066x.png?v=1753256284" alt="OnGrid"></div>
                     <div class="pc-body"><h3>On-Grid Inverter</h3><p>Net Metering Ready</p><p class="pc-price">Rs. 145,000</p><span class="pc-btn">Add to Cart</span></div>
                   </a>
                   <a href="#solar-inverters?type=Hybrid" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_178_930x.png?v=1737729038" alt="Hybrid"></div>
+                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_4_c4ecf26b-84da-45b7-803b-8f32e85635a1_1066x.png?v=1753016905" alt="Hybrid"></div>
                     <div class="pc-body"><h3>Hybrid Smart Unit</h3><p>Dual Output Support</p><p class="pc-price">Rs. 185,000</p><span class="pc-btn">Add to Cart</span></div>
                   </a>
                   <a href="#solar-inverters?type=best-selling" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_174_930x.png?v=1737729038" alt="OffGrid"></div>
+                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/LIVOLTEK6.2KWsolarinverterhybrid_1066x.png?v=1751349951" alt="OffGrid"></div>
                     <div class="pc-body"><h3>Off-Grid Premium</h3><p>Battery Backup King</p><p class="pc-price">Rs. 125,000</p><span class="pc-btn">Add to Cart</span></div>
                   </a>
                   <a href="#solar-inverters?brand=Knox" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_176_930x.png?v=1737729038" alt="Knox"></div>
+                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Knox_6KW_pv8000_Hybrid_1_1066x.png?v=1753255194" alt="Knox"></div>
                     <div class="pc-body"><h3>Knox 5KW</h3><p>Hybrid Inverter</p><p class="pc-price">Rs. 195,000</p><span class="pc-btn">Add to Cart</span></div>
                   </a>
                 </div>
                 <div class="cards-slide grid4">
                   <a href="#solar-inverters?brand=Goodwe" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_178_930x.png?v=1737729038" alt="Goodwe"></div>
+                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_4_c4ecf26b-84da-45b7-803b-8f32e85635a1_1066x.png?v=1753016905" alt="Goodwe"></div>
                     <div class="pc-body"><h3>Goodwe 6KW</h3><p>Smart Energy</p><p class="pc-price">Rs. 215,000</p><span class="pc-btn">Add to Cart</span></div>
                   </a>
                   <a href="#solar-inverters?brand=Solis" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_177_930x.png?v=1737729038" alt="Solis"></div>
+                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Fronus6KWPV6000WithNetmeteringOffGridSolarInverter_1066x.png?v=1754204638" alt="Solis"></div>
                     <div class="pc-body"><h3>Solis 8KW</h3><p>Grid-Tied Pro</p><p class="pc-price">Rs. 235,000</p><span class="pc-btn">Add to Cart</span></div>
                   </a>
                   <a href="#solar-inverters?brand=Huawei" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_177_930x.png?v=1737729038" alt="Huawei"></div>
+                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/EnvyPV9000_1066x.png?v=1767696239" alt="Huawei"></div>
                     <div class="pc-body"><h3>Huawei 10KW</h3><p>Smart Logger</p><p class="pc-price">Rs. 285,000</p><span class="pc-btn">Add to Cart</span></div>
                   </a>
                   <a href="#solar-inverters?brand=Growatt" class="pc nav-link">
-                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/Frame_176_930x.png?v=1737729038" alt="Growatt"></div>
+                    <div class="pc-img"><img src="https://kamalsolar.pk/cdn/shop/files/KnoxKrypton6.5kWPV9055HybridSolarInverter_1066x.png?v=1753688748" alt="Growatt"></div>
                     <div class="pc-body"><h3>Growatt 8KW</h3><p>Transformerless</p><p class="pc-price">Rs. 198,000</p><span class="pc-btn">Add to Cart</span></div>
                   </a>
                 </div>
@@ -3437,7 +3555,8 @@
       </section>
 
     </section><!-- /page-home -->
-
+<section class="page container" id="page-services"></section>
+<section class="page container" id="page-about"></section>
     <section class="page container" id="page-products"></section>
 
     <section class="page container" id="page-detail">
@@ -3481,7 +3600,13 @@
   </main>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+
+<!-- FIREBASE COMPAT LIBRARIES -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+
+<script>
 /* ── Particles ── */
 (function(){
   const s=document.querySelector('.special-offer-section');
@@ -3646,7 +3771,6 @@ function ccNext(id){ if(_cc[id]){ _cc[id].go(_cc[id].cur()+1); _cc[id].run(); } 
     history.pushState({_alNoor:true}, '', window.location.href);
   });
 })();
-
 function closeExitPopup() {
   var popup = document.getElementById('exitPopup');
   if (popup) popup.classList.remove('show');
@@ -3656,7 +3780,9 @@ function doExit() {
   var popup = document.getElementById('exitPopup');
   if (popup) popup.classList.remove('show');
   history.go(-2);
-}</script>
+}
+
+</script>
 
 
             <!-- CART FULL PAGE -->
@@ -3768,7 +3894,7 @@ function doExit() {
                                 <button class="copy-btn" onclick="copyText('PK07MEZN0005090112490013')">Copy</button>
                             </div>
                             <div class="payment-note" style="margin-top:10px">
-                                📝 <strong>Note:</strong> Please share payment screenshot on WhatsApp: <strong>03040666937</strong><br>
+                                📝 <strong>Note:</strong> Please share payment screenshot on WhatsApp: <strong>03006771013</strong><br>
                                 ⚠️ Full payment required for Solar products. Order processed after payment confirmation.
                             </div>
                         </div>
@@ -3837,7 +3963,6 @@ function doExit() {
                     </ul>
                 </section>
             </section>
-
             <!-- Generic Info Pages for About Us, Contact Us, Policies etc. -->
             <section class="page container" id="page-about-us"></section>
             <section class="page container" id="page-contact-us"></section>
@@ -3862,7 +3987,7 @@ function doExit() {
                 <div class="footer-column contact-details">
                     <h4>Contact Details</h4>
                     <p><i class="fas fa-map-marker-alt"></i> Masoom Shah Road, Near Raheem Chock, Multan</p>
-                    <p><i class="fas fa-phone"></i> Call us: <a href="tel:03040666937">03040666937</a></p>
+                    <p><i class="fas fa-phone"></i> Call us: <a href="tel:03006771013">03006771013</a></p>
                     <p><i class="fas fa-envelope"></i> <a href="mailto:Al Noor.pk@gmail.com">AlNoorgoup.pk@gmail.com</a></p>
                     <div class="social-links">
                         <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
@@ -3885,16 +4010,24 @@ function doExit() {
                     <a href="#warranty-policy" class="nav-link">Warranty Policy</a>
                 </div>
             </div>
-            <div class="footer-bottom container">
-                <p>&copy; 2025 Al Noor Solar House. All Rights Reserved.</p>
-            </div>
+           <div class="footer-bottom container">
+  <p>&copy; 2025 Al Noor Solar House. All Rights Reserved.</p>
+
+  <p class="powered">
+    Powered by 
+    <a href="https://wa.me/923188791637?text=I%20have%20seen%20Al%20Noor%20Solar%20website%20and%20I%20am%20contacting%20you%20for%20further%20details"
+       target="_blank">
+       SkyEagle Digital Agency
+    </a>
+  </p>
+</div>
         </footer>
 
         <!-- Mini Cart Sidebar -->
         <aside class="mini-cart-sidebar" id="miniCartSidebar">
             <div class="mini-cart-header">
                 <h3>Shopping cart (<span id="miniCartItemCount">0</span> item)</h3>
-                <button class="close-btn" id="closeMiniCart"><i class="fas fa-times"></i></button>
+              <button class="close-btn" id="closeMiniCart" onclick="closeMiniCart()"><i class="fas fa-times"></i></button>
             </div>
             <div class="mini-cart-items" id="miniCartItems">
                 <div class="empty-cart">
@@ -3960,18 +4093,6 @@ function doExit() {
     <!-- TOAST (for alerts like "copied to clipboard") -->
     <div class="toast" id="toast"></div>
 
-    <!-- EXIT POPUP -->
-    <div class="exit-popup" id="exitPopup">
-        <div class="exit-box">
-            <h3>😢 Leaving Already?</h3>
-            <p>Are you sure you want to exit AL Noor Solar Energy?</p>
-            <div class="exit-btns">
-                <button class="exit-stay" onclick="closeExitPopup()">Stay</button>
-                <button class="exit-leave">Exit</button>
-            </div>  
-        </div>
-    </div>
-
     <script>
         // ====================================================================================================
         // GLOBAL DATA & UTILITIES
@@ -3989,88 +4110,32 @@ function doExit() {
             PLACEHOLDER_IMG_BASE + '400x400/0056b3/e7f4ff?text=Local+Inverter+Offer+2',
             PLACEHOLDER_IMG_BASE + '400x400/007bff/e7f4ff?text=Local+Inverter+Offer+3'
         ];
-        // Product Data (Hardcoded for this example)
-        const products = [
-            { id: 'p1', name: 'Knox Krypyon Eco 6.2KW IP-21 PV6600 Hybrid Solar Inverter', vendor: 'Knox', price: 840000, oldPrice: 900000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Fox25KWOnGrid_1066x.png?v=1750931285', description: 'High-performance hybrid solar inverter for residential and commercial use. IP-21 rated. Offers robust power conversion and smart grid interaction.', availability: 'In stock' },
-            { id: 'p2', name: 'Knox Krypton 6.5kW PV9055 Hybrid Solar Inverter', vendor: 'Knox', price: 180000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox4.5KWPV6500HybridSolarInverter_1066x.png?v=1753252867', description: 'Advanced 6.5kW hybrid inverter with intelligent power management. Ideal for medium to large residential setups.', availability: 'In stock' },
-            { id: 'p3', name: 'Knox 4.5KW PV6500 Hybrid Solar Inverter', vendor: 'Knox', price: 125000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/6.2KWPV9000HYBRID_1066x.png?v=1753253614', description: 'Compact and efficient 4.5KW hybrid solar inverter, perfect for small homes or backup systems.', availability: 'In stock' },
-            { id: 'p4', name: 'Konx Krypton 6.2KW PV9000 HYBRID Solar Inverter', vendor: 'Knox', price: 160000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox4KWPV6000HybridSolarInverter_1066x.png?v=1753688451', description: 'Another powerful 6.2KW hybrid inverter from Konx, known for reliability and high conversion efficiency.', availability: 'In stock' },
-            { id: 'p5', name: 'Knox 30KW G4 Pro OnGrid Solar Inverter', vendor: 'Knox', price: 360000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_1_754c570f-5786-4817-96f2-75cfc095f86a_1066x.png?v=1752045033', description: 'Industrial-grade 30KW OnGrid solar inverter for large scale projects and commercial installations.', availability: 'In stock' },
-            { id: 'p6', name: 'Knox 4KW PV6000 Hybrid Solar Inverter', vendor: 'Knox', price: 118000, oldPrice: 120000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox_6KW_pv8000_Hybrid_1_1066x.png?v=1753255194', description: 'Efficient 4KW hybrid inverter, now on sale! Great value for reliable home power.', availability: 'In stock' },
-            { id: 'p7', name: 'Knox Xerox 15.2KW G4 Pro OnGrid Solar Inverter', vendor: 'Knox', price: 220000, oldPrice: 230000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/60KWG2Ongrid_1066x.png?v=1753256874', description: 'Robust 15.2KW OnGrid inverter for commercial applications, special offer. High yield and long lifespan.', availability: 'In stock' },
-            { id: 'p8', name: 'Knox 60KW G4 pro OnGrid Solar Inverter', vendor: 'Knox', price: 510000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_4_19f44575-70b1-40c4-80aa-7360a784df62_1066x.png?v=1752478809', description: 'High-capacity 60KW OnGrid inverter for maximum energy output in large-scale solar farms.', availability: 'In stock' },
-            { id: 'p9', name: 'CoreTech 1.6kW PV 2200 IP21 OffGrid Solar Inverter', vendor: 'CoreTech', price: 50000, category: 'Solar Inverters', type: 'OffGrid', image: 'https://kamalsolar.pk/cdn/shop/files/KnoxEcoPV4000Hybrid_1066x.png?v=1762175028', description: 'Affordable 1.6kW OffGrid inverter for basic solar setups, ensuring continuous power supply.', availability: 'In stock' },
-            { id: 'p10', name: 'CoreTech 4kW PV 5600 IP21 Hybrid Solar Inverter', vendor: 'CoreTech', price: 105000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_2_0ed3843a-61d1-4b01-895f-14f0c82a194c_1066x.png?v=1758978389', description: 'Mid-range 4kW hybrid inverter for balanced power needs, featuring smart energy management.', availability: 'In stock' },
-            { id: 'p11', name: 'CoreTech 6.2kW IP21 Hybrid Solar Inverter', vendor: 'CoreTech', price: 120000, oldPrice: 140000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/CrownArceus5.8KWsolarinverterHybrid_1066x.png?v=1753256284', description: 'Powerful 6.2kW hybrid inverter from CoreTech, now with a discount! Excellent for home and small business.', availability: 'In stock' },
-            { id: 'p12', name: 'Crown Arceus 5.8KW Hybrid Solar Inverter', vendor: 'Crown Hybrid', price: 100000, oldPrice: 145000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/6KW_1066x.png?v=1753256037', description: 'Crown Arceus 5.8KW hybrid inverter, excellent value with advanced features for optimal energy usage.', availability: 'In stock' },
-            { id: 'p13', name: 'Crown Elego 6KW solar inverter Hybrid', vendor: 'Crown Hybrid', price: 160000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/CrownXavier4KWHybridSolarInverter_1066x.png?v=1755756533', description: 'Reliable 6KW hybrid inverter from Crown Elego series, designed for consistent power output.', availability: 'In stock' },
-            { id: 'p14', name: 'Crown Elego Star 6.5KW Hybrid Solar Inverter', vendor: 'Crown Hybrid', price: 160000, oldPrice: 176000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_3_16cb0c0b-2e1f-4382-89bf-72c35598b3cb_1066x.png?v=1753256605', description: 'The upgraded Star version of Crown Elego 6.5KW hybrid inverter, offering enhanced performance and durability.', availability: 'In stock' },
-            { id: 'p15', name: 'Crown Nova 8.2KW solar inverter Hybrid', vendor: 'Crown Hybrid', price: 235000, oldPrice: 300000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_7-min_1066x.png?v=1737898387', description: 'High-power 8.2KW hybrid inverter, great for larger homes with significant energy demands.', availability: 'In stock' },
-            { id: 'p16', name: 'Crown Nova 9.8KW Hybrid Solar Inverter', vendor: 'Crown Hybrid', price: 280000, oldPrice: 315000, category: 'Solar Inverters', type: 'Hybrid', image:'https://kamalsolar.pk/cdn/shop/files/GoodWe10KWOngridsolarinverter_1066x.png?v=1753768240', description: 'Premium 9.8KW hybrid inverter from Crown Nova, on pre-order. Features cutting-edge technology.', availability: 'Out of stock' },
-            { id: 'p17', name: 'Crown Xavier 4KW Hybrid Solar Inverter', vendor: 'Crown Hybrid', price: 105000, oldPrice: 116000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Hybrid11.7-KWIP-54_1066x.png?v=1772109865', description: 'Compact 4KW hybrid inverter, perfect for smaller installations with efficient energy conversion.', availability: 'In stock' },
-            { id: 'p18', name: 'Fox 10KW On Grid Solar Inverter', vendor: 'FOX', price: 165000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/Fox10KWOnGrid_1066x.png?v=1750930057', description: 'Efficient 10KW OnGrid inverter from FOX, ideal for net metering systems and high reliability.', availability: 'In stock' },
-            { id: 'p19', name: 'Fox 20KW On Grid Solar Inverter', vendor: 'FOX', price: 275000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/Fox20KWOnGrid_15602b9f-fb79-4dd3-ac93-7534fe531706_1066x.png?v=1750930989', description: 'Powerful 20KW OnGrid inverter, robust and reliable, suitable for larger residential or commercial setups.', availability: 'In stock' },
-            { id: 'p20', name: 'Fox 25KW On Grid Solar Inverter', vendor: 'FOX', price: 265000, oldPrice: 295000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/Fox25KWOnGrid_1066x.png?v=1750931285', description: 'High-capacity 25KW OnGrid inverter at a special price, offering superior performance and energy yield.', availability: 'In stock' },
-            { id: 'p21', name: 'Fronus Meta 10KW PV14000 With Netmetering Battery Less Solar Inverter', vendor: 'FRONUS', price: 46000, category: 'Solar Inverters', type: 'Netmetering', image: 'https://kamalsolar.pk/cdn/shop/files/CoreTech1.6kWPV2200IP21OffGridSolarInverter_1066x.png?v=1769602966', description: 'Battery-less 10KW inverter with net metering capabilities from Fronus Meta, designed for grid-tied systems.', availability: 'In stock' },
-            { id: 'p22', name: 'Livoltek 6.2KW hybrid solar inverter', vendor: 'Livoltek', price: 115000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/10KWPV14000_1066x.png?v=1767877345', description: 'Modern 6.2KW hybrid inverter with advanced features for optimal solar energy utilization and storage.', availability: 'In stock' },
-            { id: 'p23', name: 'Fronus Meta 6KW PV9000 With Netmetering Battery Less Solar Inverter', vendor: 'FRONUS', price: 35000, oldPrice: 40000, category: 'Solar Inverters', type: 'Netmetering', image: 'https://kamalsolar.pk/cdn/shop/files/12KWIP-66HYBRID_1066x.png?v=1773310377', description: 'Compact 6KW net metering inverter from Fronus Meta, great for smaller loads and efficient grid integration.', availability: 'In stock' },
-            { id: 'p24', name: 'Galaxy Envy PV 9000 6KW With Netmetering Battery Less Solar Inverter', vendor: 'Galaxy', price: 37000, category: 'Solar Inverters', type: 'Netmetering', image: 'https://kamalsolar.pk/cdn/shop/files/EnvyPV9000_1066x.png?v=1767696239', description: 'Galaxy Envy 6KW battery-less net metering inverter, offering reliable performance for grid-connected solar setups.', availability: 'Out of stock' },
-            { id: 'p25', name: 'Livoltek 10KW OnGrid Three Phase Solar Inverter', vendor: 'Livoltek', price: 150000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/Fronus6KWPV6000WithNetmeteringOffGridSolarInverter_1066x.png?v=1754204638', description: 'Three-phase 10KW OnGrid inverter for commercial setups, ensuring stable and high-efficiency power conversion.', availability: 'In stock' },
-            { id: 'p26', name: 'Inverex Nitrox 10KW Hybrid Solar Inverter', vendor: 'Inverex', price: 485000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_59db06cd-306f-4afd-980a-645934a4a6b7_1066x.png?v=1752058053', description: 'Premium 10KW hybrid inverter from Inverex Nitrox series, known for its robust design and advanced energy management.', availability: 'In stock' },
-            { id: 'p27', name: 'Muxtronics Ultra PV9000 6KW Solar Inverter', vendor: 'AL Noor Solar', price: 45000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/IMG-3834_1066x.png?v=1758195521', description: 'Muxtronics Ultra 6KW inverter by Kamal Solar, reliable and efficient, a great choice for local solar solutions.', availability: 'Out of stock' },
-            { id: 'p28', name: 'GROWATT 10KW OnGrid solar inverter', vendor: 'GROWATT', price: 170000, category: 'Solar Inverters', type: 'OnGrid', image:'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_4_c4ecf26b-84da-45b7-803b-8f32e85635a1_1066x.png?v=1753016905', description: 'Globally recognized GROWATT 10KW OnGrid inverter, offering high efficiency and smart monitoring features.', availability: 'Out of stock' },
-            { id: 'p29', name: 'Goodwe 8KW Single Phase Hybrid Solar Inverter', vendor: 'Goodwe', price: 310000, oldPrice: 335000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://media.istockphoto.com/id/1372172443/photo/automatic-inverter-for-electric-current-vector-or-vfd-high-performance-and-accuracy-control.webp?a=1&b=1&s=612x612&w=0&k=20&c=DUpM3Rfs6lDCRjv-TzrnOQtV7q_Dp9mZOUCOV7Uo4q8=', description: 'Single-phase 8KW hybrid inverter from Goodwe, excellent performance for residential solar battery systems.', availability: 'In stock' },
-            { id: 'p30', name: 'Goodwe 6KW Single Phase Hybrid Solar Inverter', vendor: 'Goodwe', price: 225000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/6KW_1066x.png?v=1753256037', description: 'Goodwe 6KW single-phase hybrid inverter, robust and smart, ensuring optimal energy storage and usage.', availability: 'Out of stock' },
-            { id: 'p31', name: 'Livoltek 15KW OnGrid Three Phase Solar Inverter', vendor: 'Livoltek', price: 180000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_3_16cb0c0b-2e1f-4382-89bf-72c35598b3cb_1066x.png?v=1753256605', description: 'High-power 15KW three-phase OnGrid inverter from Livoltek, suitable for advanced commercial applications.', availability: 'In stock' },
-            { id: 'p32', name: 'Huawei 50KW On Grid solar inverter', vendor: 'HUAWEI', price: 710000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/Hybrid11.7-KWIP-54_1066x.png?v=1772109865', description: 'Industry-leading 50KW OnGrid inverter from Huawei, for large commercial sites requiring high reliability.', availability: 'In stock' },
+        // Firebase Configuration (Aapki API keys)
+        const firebaseConfig = {
+            apiKey: "AIzaSyACRvTs97pVRQEZkDVkivq7vf1xhaU8g0M",
+            authDomain: "al-noor-solar-energy.firebaseapp.com",
+            projectId: "al-noor-solar-energy",
+            storageBucket: "al-noor-solar-energy.firebasestorage.app",
+            messagingSenderId: "789267821397",
+            appId: "1:789267821397:web:27816d097bc0a6896e35dc",
+            measurementId: "G-TC47B22038"
+        };
 
-            // Lithium Batteries
-            { id: 'b1', name: 'BYD Battery Box LV5.0+ 100A 51.2v Lithium Battery', vendor: 'BYD', price: 275000, category: 'Lithium Batteries', image:'https://kamalsolar.pk/cdn/shop/files/BYDLV5.0_100A51.2v_1066x.png?v=1767529127', description: 'High-end BYD Lithium battery with 100A capacity, known for its long cycle life and safety features.', availability: 'Out of stock' },
-            { id: 'b2', name: 'CoreTech 24v (2.5KW) 100Amp Lithium Battery', vendor: 'CoreTech', price: 125000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/CoreTech1.6kWPV2200IP21OffGridSolarInverter_1066x.png?v=1769602966', description: 'Efficient 24v 100Amp Lithium battery from CoreTech, ideal for smaller solar systems requiring reliable storage.', availability: 'In stock' },
-            { id: 'b3', name: 'CoreTech 51.2v (5KW) 100Amp Lithuim Battery', vendor: 'CoreTech', price: 210000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/CoreTech24v100AmpLithuimBattery_0dd4a2f9-e8ea-4a95-b8f1-81bd29554f01_1066x.png?v=1751439205', description: 'Powerful 51.2v 100Amp Lithium battery from CoreTech, offering robust energy storage for various applications.', availability: 'In stock' },
-            { id: 'b4', name: 'CoreTech Sunwoda Atrix Smart 5 51.2v 100Amp Lithium Battery', vendor: 'CoreTech', price: 225000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/CoreTech4kWPV5600IP21HybridSolarInverter_1066x.png?v=1769601891', description: 'Smart 51.2v 100Amp Lithium battery with advanced BMS, ensuring safety and optimizing battery performance.', availability: 'In stock' },
-            { id: 'b5', name: 'Crown 51.2v 100A Lithium ion battery IP30 Rating', vendor: 'Crown Lithium Battery', price: 235000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/CoreTech51v100AmpLithuimBattery_1e3eb3df-f11b-40a5-a19f-9b084874fb1c_1066x.png?v=1751439347', description: 'Durable Crown Lithium-ion battery with IP30 rating, providing reliable power storage with environmental protection.', availability: 'In stock' },
-            { id: 'b6', name: 'Dyness Lithium Battery 51.2V 100Amp 8000 LifeCycle', vendor: 'Dyness', price: 255000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/CoreTech6.2kWIP21HybridSolarInverter_1_1066x.png?v=1755756065', description: 'Long-lasting Dyness Lithium battery with 8000+ life cycles, offering exceptional durability and performance.', availability: 'In stock' },
-            { id: 'b7', name: 'Knox Powerwall 3.0 25.6v 100Amp Lithuim Battery', vendor: 'Knox', price: 130000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/51.2100AmpIP20_1066x.png?v=1770548600', description: 'Knox Powerwall 3.0, a reliable 25.6v Lithium battery for efficient energy storage in residential settings.', availability: 'Out of stock' },
-            { id: 'b8', name: 'Knox Powerwall 6.0 51.2V-100AMP Lithium Battery', vendor: 'Knox', price: 225000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/KnoxKrypton6.5kWPV9055HybridSolarInverter_1066x.png?v=1753688748', description: 'High-capacity Knox Powerwall 6.0, 51.2V Lithium battery, designed for robust and scalable energy solutions.', availability: 'In stock' },
-            { id: 'b9', name: 'Knox Powerwall 3.1 25.6V 100Ah Lithium Battery', vendor: 'Knox', price: 140000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/DynessLithiumBattery51.2V100Amp_1066x.png?v=1763548804', description: 'Upgraded Knox Powerwall 3.1, a robust 25.6V 100Ah unit offering improved performance and longevity.', availability: 'In stock' },
-            { id: 'b10', name: 'Livoltek Lithium Battery – IP21 5kW 51.2v 100AMP', vendor: 'Livoltek', price: 195000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Powerwall3.025.6v100A_1066x.png?v=1762176444', description: 'Livoltek 5kW Lithium battery with IP21 protection, ensuring safe and efficient energy storage.', availability: 'In stock' },
-            { id: 'b11', name: 'Knox Power Wall 6.1 - 51.2V 100AH IP20 Lithium Battery', vendor: 'Knox', price: 240000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_7_3935428f-5a10-41d0-815c-1debc9eb1edf_1066x.png?v=1752059880', description: 'Improved Knox Powerwall 6.1, a 51.2V 100Ah Lithium solution with reliable performance for solar systems.', availability: 'Out of stock' },
-            { id: 'b12', name: 'Soluna Lithium Battery 51.2V 100A 6000LC 5KW', vendor: 'Soluna', price: 270000, oldPrice: 280000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_12_46c849cb-5299-4cb5-9e75-f547a1d8df7a_1066x.png?v=1752062489', description: 'Soluna 5KW Lithium battery with 6000 life cycles, on sale. Provides durable and high-capacity energy storage.', availability: 'In stock' },
-            { id: 'b13', name: 'Knox Powerwall 7.1 - 51.2V 100Ah IP65 Lithium Battery', vendor: 'Knox', price: 320000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_ba3e8a01-95f8-4620-b9b1-3c2f11e7bafb_1066x.png?v=1752067309', description: 'Top-tier Knox Powerwall 7.1, 51.2V 100Ah with IP65 rating, offering superior protection and longevity.', availability: 'In stock' },
-            { id: 'b14', name: 'Pylontech Fidus Battery Plus 16-KW IP-65 Lithium Battery', vendor: 'PylonTech', price: 725000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/51.2100AmpIP20_1066x.png?v=1770548600', description: 'Industrial-grade Pylontech 16KW Lithium battery with IP65 for robust and high-demand energy storage.', availability: 'Out of stock' },
-            { id: 'b15', name: 'Itel 16KW 314Amp IP20 Lithium Battery', vendor: 'Itel', price: 535000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_17_1066x.png?v=1754830366', description: 'Powerful Itel 16KW 314Amp Lithium battery for demanding applications, ensuring reliable power supply.', availability: 'In stock' },
-            { id: 'b16', name: 'Ziewnic Box European 100Amp 51.2v Lithium Battery', vendor: 'Ziewnic', price: 268000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/KnoxPowerwall7.1-51.2V100AhIP65LithiumBattery_1066x.png?v=1753608277', description: 'European standard Ziewnic Box Lithium battery, 100Amp 51.2v, known for its quality and performance.', availability: 'In stock' },
-            { id: 'b17', name: 'Knox Rackwall 8 51.2V 150AMP Lithium Battery', vendor: 'Knox', price: 370000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/16KW314AmpIP-65_1066x.png?v=1773311964', description: 'Knox Rackwall 8, a high-capacity 51.2V 150AMP Lithium battery, ideal for larger solar energy systems.', availability: 'In stock' },
-            { id: 'b18', name: 'Knox Powerwall 6.11 51.2V 100Ah Lithium Battery', vendor: 'Knox', price: 245000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/CoreTech51v100AmpLithuimBattery_1e3eb3df-f11b-40a5-a19f-9b084874fb1c_1066x.png?v=1751439347', description: 'Another variant of Knox Powerwall, 6.11 51.2V 100Ah, offering consistent and reliable power storage.', availability: 'In stock' },
-            { id: 'b19', name: 'Knox Rackwall 10.5 51.2v 200AMP Lithium Battery', vendor: 'Knox', price: 475000, oldPrice: 480000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/100Amp51.2vIP-21_1066x.png?v=1772108856', description: 'Massive 10.5KW Knox Rackwall Lithium battery, 51.2v 200AMP, designed for extensive energy demands.', availability: 'In stock' },
-            { id: 'b20', name: 'Itel 2.5KW 25.6v 100Amp IP-20 Lithium Battery', vendor: 'Itel', price: 122000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_8_65bd897e-f45b-4456-8b4b-c8d89389397a_1066x.png?v=1752061149', description: 'Itel 2.5KW 25.6v 100Amp Lithium battery with IP-20 rating, suitable for various solar energy applications.', availability: 'In stock' },
-            { id: 'b21', name: 'Itel 5KW 51.2v 100Amp IP-20 Lithium Battery', vendor: 'Itel', price: 210000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/2.5-KW100AmpIP20_1066x.jpg?v=1773313934', description: 'Itel 5KW 51.2v 100Amp Lithium battery with IP-20 rating, providing efficient and safe power storage.', availability: 'In stock' },
-            
-            // Other Accessories
-            { id: 'a1', name: 'Eve Power Fire Extinguishing Device for Distribution box', vendor: 'Fire Extinguishing Device', price: 2000, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/CrownArceus5.8KWsolarinverterHybrid_1066x.png?v=1753256284', description: 'Compact fire extinguishing device designed for protection of electrical distribution boxes.', availability: 'In stock' },
-            { id: 'a2', name: 'Solar Panel Frame Kit', vendor: 'Local Manufacturer', price: 5000, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_7-min_1066x.png?v=1737898387', description: 'Durable and easy-to-install kit for mounting solar panels securely.', availability: 'In stock' },
-            { id: 'a3', name: 'DC Breaker Box', vendor: 'Generic', price: 7500, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/FireExtinguisher_1066x.png?v=1767616949', description: 'Essential DC breaker box for circuit protection in solar power systems.', availability: 'In stock' },
-            { id: 'a4', name: 'Solar PV Cable 4mm', vendor: 'Generic', price: 200, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/KnoxKrypton6.5kWPV9055HybridSolarInverter_1066x.png?v=1753688748', description: 'High-quality 4mm solar PV cable for reliable connection of solar panels.', availability: 'In stock' },
-            { id: 'a5', name: 'MC4 Connectors (Pair)', vendor: 'Generic', price: 300, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_1_754c570f-5786-4817-96f2-75cfc095f86a_1066x.png?v=1752045033', description: 'Waterproof MC4 connectors for safe and easy wiring of solar panels.', availability: 'In stock' },
-            { id: 'a6', name: 'Solar Combiner Box 4-String', vendor: 'Generic', price: 12000, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_9586143e-271a-46b8-b6cb-62ac386f4205_1066x.png?v=1758455346', description: '4-string solar combiner box for efficient management and protection of solar PV arrays.', availability: 'In stock' },
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-            // Solar Panels
-            { id: 'sp1', name: 'Jinko Solar Tiger Neo 570W N-type', vendor: 'Jinko Solar', price: 35000, category: 'Solar Panels', image: 'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c29sYXIlMjBwYW5lbHxlbnwwfHwwfHx8MA%3D%3D', description: 'High-efficiency Jinko Solar panel with N-type technology for superior performance.', availability: 'In stock' },
-            { id: 'sp2', name: 'Longi Solar Hi-MO 5 550W', vendor: 'Longi Solar', price: 32000, category: 'Solar Panels', image: 'https://images.unsplash.com/photo-1724041875334-0a6397111c7e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c29sYXIlMjBwYW5lbHxlbnwwfHwwfHx8MA%3D%3D', description: 'Advanced Longi Solar Hi-MO 5 panel, offering excellent power output and durability.', availability: 'In stock' },
-            { id: 'sp3', name: 'Canadian Solar TopHiKu6 600W', vendor: 'Canadian Solar', price: 40000, category: 'Solar Panels', image: 'https://images.unsplash.com/photo-1521618755572-156ae0cdd74d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c29sYXIlMjBwYW5lbHxlbnwwfHwwfHx8MA%3D%3D', description: 'Canadian Solar TopHiKu6 600W panel, known for its high efficiency and robust design.', availability: 'In stock' },
-            { id: 'sp4', name: 'JA Solar 560W Mono PERC', vendor: 'JA Solar', price: 30000, category: 'Solar Panels', image: 'https://plus.unsplash.com/premium_photo-1677993355347-92715eae6806?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjl8fHNvbGFyJTIwcGFuZWx8ZW58MHx8MHx8fDA%3D', description: 'JA Solar 560W Mono PERC panel, providing reliable and high-performance solar energy conversion.', availability: 'In stock' },
-            { id: 'sp5', name: 'Trina Solar Vertex 670W', vendor: 'Trina Solar', price: 45000, category: 'Solar Panels', image: 'https://images.unsplash.com/photo-1707247111552-aaf74241058b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDN8fHNvbGFyJTIwcGFuZWx8ZW58MHx8MHx8fDA%3D', description: 'Trina Solar Vertex 670W panel, a leading choice for maximum power generation and efficiency.', availability: 'In stock' },
+        // Khali array jisme Firebase se data aayega
+        let products = []; 
 
-            // VFD Inverters
-            { id: 'vfd1', name: 'Generic VFD Inverter 2.2KW', vendor: 'VFD Tech', price: 25000, category: 'VFD Inverters', image: 'https://media.istockphoto.com/id/2233720607/photo/hand-pressing-button-on-vfd-control-panel.webp?a=1&b=1&s=612x612&w=0&k=20&c=VfOKlFfCSmzCLGhcj--IFeY-PbEWNt8fHvvc3Xm4tsY=', description: 'Reliable 2.2KW VFD inverter for industrial motor control and energy saving applications.', availability: 'In stock' },
-            { id: 'vfd2', name: 'High-Efficiency VFD 5.5KW', vendor: 'PowerDrive', price: 45000, category: 'VFD Inverters', image:'https://media.istockphoto.com/id/923397428/photo/a-group-of-three-different-sizes-and-capacities-new-universal-inverter-for-controlling-the.webp?a=1&b=1&s=612x612&w=0&k=20&c=88PTpl2nAX_Fj7YkRxh9_ykTCi029Lr5I9Na8N-Adug=', description: 'High-efficiency 5.5KW VFD for precise speed control of pumps and fans.', availability: 'In stock' },
-            { id: 'vfd3', name: 'Industrial VFD 11KW', vendor: 'MegaInvert', price: 80000, category: 'VFD Inverters', image: 'https://kamalsolar.pk/cdn/shop/files/Knox4.5KWPV6500HybridSolarInverter_1066x.png?v=1753252867', description: 'Robust 11KW industrial VFD for heavy-duty applications requiring variable frequency drive.', availability: 'In stock' },
-            { id: 'vfd4', name: 'Compact VFD 0.75KW', vendor: 'MiniFlow', price: 15000, category: 'VFD Inverters', image: 'https://kamalsolar.pk/cdn/shop/files/CrownXavier4KWHybridSolarInverter_1066x.png?v=1755756533', description: 'Compact 0.75KW VFD for small motor control and automation tasks, energy-efficient.', availability: 'In stock' },
-
-            // Special Offer Product (Kamal Local Dasi Solar Inverter 7KW & 10KW) - these will be virtual products derived from so_base
-            { id: 'so_base', name: 'Kamal Local Dasi Solar Inverter', vendor: '@AlNoor solar energy', price_10kw: 40000, oldPrice_10kw: 50000, price_7kw: 35000, oldPrice_7kw: 45000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/6KW_1066x.png?v=1753256037', description: 'Pakistan\'s No. 1 Pure Sine wave and Modified Sine wave Local Solar Inverter. Al Noor Solar Local Inverter 7 KW and 10 KW ready stock available at Al Noor Solar House.', capacity: ['10KW', '7KW'], availability: 'In stock' },
-        ];
+        // Special offer ke liye base product (Homepage ke liye zaroori)
+        const specialOfferBase = { 
+            id: 'so_base', name: 'Kamal Local Dasi Solar Inverter', vendor: '@AlNoor solar energy', 
+            price_10kw: 40000, oldPrice_10kw: 50000, price_7kw: 35000, oldPrice_7kw: 45000, 
+            category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/6KW_1066x.png?v=1753256037', 
+            description: 'Pakistan\'s No. 1 Pure Sine wave and Modified Sine wave Local Solar Inverter.', 
+            capacity: ['10KW', '7KW'], availability: 'In stock' 
+        };
 
         // Cart state
         let cart = JSON.parse(localStorage.getItem('alnoorCart')) || [];
@@ -4125,6 +4190,8 @@ function doExit() {
         const pageRenderers = {
             'home': renderHome,
             'products': renderAllProducts,
+            'services': renderServicesPage,
+            'about': renderAboutPage,
             'solar-inverters': (params) => renderCategoryPage('Solar Inverters', params),
             'lithium-batteries': (params) => renderCategoryPage('Lithium Batteries', params),
             'vfd-inverters': (params) => renderCategoryPage('VFD Inverters', params),
@@ -4143,7 +4210,7 @@ function doExit() {
             'contact-us': () => renderInfoPage('Contact Information', `
                 <p>Have questions or need assistance? Our team is here to help!</p>
                 <p><strong>Address:</strong> Masoom Shah Road, Near Raheem Chock, Multan, Pakistan</p>
-                <p><strong>Phone:</strong> <a href="tel:03040666937">03040666937</a></p>
+                <p><strong>Phone:</strong> <a href="tel:03006771013">03006771013</a></p>
                 <p><strong>Email:</strong> <a href="mailto:kamalgroup.pk@gmail.com">kamalgroup.pk@gmail.com</a></p>
                 <p><strong>Business Hours:</strong> Saturday - Thursday: 09:00 AM to 07:00 PM (Friday OFF)</p>
                 <p>Feel free to reach out to us through phone, email, or visit our office during business hours. We look forward to serving you!</p>
@@ -4242,6 +4309,30 @@ function doExit() {
             }
             renderPageFromHash(hash);
         }
+        
+        function toggleMobileMenu() {
+            const panel   = document.getElementById('mobileNavPanel');
+            const overlay = document.getElementById('mobOverlay');
+            const btn     = document.getElementById('hamburgerBtn');
+            const isOpen  = panel.classList.contains('open');
+            if (isOpen) {
+                closeMobileMenu();
+            } else {
+                panel.classList.add('open');
+                overlay.classList.add('open');
+                btn.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+ 
+        function closeMobileMenu() {
+            document.getElementById('mobileNavPanel').classList.remove('open');
+            document.getElementById('mobOverlay').classList.remove('open');
+            const btn = document.getElementById('hamburgerBtn');
+            if (btn) btn.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
 
         function renderPageFromHash(hash) {
             let pageId = hash.split('?')[0];
@@ -4273,14 +4364,50 @@ function doExit() {
             updateBottomNavActiveState(pageId);
             window.scrollTo(0, 0);
         }
+// Function jo Firebase se data laayega
+        async function loadProductsFromFirebase() {
+            try {
+                const querySnapshot = await db.collection('products').get();
+                let fetchedProducts = [];
+                
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    fetchedProducts.push({
+                        id: doc.id, 
+                        name: data.name || 'Unnamed Product',
+                        vendor: data.vendor || 'Generic',
+                        price: Number(data.price) || 0,
+                        oldPrice: Number(data.oldPrice) || null,
+                        category: data.category || 'Other Accessories',
+                        type: data.type || '',
+                        image: data.image || 'https://via.placeholder.com/150',
+                        description: data.description || 'Premium quality product.',
+                        availability: data.availability || 'In stock'
+                    });
+                });
 
-        // Initial render based on URL hash or default to home
+                // Special offer ko list mein daalna
+                fetchedProducts.push(specialOfferBase);
+
+                // Asal products ko Firebase wale products se update kar diya
+                products = fetchedProducts;
+
+                // Website Start Karna
+                const initialHash = window.location.hash.substring(1);
+                navigate(initialHash || 'home', false); 
+                updateCartUI();
+                addGlobalEventListeners();
+                startCountdownTimer(); 
+
+            } catch (error) {
+                console.error("Firebase se products laane mein error:", error);
+                alert("Please check your internet connection.");
+            }
+        }
+
+        // Jab page load ho to Firebase wala function chalao
         window.addEventListener('DOMContentLoaded', () => {
-            const initialHash = window.location.hash.substring(1);
-            navigate(initialHash || 'home', false); // Use replaceState for initial load
-            updateCartUI();
-            addGlobalEventListeners();
-            startCountdownTimer(); // Start cart timer
+            loadProductsFromFirebase();
         });
 
         // Popstate event for browser back/forward buttons
@@ -4335,14 +4462,6 @@ function doExit() {
             // Event listener for closing mini cart
             document.getElementById('closeMiniCart').addEventListener('click', closeMiniCart);
             document.getElementById('overlay').addEventListener('click', closeMiniCart);
-            
-            // Exit popup buttons
-            document.querySelector('.exit-leave').addEventListener('click', () => {
-                closeExitPopup();
-                // Allow default back action, which would close tab/go to previous site
-                // In a SPA, window.history.back() will go to previous. If already on root, it might try to exit.
-                // No explicit `window.close()` is possible due to browser security.
-            });
         }
 
         function updateBottomNavActiveState(pageId) {
@@ -5256,7 +5375,7 @@ function doExit() {
                 orderDetails += `_No payment screenshot uploaded. Please instruct customer for advance payment proof._`;
             }
 
-            const whatsappNumber = '923040666937';
+            const whatsappNumber = '923006771013';
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(orderDetails)}`;
 
             window.open(whatsappUrl, '_blank');
@@ -5353,19 +5472,365 @@ function doExit() {
             }
             document.getElementById('page-search').classList.add('active');
         }
+        function renderServicesPage() {
+            const page = document.getElementById('page-services');
+            page.innerHTML = `
+                <div class="page-header">
+                    <div class="container">
+                        <h1>Our Completed Projects</h1>
+                        <p>Delivering excellence across Pakistan with sustainable and high-efficiency solar installations.</p>
+                    </div>
+                </div>
+                <div class="container services-container">
+                    <!-- Project 1 -->
+                    <div class="project-horizontal-card">
+                        <img src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800" alt="Residential Project">
+                        <div class="project-horizontal-info">
+                            <span class="tag">Residential</span>
+                            <h3>10kW Premium Home Solution</h3>
+                            <p>Successfully installed in Model Town, Multan. This project features Tier-1 Jinko N-Type solar panels paired with a Knox Hybrid Smart Inverter, ensuring 24/7 uninterrupted power supply and maximum energy savings for the household.</p>
+                        </div>
+                    </div>
 
-        function showExitPopup() {
-            exitPopup.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
+                    <!-- Project 2 -->
+                    <div class="project-horizontal-card">
+                        <img src="https://scontent.flhe2-3.fna.fbcdn.net/v/t39.30808-6/615355680_25276126922086833_3848902666748558985_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeE58NdxFZs9f3OfC8NcWZSq_RFzNQScIxr9EXM1BJwjGqhpwQiv7Z41DXDFftlAK4iPn6wdmo5-mGThY-qBW0Lz&_nc_ohc=c6F6rW_5njcQ7kNvwF4KSUD&_nc_oc=AdpVPQkXVm0_RXYlXBWUHoJben3_S9wUJVE_I186_lXERMMZ-zxXzxTosOFUzWVFQnQ63f0Q2arfq634SmQYyDWl&_nc_zt=23&_nc_ht=scontent.flhe2-3.fna&_nc_gid=SG_j9k-tkM4hgE1wmrDSkg&_nc_ss=7a32e&oh=00_AfzjJw_y4y8mxI77VIWOk1geueZxrnOlCabx4LkNJ4QTig&oe=69C94564" alt="Industrial Project">
+                        <div class="project-horizontal-info">
+                            <span class="tag">Industrial</span>
+                            <h3>50kW Grid-Tied System</h3>
+                            <p>A massive industrial installation at the Multan Industrial Estate. By implementing high-capacity on-grid technology, we helped the client reduce their monthly electricity expenditure by over 80%, providing a rapid return on investment.</p>
+                        </div>
+                    </div>
 
-        function closeExitPopup() {
-            exitPopup.style.display = 'none';
-            document.body.style.overflow = '';
-            // If the user clicks "Stay", we need to push the current (home) state back to prevent
-            // the browser from trying to navigate away.
-            history.pushState({ page: 'home' }, '', '#home');
+                    <!-- Project 3 -->
+                    <div class="project-horizontal-card">
+                        <img src="https://scontent.flhe2-2.fna.fbcdn.net/v/t39.30808-6/615855120_25276128962086629_7766695695701011977_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeErAfxeoxULXqNoKsZTG0xyaR2LNm6Mhx9pHYs2boyHH444GaEQe1XLDKI_DTY3gada49TjYK-J_yjiNdhIaFs6&_nc_ohc=XG9RESYdq74Q7kNvwE7Eck6&_nc_oc=AdoCUElyt6-_klvy64F8Hveh1dir1nOFHptCs7QjokX_pRzYHGKSdrBJazgyluWa7VYel7bSWdggv7rZzuLtVlCf&_nc_zt=23&_nc_ht=scontent.flhe2-2.fna&_nc_gid=XRt2ccEhbPe3PcUmyjLOCg&_nc_ss=7a32e&oh=00_Afx3xA9QI7T69l5pBhfjHKrM43ts_yl_bE6jiVmkuVR4-Q&oe=69C93C5F" alt="Agricultural Project">
+                        <div class="project-horizontal-info">
+                            <span class="tag">Agricultural</span>
+                            <h3>Solar Water Pumping System</h3>
+                            <p>Empowering local farmers with robust VFD solar pumping solutions. This project eliminates fuel costs and provides a reliable water supply for irrigation using pure solar energy, significantly increasing crop productivity.</p>
+                        </div>
+                    </div>
+
+                    <!-- Project 4 -->
+                    <div class="project-horizontal-card">
+                        <img src="https://scontent.flhe2-2.fna.fbcdn.net/v/t39.30808-6/615442241_25276127262086799_2089962370499971350_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeElpEnLR3PUKW9TOdFZkcERiJ9wSFfpUB6In3BIV-lQHtpmY_GCPHOJQqgPlQIctNkQFc-d2bosZccUBrJcxW9Y&_nc_ohc=tZ1-hd14pR8Q7kNvwHhTrQP&_nc_oc=Adrf-ZEzeu5_uyxCFxtceh8XlUViGteTg8f1DVvaaO5jwbgRgDsBWSSRv--CLZ6qBTmxz4NroTzz5oiYjXQIyD_C&_nc_zt=23&_nc_ht=scontent.flhe2-2.fna&_nc_gid=ec-zR-Dsv1BYUVGr_Co2GA&_nc_ss=7a32e&oh=00_AfwjdpjPcbkIC3Xii5OwGY3-EMgv29pMtVm79ZijBCsstQ&oe=69C945BF" alt="Commercial Project">
+                        <div class="project-horizontal-info">
+                            <span class="tag">Commercial</span>
+                            <h3>Corporate Backup Infrastructure</h3>
+                            <p>Designed and deployed for a Bank Alfalah branch. This specialized backup infrastructure ensures that critical banking operations remain functional during grid failures, maintaining seamless service for customers.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            page.classList.add('active');
         }
+function renderAboutPage() {
+            const page = document.getElementById('page-about');
+            page.innerHTML = `
+                <div class="page-header">
+                    <div class="container">
+                        <h1>About AL Noor Solar Energy</h1>
+                        <p>Leading the transition to clean, renewable energy in Pakistan.</p>
+                    </div>
+                </div>
+
+                <div class="container">
+
+                    <!-- ══════════════════════════════════════
+                         CEO PROFILE CARD
+                    ══════════════════════════════════════ -->
+                    <div style="
+                        background: linear-gradient(145deg, #071E4A 0%, #0A3080 55%, #1565C0 100%);
+                        border-radius: 28px;
+                        padding: 36px 28px 32px;
+                        margin-bottom: 28px;
+                        position: relative;
+                        overflow: hidden;
+                        box-shadow: 0 24px 64px rgba(7,30,74,0.35);
+                    ">
+                        <!-- Background decorations -->
+                        <div style="position:absolute;width:340px;height:340px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.05);top:-100px;right:-100px;pointer-events:none;"></div>
+                        <div style="position:absolute;width:200px;height:200px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.04);bottom:-60px;left:10px;pointer-events:none;"></div>
+                        <div style="position:absolute;width:90px;height:90px;background:rgba(255,184,0,0.07);border-radius:50%;top:24px;right:50px;pointer-events:none;"></div>
+                        <div style="position:absolute;width:50px;height:50px;background:rgba(77,163,255,0.1);border-radius:50%;bottom:40px;right:30px;pointer-events:none;"></div>
+
+                        <!-- SECTION 1: Photo + Basic Info -->
+                        <div style="display:flex;align-items:flex-start;gap:24px;margin-bottom:28px;flex-wrap:wrap;">
+
+                            <!-- Photo (NO rotation, just clean border) -->
+                            <div style="position:relative;flex-shrink:0;">
+                                <div style="
+                                    width:130px;height:130px;border-radius:20px;
+                                    border:3px solid rgba(77,163,255,0.5);
+                                    overflow:hidden;
+                                    box-shadow:0 12px 36px rgba(0,0,0,0.4), 0 0 0 6px rgba(77,163,255,0.1);
+                                    background:#0A3080;
+                                ">
+                                    <img
+                                        src="https://scontent.flhe2-4.fna.fbcdn.net/v/t1.6435-9/49347963_1886595574799964_765262090091888640_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeGncmVH_MM5A8_lbXNOQpQhigiOgD-n8SCKCI6AP6fxIF03sMNb5X4P8DEXRsKTIanA4ZxAkePnSXzdD2d9pdo3&_nc_ohc=KNO_5cqmvikQ7kNvwFxg1l6&_nc_oc=AdoLmZ1USgi-jqFLWgjmkM3qXUfiOEkQzaBV0lyfyN0dmWTWnVbntfN6j8OCdqo6odM3xxmR-1Nuajy-G0Bg7470&_nc_zt=23&_nc_ht=scontent.flhe2-4.fna&_nc_gid=h_zHq0E99Ev8gEh_nMfZaQ&_nc_ss=7a32e&oh=00_Afx7aFqOjK9x10lHgNyZjAtjmg_6ul2wAhKNfHiYkTDDiQ&oe=69EAD243"
+                                        alt="Engr. Muhammad Hamid"
+                                        style="width:100%;height:100%;object-fit:cover;display:block;"
+                                        onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><rect width=%2280%22 height=%2280%22 fill=%22%231565C0%22/><text x=%2240%22 y=%2248%22 text-anchor=%22middle%22 font-size=%2228%22 fill=%22white%22>👤</text></svg>'"
+                                    >
+                                </div>
+                                <!-- Verified badge -->
+                                <div style="
+                                    position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
+                                    background:linear-gradient(135deg,#FFB800,#FF8A00);
+                                    color:#fff;font-size:10px;font-weight:800;
+                                    padding:3px 10px;border-radius:20px;white-space:nowrap;
+                                    box-shadow:0 4px 10px rgba(255,138,0,0.4);
+                                    letter-spacing:.5px;
+                                ">✦ CEO & Founder</div>
+                            </div>
+
+                            <!-- Name + Tags -->
+                            <div style="flex:1;min-width:160px;padding-top:4px;">
+                                <h2 style="color:#ffffff;font-size:21px;font-weight:800;margin:0 0 4px;line-height:1.2;">
+                                    Engr. Muhammad Hamid
+                                </h2>
+                                <p style="color:rgba(255,255,255,0.55);font-size:13px;margin:0 0 14px;font-weight:500;">
+                                    Al-Noor Solar Energy (ASE) &amp; Al Noor Solar Traders, Multan
+                                </p>
+                                <div style="display:flex;gap:7px;flex-wrap:wrap;">
+                                    <span style="background:rgba(77,163,255,0.15);color:#7DC8FF;border:1px solid rgba(77,163,255,0.25);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;">⚡ MSc Electrical Power</span>
+                                    <span style="background:rgba(0,217,126,0.12);color:#4DFFA8;border:1px solid rgba(0,217,126,0.22);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;">🏆 400+ Projects</span>
+                                    <span style="background:rgba(255,184,0,0.12);color:#FFD45C;border:1px solid rgba(255,184,0,0.22);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;">🏢 4 Offices S.Punjab</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 2: About / Profile Info -->
+                        <div style="
+                            background:rgba(255,255,255,0.05);
+                            border:1px solid rgba(255,255,255,0.1);
+                            border-radius:16px;
+                            padding:20px 18px;
+                            margin-bottom:20px;
+                        ">
+                            <div style="color:rgba(255,255,255,0.45);font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;">
+                                👤 Profile
+                            </div>
+                            <p style="color:rgba(255,255,255,0.82);font-size:14px;line-height:1.85;margin:0 0 12px;">
+                                <strong style="color:white;">Engineer Muhammad Hamid</strong> is the CEO and Founder of
+                                <strong style="color:#7DC8FF;">Al-Noor Solar Energy (ASE)</strong> and
+                                <strong style="color:#7DC8FF;">Al Noor Solar Traders</strong> — the biggest Solar Company
+                                of South Punjab, operating <strong style="color:#FFD45C;">four offices</strong> across the region
+                                and dealing in all types of solar products in Pakistan.
+                            </p>
+                            <p style="color:rgba(255,255,255,0.72);font-size:14px;line-height:1.85;margin:0 0 12px;">
+                                He holds an <strong style="color:white;">MSc in Electrical Power Engineering (2017)</strong> and
+                                began his career at <strong style="color:white;">NTDC Multan in 2015</strong> as an Electrical Engineer.
+                                He then joined <strong style="color:white;">Jaffer Brothers Group</strong> as Regional Manager Operations
+                                for South Punjab in 2017, where he successfully completed
+                                <strong style="color:#4DFFA8;">400+ Agricultural Solar Projects</strong> under the Punjab Agriculture Department's
+                                high-efficiency irrigation solarization program.
+                            </p>
+                            <p style="color:rgba(255,255,255,0.72);font-size:14px;line-height:1.85;margin:0;">
+                                He has also served as <strong style="color:white;">Assistant Manager at Punjab Energy Department</strong>,
+                                <strong style="color:white;">General Manager at Zonergy Multan</strong>, Trainee Engineer at Wajedo Inspection,
+                                and former Engineer at <strong style="color:white;">NFC Institute of Engineering &amp; Technology</strong>.
+                            </p>
+                        </div>
+
+                        <!-- SECTION 3: CEO Message -->
+                        <div style="
+                            background:rgba(255,255,255,0.06);
+                            backdrop-filter:blur(12px);
+                            border:1px solid rgba(255,255,255,0.12);
+                            border-radius:16px;
+                            padding:22px 18px 18px;
+                            position:relative;
+                            margin-bottom:24px;
+                        ">
+                            <div style="
+                                position:absolute;top:-14px;left:20px;
+                                width:30px;height:30px;border-radius:50%;
+                                background:linear-gradient(135deg,#FFB800,#FF6A00);
+                                display:flex;align-items:center;justify-content:center;
+                                font-size:14px;box-shadow:0 4px 12px rgba(255,184,0,0.45);
+                            ">💬</div>
+
+                            <div style="color:rgba(255,255,255,0.42);font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;">
+                                Message from the CEO
+                            </div>
+                            <p style="
+                                color:rgba(255,255,255,0.9);
+                                font-size:15px;
+                                line-height:1.85;
+                                font-style:italic;
+                                margin:0 0 18px;
+                            ">
+                                "My vision is to promote Solar &amp; Renewable Energy across Pakistan and to facilitate every
+                                citizen — whether in a home, office, or industry — to break free from rising electricity bills
+                                while reducing carbon emissions. At Al-Noor Solar Energy, we don't just sell products;
+                                we deliver high-quality, reliable solar solutions that are affordable for every Pakistani family.
+                                Together, we are building a cleaner, brighter, and more energy-independent future — one
+                                installation at a time."
+                            </p>
+                            <div style="display:flex;align-items:center;gap:10px;border-top:1px solid rgba(255,255,255,0.1);padding-top:14px;">
+                                <div style="width:34px;height:34px;border-radius:10px;background:rgba(77,163,255,0.18);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">✍️</div>
+                                <div>
+                                    <div style="color:white;font-weight:800;font-size:14px;">Engr. Muhammad Hamid</div>
+                                    <div style="color:rgba(255,255,255,0.45);font-size:11px;margin-top:1px;">CEO &amp; Founder — Al-Noor Solar Energy (ASE)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 4: Career Timeline -->
+                        <div>
+                            <div style="color:rgba(255,255,255,0.42);font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:13px;">
+                                📅 Career Highlights
+                            </div>
+                            <div style="display:flex;flex-direction:column;gap:9px;">
+                                ${[
+                                    { icon:'🎓', year:'2015',    title:'NTDC Multan',                    role:'Electrical Engineer — Started His Professional Journey' },
+                                    { icon:'🔧', year:'',        title:'Wajedo Inspection',              role:'Trainee Engineer' },
+                                    { icon:'🏫', year:'',        title:'NFC Institute of Engg & Tech',   role:'Former Engineer' },
+                                    { icon:'⚙️', year:'',        title:'Punjab Energy Department',       role:'Assistant Manager — Government Energy Sector' },
+                                    { icon:'🌞', year:'',        title:'Zonergy Multan',                 role:'General Manager' },
+                                    { icon:'🏭', year:'2017',    title:'Jaffer Brothers Group',          role:'Regional Manager Operations, South Punjab' },
+                                    { icon:'🌱', year:'2017–20', title:'Punjab Agriculture Dept.',       role:'Completed 400+ Agricultural Solar Solarization Projects' },
+                                    { icon:'🏆', year:'Now',     title:'Al-Noor Solar Energy (ASE)',     role:'CEO & Founder — Biggest Solar Company of South Punjab' },
+                                ].map((item, i) => `
+                                <div style="
+                                    display:flex;align-items:flex-start;gap:11px;
+                                    background:${i === 7 ? 'rgba(255,184,0,0.07)' : 'rgba(255,255,255,0.04)'};
+                                    border:1px solid ${i === 7 ? 'rgba(255,184,0,0.3)' : 'rgba(255,255,255,0.07)'};
+                                    border-radius:12px;padding:10px 13px;
+                                ">
+                                    <div style="font-size:17px;flex-shrink:0;margin-top:1px;">${item.icon}</div>
+                                    <div style="flex:1;min-width:0;">
+                                        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+                                            <span style="color:white;font-weight:700;font-size:13px;">${item.title}</span>
+                                            ${item.year ? `<span style="background:rgba(77,163,255,0.18);color:#7DC8FF;border-radius:6px;padding:1px 7px;font-size:10px;font-weight:700;">${item.year}</span>` : ''}
+                                        </div>
+                                        <div style="color:rgba(255,255,255,0.48);font-size:12px;margin-top:2px;">${item.role}</div>
+                                    </div>
+                                </div>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ══════════════════════════════════════
+                         LIVE CONTACT + MAP
+                    ══════════════════════════════════════ -->
+                    <div class="contact-map-box">
+                        <div style="background:#fff;padding:32px 24px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.06);border:1px solid #eef2ff;">
+                            <h3 style="color:var(--dark-blue);margin:0 0 20px;font-size:18px;font-weight:800;">📍 Contact Us</h3>
+                            <div style="display:flex;flex-direction:column;gap:12px;">
+
+                                <!-- Address -->
+                                <div style="display:flex;align-items:flex-start;gap:12px;padding:14px;background:#FFF7F7;border-radius:14px;border:1px solid #FFE4E4;">
+                                    <div style="width:38px;height:38px;border-radius:11px;background:#FEE2E2;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;">📍</div>
+                                    <div>
+                                        <div style="font-size:10px;font-weight:800;color:#999;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Address</div>
+                                        <div style="font-size:13.5px;color:#333;line-height:1.55;">155-A, Opposite Bank Alfalah,<br>Model Town Chowk, Multan, Pakistan</div>
+                                        <a href="https://maps.google.com/?q=Model+Town+Chowk+Multan+Pakistan" target="_blank"
+                                           style="display:inline-flex;align-items:center;gap:5px;margin-top:7px;font-size:12px;font-weight:700;color:var(--primary-blue);text-decoration:none;background:#EFF6FF;padding:4px 10px;border-radius:8px;">
+                                            🗺️ Open in Maps
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Phone -->
+                                <a href="tel:03006771013" style="text-decoration:none;">
+                                    <div style="display:flex;align-items:center;gap:12px;padding:14px;background:#F0F7FF;border-radius:14px;border:1px solid #DBEAFE;cursor:pointer;transition:background .2s;">
+                                        <div style="width:38px;height:38px;border-radius:11px;background:#DBEAFE;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;">📞</div>
+                                        <div style="flex:1;">
+                                            <div style="font-size:10px;font-weight:800;color:#999;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Call Now</div>
+                                            <div style="font-size:16px;color:#1D4ED8;font-weight:800;">0300-6771013</div>
+                                        </div>
+                                        <div style="font-size:20px;">→</div>
+                                    </div>
+                                </a>
+
+                                <!-- WhatsApp -->
+                                <a href="https://wa.me/923006771013" target="_blank" style="text-decoration:none;">
+                                    <div style="display:flex;align-items:center;gap:12px;padding:14px;background:#F0FDF4;border-radius:14px;border:1px solid #BBF7D0;cursor:pointer;">
+                                        <div style="width:38px;height:38px;border-radius:11px;background:#DCFCE7;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;">💬</div>
+                                        <div style="flex:1;">
+                                            <div style="font-size:10px;font-weight:800;color:#999;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">WhatsApp</div>
+                                            <div style="font-size:15px;color:#15803D;font-weight:800;">Chat on WhatsApp</div>
+                                        </div>
+                                        <div style="font-size:20px;">→</div>
+                                    </div>
+                                </a>
+
+                                <!-- Email -->
+                                <a href="mailto:alnoorse786@gmail.com" style="text-decoration:none;">
+                                    <div style="display:flex;align-items:center;gap:12px;padding:14px;background:#F5F3FF;border-radius:14px;border:1px solid #DDD6FE;cursor:pointer;">
+                                        <div style="width:38px;height:38px;border-radius:11px;background:#EDE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;">✉️</div>
+                                        <div style="flex:1;">
+                                            <div style="font-size:10px;font-weight:800;color:#999;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Email</div>
+                                            <div style="font-size:13px;color:#6D28D9;font-weight:700;">alnoorse786@gmail.com</div>
+                                        </div>
+                                        <div style="font-size:20px;">→</div>
+                                    </div>
+                                </a>
+
+                                <!-- Business Hours -->
+                                <div style="display:flex;align-items:center;gap:12px;padding:14px;background:#FFFBEB;border-radius:14px;border:1px solid #FDE68A;">
+                                    <div style="width:38px;height:38px;border-radius:11px;background:#FEF3C7;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;">🕐</div>
+                                    <div>
+                                        <div style="font-size:10px;font-weight:800;color:#999;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Business Hours</div>
+                                        <div style="font-size:14px;color:#92400E;font-weight:700;">Mon–Thu, Sat–Sun: 09:00 AM – 07:00 PM</div>
+                                        <div style="font-size:12px;color:#DC2626;font-weight:700;margin-top:2px;">❌ Friday: Closed</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- MAP -->
+                        <div class="map-container">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3448.2435423851084!2d71.4820!3d30.2012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDEyJzA0LjMiTiA3McKwMjgnNTUuMiJF!5e0!3m2!1sen!2spk!4v1620000000000!5m2!1sen!2spk"
+                                width="100%" height="350"
+                                style="border:0;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.1);"
+                                allowfullscreen="" loading="lazy">
+                            </iframe>
+                        </div>
+                    </div>
+
+                </div>
+            `;
+            page.classList.add('active');
+        }
+       
     </script>
+
+    <!-- MOBILE NAV OVERLAY -->
+    <div class="mob-overlay" id="mobOverlay" onclick="closeMobileMenu()"></div>
+
+    <!-- MOBILE NAV PANEL -->
+    <div class="mobile-nav-panel" id="mobileNavPanel">
+        <div class="mnp-header">
+            <div class="mnp-logo">
+                <img src="https://scontent.flhe2-4.fna.fbcdn.net/v/t39.30808-6/295888334_117388544374333_406723974692594063_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeGxTlZUacSYXgWQc_8mSypkPMkvrfF97J48yS-t8X3snjh5qf3fQrAmwQ-iQCd6pND-4eahxWcgBTirKIPl584G&_nc_ohc=rgbOUf9IxkoQ7kNvwFXE-H9&_nc_oc=AdpiznhVEnHYQx_cBzrkjbDjPbJGoQidOPn5yfuWEddMnsdKIJ0Vi5TwJ01jXdfMlUrpKKl-A13E8bP0VSAJk_Y-&_nc_zt=23&_nc_ht=scontent.flhe2-4.fna&_nc_gid=5z-eIgFRdP2CJy96jqra1Q&_nc_ss=7a32e&oh=00_AfwGCLeCxAxWhM8bHSts_bNL-TmZj8QlHbJUjhbfYsbSfA&oe=69C940E2" alt="Logo" onerror="this.style.background='#1565C0'">
+                <span>AL Noor Solar</span>
+            </div>
+            <button class="mnp-close" onclick="closeMobileMenu()">✕</button>
+        </div>
+        <nav class="mnp-links">
+            <a href="#home"                class="mnp-link nav-link" onclick="closeMobileMenu()"><span class="mnp-icon">🏠</span> Home</a>
+            <a href="#products"            class="mnp-link nav-link" onclick="closeMobileMenu()"><span class="mnp-icon">📦</span> All Products</a>
+            <a href="#solar-inverters"     class="mnp-link nav-link" onclick="closeMobileMenu()"><span class="mnp-icon">⚡</span> Solar Inverters</a>
+            <a href="#solar-panels"        class="mnp-link nav-link" onclick="closeMobileMenu()"><span class="mnp-icon">☀️</span> Solar Panels</a>
+            <a href="#lithium-batteries"   class="mnp-link nav-link" onclick="closeMobileMenu()"><span class="mnp-icon">🔋</span> Lithium Batteries</a>
+            <a href="#vfd-inverters"       class="mnp-link nav-link" onclick="closeMobileMenu()"><span class="mnp-icon">🔧</span> VFD Inverters</a>
+            <a href="#module-authenticity" class="mnp-link nav-link" onclick="closeMobileMenu()"><span class="mnp-icon">✅</span> Module Authenticity</a>
+            <a href="#services"            class="mnp-link nav-link" onclick="closeMobileMenu()"><span class="mnp-icon">🛠️</span> Our Services</a>
+            <a href="#about"               class="mnp-link nav-link" onclick="closeMobileMenu()"><span class="mnp-icon">🧓</span> About Us</a>
+        </nav>
+        <div class="mnp-footer">
+            <div class="mnp-contact-row">📞 <a href="tel:03006771013">0300-6771013</a></div>
+            <div class="mnp-contact-row">✉️ <a href="mailto:alnoorse786@gmail.com">alnoorse786@gmail.com</a></div>
+            <div class="mnp-contact-row" style="color:#888;font-size:12px;">🕐 Mon–Thu, Sat–Sun: 9AM–7PM</div>
+        </div>
+    </div>
+
 </body>
 </html>
+
