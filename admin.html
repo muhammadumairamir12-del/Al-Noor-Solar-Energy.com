@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Al Noor Solar — Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-dark:   #071E4A;
+            --blue-deep:   #0A2F7A;
+            --blue-mid:    #1255CC;
+            --blue-main:   #1976D2;
+            --blue-light:  #4DA3FF;
+            --blue-pale:   #EBF4FF;
+            --accent:      #FFB800;
+            --green:       #00D97E;
+            --red:         #FF4757;
+            --white:       #ffffff;
+            --surface:     #F4F8FF;
+            --card-bg:     rgba(255,255,255,0.96);
+            --text-dark:   #071E4A;
+            --text-mid:    #5C6E8A;
+            --text-light:  #9BB1CC;
+            --border:      rgba(77,163,255,0.18);
+            --shadow-sm:   0 2px 12px rgba(18,85,204,0.08);
+            --shadow-md:   0 8px 32px rgba(18,85,204,0.14);
+            --shadow-lg:   0 20px 60px rgba(7,30,74,0.18);
+            --font:        'Plus Jakarta Sans', sans-serif;
+            --font-head:   'Syne', sans-serif;
+            --spring:      cubic-bezier(0.34,1.56,0.64,1);
+            --ease-out:    cubic-bezier(0.22,1,0.36,1);
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font);
+            background: var(--surface);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── ANIMATED BACKGROUND ─── */
+        .bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .bg-gradient {
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% -10%, rgba(77,163,255,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 90% 80%, rgba(18,85,204,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at 50% 50%, rgba(255,184,0,0.04) 0%, transparent 70%);
+        }
+        .orb { position: absolute; border-radius: 50%; filter: blur(70px); animation: orbFloat 10s ease-in-out infinite alternate; }
+        .o1 { width:500px; height:500px; background:var(--blue-mid); opacity:.09; top:-200px; left:-150px; }
+        .o2 { width:380px; height:380px; background:var(--blue-light); opacity:.1; top:35%; right:-120px; animation-delay:3s; animation-duration:12s; }
+        .o3 { width:300px; height:300px; background:var(--accent); opacity:.07; bottom:-100px; left:25%; animation-delay:6s; animation-duration:9s; }
+        .o4 { width:200px; height:200px; background:var(--blue-light); opacity:.08; top:60%; left:10%; animation-delay:2s; animation-duration:14s; }
+        @keyframes orbFloat {
+            0%   { transform: translate(0,0) scale(1); }
+            50%  { transform: translate(20px,30px) scale(1.05); }
+            100% { transform: translate(-15px,15px) scale(0.95); }
+        }
+        .bg-grid {
+            position: absolute; inset: 0; opacity: 0.025;
+            background-image: linear-gradient(var(--blue-mid) 1px, transparent 1px), linear-gradient(90deg, var(--blue-mid) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* ─── LOADING SCREEN ─── */
+        #loadingScreen {
+            position: fixed; inset: 0; z-index: 9999;
+            background: var(--blue-dark);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity .6s ease, visibility .6s;
+        }
+        #loadingScreen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-logo {
+            width: 78px; height: 78px; border-radius: 50%;
+            background: rgba(255,255,255,.07); border: 2px solid rgba(77,163,255,.3);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+            margin-bottom: 22px; animation: lPulse 1.5s ease-in-out infinite;
+        }
+        .loader-logo img { width: 70px; height: 70px; object-fit: contain; border-radius: 50%; }
+        @keyframes lPulse {
+            0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(77,163,255,.3); }
+            50%      { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(77,163,255,0); }
+        }
+        .loader-name { font-family: var(--font-head); color: white; font-size: 18px; margin-bottom: 4px; }
+        .loader-sub  { color: rgba(255,255,255,.45); font-size: 12px; margin-bottom: 28px; }
+        .lbar-wrap { width: 150px; height: 3px; background: rgba(255,255,255,.1); border-radius: 3px; overflow: hidden; }
+        .lbar { height: 100%; background: linear-gradient(90deg, var(--blue-light), var(--accent)); border-radius: 3px; animation: lbar 1.8s ease-in-out infinite; }
+        @keyframes lbar { 0%{width:0%;transform:translateX(0)} 60%{width:100%;transform:translateX(0)} 100%{width:100%;transform:translateX(110%)} }
+
+        /* ─── KEYFRAMES ─── */
+        @keyframes screenIn   { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes cardRise   { from{opacity:0;transform:translateY(46px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes pillIn     { from{opacity:0;transform:translateY(14px) scale(.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes cardSlide  { from{opacity:0;transform:translateX(-18px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes shake      { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-7px)} 40%,80%{transform:translateX(7px)} }
+        @keyframes spin       { to{transform:rotate(360deg)} }
+        @keyframes shimmer    { 0%{background-position:-468px 0} 100%{background-position:468px 0} }
+        @keyframes logoBorder { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+        /* ─── LOGIN SCREEN ─── */
+        #loginScreen {
+            position: relative; z-index: 10;
+            display: none; flex-direction: column;
+            justify-content: center; align-items: center;
+            min-height: 100vh; padding: 24px 20px;
+        }
+        #loginScreen.show { display: flex; animation: screenIn .6s var(--ease-out); }
+
+        /* Hero */
+        .login-hero { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
+        .logo-host { position: relative; width: 118px; height: 118px; margin-bottom: 16px; }
+        .logo-spin-ring {
+            position: absolute; inset: 0; border-radius: 50%;
+            background: conic-gradient(var(--blue-light), var(--blue-mid), var(--accent), var(--blue-light));
+            animation: logoBorder 5s linear infinite;
+            padding: 2.5px;
+        }
+        .logo-spin-ring::before {
+            content: ''; display: block; width: 100%; height: 100%;
+            border-radius: 50%; background: var(--surface);
+        }
+        .logo-circle {
+            position: absolute; inset: 8px; border-radius: 50%;
+            background: white; border: 2px solid rgba(77,163,255,.2);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; box-shadow: 0 4px 20px rgba(18,85,204,.15);
+        }
+        .logo-circle img { width: 86px; height: 86px; object-fit: contain; border-radius: 50%; }
+        .brand-name { font-family: var(--font-head); font-size: 23px; color: var(--blue-dark); }
+        .brand-name em { font-style: normal; color: var(--blue-mid); }
+        .brand-tag {
+            display: inline-block; margin-top: 7px;
+            background: var(--blue-pale); color: var(--blue-mid);
+            border: 1.5px solid var(--border); border-radius: 20px;
+            font-size: 11px; font-weight: 700; letter-spacing: 1.8px;
+            text-transform: uppercase; padding: 4px 14px;
+        }
+
+        /* Card */
+        .login-card {
+            width: 100%; max-width: 376px;
+            background: rgba(255,255,255,.94); backdrop-filter: blur(24px) saturate(180%);
+            border-radius: 28px; border: 1.5px solid var(--border);
+            box-shadow: var(--shadow-lg); padding: 30px 26px 26px;
+            animation: cardRise .8s var(--ease-out) .12s both;
+        }
+        .card-h2 { font-family: var(--font-head); font-size: 24px; color: var(--blue-dark); margin-bottom: 4px; }
+        .card-sub { color: var(--text-mid); font-size: 13px; font-weight: 500; margin-bottom: 24px; }
+
+        /* Fields */
+        .f-wrap { position: relative; margin-bottom: 15px; }
+        .f-lbl { display: block; font-size: 11px; font-weight: 800; color: var(--blue-mid); letter-spacing: .9px; text-transform: uppercase; margin-bottom: 6px; }
+        .f-icon { position: absolute; left: 13px; bottom: 13px; font-size: 16px; pointer-events: none; transition: transform .2s; }
+        .f-in {
+            width: 100%; padding: 13px 13px 13px 42px;
+            border: 2px solid #D8E8FF; border-radius: 13px;
+            font-family: var(--font); font-size: 15px; color: var(--text-dark);
+            background: var(--blue-pale); outline: none;
+            transition: border-color .2s, box-shadow .2s, background .2s;
+        }
+        .f-in:focus { border-color: var(--blue-light); box-shadow: 0 0 0 4px rgba(77,163,255,.15); background: white; }
+        .f-in::placeholder { color: #B8CEDD; }
+        .f-in:focus ~ .f-icon { transform: scale(1.15); }
+
+        /* Login Btn */
+        .login-btn {
+            width: 100%; padding: 14px 20px; margin-top: 6px;
+            background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 50%, var(--blue-light) 100%);
+            background-size: 200% 200%;
+            color: white; border: none; border-radius: 13px;
+            font-family: var(--font); font-size: 15px; font-weight: 800;
+            cursor: pointer; letter-spacing: .3px;
+            box-shadow: 0 6px 22px rgba(18,85,204,.4), inset 0 1px 0 rgba(255,255,255,.15);
+            transition: transform .2s, box-shadow .2s, background-position .4s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            position: relative; overflow: hidden;
+        }
+        .login-btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle, rgba(255,255,255,.18) 0%, transparent 60%);
+            opacity: 0; transition: opacity .25s;
+        }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(18,85,204,.5); background-position: 100% 0%; }
+        .login-btn:hover::before { opacity: 1; }
+        .login-btn:active { transform: translateY(1px); }
+        .btn-arrow { transition: transform .3s var(--spring); }
+        .login-btn:hover .btn-arrow { transform: translateX(5px); }
+        .login-btn.loading { pointer-events: none; }
+        .login-btn.loading .btn-txt { display: none; }
+        .login-btn .spin-ring { display: none; width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; }
+        .login-btn.loading .spin-ring { display: block; }
+
+        .err-box {
+            display: none; margin-top: 12px;
+            background: #FFF0F0; border: 1.5px solid #FECACA; border-radius: 10px;
+            padding: 10px 14px; color: #B91C1C; font-size: 13px; font-weight: 700; text-align: center;
+        }
+        .err-box.on { display: block; animation: shake .45s ease; }
+        .card-foot { display: flex; align-items: center; gap: 10px; margin-top: 18px; }
+        .card-foot::before, .card-foot::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+        .card-foot span { font-size: 11px; color: var(--text-light); font-weight: 600; white-space: nowrap; }
+
+        /* ─── ADMIN CONTENT ─── */
+        #adminContent { display: none; position: relative; z-index: 10; min-height: 100vh; }
+        #adminContent.show { display: block; animation: screenIn .5s var(--ease-out); }
+
+        /* TOP NAV */
+        .top-nav {
+            position: sticky; top: 0; z-index: 100; height: 60px;
+            background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-deep) 55%, var(--blue-mid) 100%);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 15px;
+            box-shadow: 0 4px 22px rgba(7,30,74,.35);
+        }
+        .top-nav::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+            height: 1px; background: linear-gradient(90deg, transparent, rgba(77,163,255,.4), transparent);
+        }
+        .nb { display: flex; align-items: center; gap: 10px; }
+        .nav-logo {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: rgba(255,255,255,.95); border: 2px solid rgba(77,163,255,.4);
+            overflow: hidden; flex-shrink: 0;
+        }
+        .nav-logo img { width: 34px; height: 34px; object-fit: contain; border-radius: 50%; margin: 2px; }
+        .nav-label { font-family: var(--font-head); color: white; font-size: 15px; line-height: 1; }
+        .nav-label small { font-family: var(--font); font-size: 11px; opacity: .55; display: block; margin-top: 2px; font-weight: 600; }
+        .logout-btn {
+            background: rgba(255,71,87,.15); color: #FF8A92;
+            border: 1.5px solid rgba(255,71,87,.25); border-radius: 10px;
+            padding: 7px 13px; font-size: 12px; font-weight: 700;
+            cursor: pointer; font-family: var(--font);
+            display: flex; align-items: center; gap: 5px;
+            transition: background .2s, color .2s;
+        }
+        .logout-btn:hover { background: rgba(255,71,87,.28); color: white; }
+
+        /* STATS */
+        .stats-row { padding: 13px 13px 5px; display: flex; gap: 9px; overflow-x: auto; scrollbar-width: none; }
+        .stats-row::-webkit-scrollbar { display: none; }
+        .stat-card {
+            flex-shrink: 0; min-width: 100px; background: var(--card-bg);
+            border-radius: 15px; border: 1.5px solid var(--border);
+            padding: 12px 14px; box-shadow: var(--shadow-sm);
+            transition: transform .25s var(--spring), box-shadow .25s;
+            animation: pillIn .5s var(--ease-out) both;
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .stat-card:nth-child(1){animation-delay:.05s} .stat-card:nth-child(2){animation-delay:.12s}
+        .stat-card:nth-child(3){animation-delay:.19s} .stat-card:nth-child(4){animation-delay:.26s}
+        .si { font-size: 17px; margin-bottom: 5px; }
+        .sv { font-family: var(--font-head); font-size: 22px; line-height: 1; transition: all .4s ease; }
+        .sk { font-size: 10px; font-weight: 700; color: var(--text-mid); margin-top: 3px; letter-spacing: .4px; }
+        .stat-card:nth-child(1) .sv{color:var(--blue-mid)}
+        .stat-card:nth-child(2) .sv{color:#00A86B}
+        .stat-card:nth-child(3) .sv{color:#7C3AED}
+        .stat-card:nth-child(4) .sv{color:#D97706}
+
+        /* TOOLBAR */
+        .toolbar { padding: 10px 13px; display: flex; gap: 9px; align-items: center; }
+        .search-wrap {
+            flex: 1; background: var(--card-bg); border-radius: 13px;
+            border: 2px solid var(--border); padding: 9px 13px;
+            display: flex; align-items: center; gap: 9px;
+            box-shadow: var(--shadow-sm); transition: border-color .2s, box-shadow .2s;
+        }
+        .search-wrap:focus-within { border-color: var(--blue-light); box-shadow: 0 0 0 4px rgba(77,163,255,.1), var(--shadow-sm); }
+        .search-wrap .sico { font-size: 15px; color: var(--blue-light); flex-shrink: 0; }
+        .search-wrap input { border: none; outline: none; font-family: var(--font); font-size: 14px; color: var(--text-dark); background: transparent; width: 100%; }
+        .search-wrap input::placeholder { color: var(--text-light); }
+        .refresh-btn {
+            width: 42px; height: 42px; flex-shrink: 0; background: var(--card-bg);
+            border-radius: 13px; border: 2px solid var(--border); font-size: 17px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-sm); transition: transform .25s var(--spring), border-color .2s;
+        }
+        .refresh-btn:hover { border-color: var(--blue-light); transform: scale(1.05) rotate(90deg); }
+
+        /* CHIPS */
+        .chips { padding: 0 13px 11px; display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; }
+        .chips::-webkit-scrollbar { display: none; }
+        .chip {
+            flex-shrink: 0; padding: 6px 13px; border-radius: 20px;
+            font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;
+            border: 1.5px solid var(--border); background: var(--card-bg); color: var(--text-mid);
+            transition: all .22s var(--spring);
+        }
+        .chip.on { background: linear-gradient(135deg, var(--blue-mid), var(--blue-light)); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(18,85,204,.3); transform: translateY(-1px); }
+        .chip:hover:not(.on) { border-color: var(--blue-light); color: var(--blue-mid); transform: translateY(-1px); }
+
+        /* SECTION HEADER */
+        .sec-head { padding: 6px 15px 10px; display: flex; align-items: center; justify-content: space-between; }
+        .sec-title { font-family: var(--font-head); font-size: 17px; color: var(--blue-dark); display: flex; align-items: center; gap: 8px; }
+        .cnt-badge {
+            background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+            color: white; border-radius: 20px; padding: 2px 9px;
+            font-size: 11px; font-weight: 800; font-family: var(--font);
+        }
+
+        /* PRODUCT CARDS */
+        .products-list { padding: 0 13px 110px; display: flex; flex-direction: column; gap: 10px; }
+        .pc {
+            background: var(--card-bg); border-radius: 18px; border: 1.5px solid var(--border);
+            box-shadow: var(--shadow-sm); display: flex; align-items: stretch; overflow: hidden;
+            transition: transform .25s var(--spring), box-shadow .25s, border-color .25s;
+            animation: cardSlide .4s var(--ease-out) both; position: relative;
+        }
+        .pc::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+            background: linear-gradient(180deg, var(--blue-light), var(--blue-mid));
+            opacity: 0; transition: opacity .2s;
+        }
+        .pc:hover { transform: translateY(-3px) scale(1.006); box-shadow: var(--shadow-md); border-color: rgba(77,163,255,.3); }
+        .pc:hover::before { opacity: 1; }
+
+        .pc-img {
+            width: 86px; flex-shrink: 0; background: var(--blue-pale);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .pc-img img { width: 86px; height: 100%; object-fit: cover; transition: transform .3s ease; }
+        .pc:hover .pc-img img { transform: scale(1.07); }
+
+        .pc-body { padding: 11px 12px; flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
+        .pc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 7px; }
+        .pc-name { font-weight: 800; font-size: 14px; color: var(--blue-dark); line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .stk { flex-shrink: 0; padding: 3px 7px; border-radius: 7px; font-size: 10px; font-weight: 800; white-space: nowrap; }
+        .stk.in  { background: #DCFCE7; color: #15803D; }
+        .stk.out { background: #FEE2E2; color: #B91C1C; }
+        .pc-vendor { font-size: 11px; color: var(--text-mid); font-weight: 600; margin-top: 3px; }
+        .pc-meta { display: flex; align-items: center; gap: 7px; margin-top: 6px; flex-wrap: wrap; }
+        .pc-price { font-family: var(--font-head); font-size: 15px; color: var(--blue-mid); }
+        .pc-old   { font-size: 11px; color: var(--text-light); text-decoration: line-through; }
+        .pc-cat   { background: var(--blue-pale); color: var(--blue-mid); padding: 2px 7px; border-radius: 6px; font-size: 10px; font-weight: 700; }
+
+        .pc-acts { display: flex; gap: 7px; margin-top: 9px; }
+        .pbtn {
+            flex: 1; padding: 7px; border: none; border-radius: 9px;
+            font-family: var(--font); font-size: 12px; font-weight: 800;
+            cursor: pointer; transition: transform .2s, opacity .2s, box-shadow .2s;
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+        }
+        .pbtn:active { transform: scale(.94); }
+        .pbtn.edit { background: #EFF6FF; color: #1D4ED8; border: 1.5px solid #BFDBFE; }
+        .pbtn.edit:hover  { background: #DBEAFE; box-shadow: 0 4px 10px rgba(29,78,216,.14); }
+        .pbtn.del  { background: #FFF5F5; color: #DC2626; border: 1.5px solid #FECACA; }
+        .pbtn.del:hover   { background: #FEE2E2; box-shadow: 0 4px 10px rgba(220,38,38,.14); }
+
+        /* SKELETON */
+        .skel { background: white; border-radius: 18px; border: 1.5px solid var(--border); height: 100px; overflow: hidden; position: relative; }
+        .skel::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(90deg, rgba(227,242,255,0) 0%, rgba(77,163,255,.08) 50%, rgba(227,242,255,0) 100%);
+            background-size: 936px 100%; animation: shimmer 1.6s infinite linear;
+        }
+        /* EMPTY */
+        .empty { display: flex; flex-direction: column; align-items: center; padding: 60px 20px; text-align: center; animation: screenIn .5s ease; }
+        .empty-ico { width: 76px; height: 76px; border-radius: 50%; background: var(--blue-pale); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 34px; margin-bottom: 16px; }
+        .empty h4 { font-family: var(--font-head); font-size: 18px; color: var(--blue-dark); margin-bottom: 7px; }
+        .empty p  { color: var(--text-mid); font-size: 13px; line-height: 1.6; max-width: 210px; }
+
+        /* FAB */
+        .fab-host { position: fixed; bottom: 22px; right: 17px; z-index: 200; }
+        .fab-tip {
+            position: absolute; right: 62px; top: 50%; transform: translateY(-50%) translateX(4px);
+            white-space: nowrap; background: var(--blue-dark); color: white;
+            padding: 6px 11px; border-radius: 8px; font-size: 11px; font-weight: 700;
+            opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+        }
+        .fab-tip::after { content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%); border: 5px solid transparent; border-left-color: var(--blue-dark); border-right: none; }
+        .fab-host:hover .fab-tip { opacity: 1; transform: translateY(-50%) translateX(0); }
+        .fab {
+            width: 54px; height: 54px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid), var(--blue-light));
+            background-size: 200% 200%;
+            color: white; border: none; font-size: 24px;
+            box-shadow: 0 8px 26px rgba(18,85,204,.52), inset 0 1px 0 rgba(255,255,255,.18);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: transform .3s var(--spring), box-shadow .3s, background-position .4s;
+        }
+        .fab:hover { transform: scale(1.13) rotate(90deg); box-shadow: 0 12px 34px rgba(18,85,204,.62); background-position: 100% 100%; }
+        .fab:active { transform: scale(.95); }
+
+        /* ─── OVERLAY & DRAWER ─── */
+        .overlay {
+            position: fixed; inset: 0; z-index: 300;
+            background: rgba(7,30,74,.52); backdrop-filter: blur(5px);
+            opacity: 0; visibility: hidden;
+            transition: opacity .35s ease, visibility .35s;
+        }
+        .overlay.open { opacity: 1; visibility: visible; }
+        .drawer {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 400;
+            background: white; border-radius: 26px 26px 0 0;
+            box-shadow: 0 -12px 58px rgba(7,30,74,.24);
+            max-height: 94dvh; overflow: hidden;
+            display: flex; flex-direction: column;
+            transform: translateY(110%);
+            transition: transform .45s var(--ease-out);
+        }
+        .drawer.open { transform: translateY(0); }
+        .dh-bar { padding: 11px 0 0; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+        .dh-bar-line { width: 36px; height: 4px; background: #DCE8F8; border-radius: 2px; }
+        .dh {
+            padding: 13px 18px 0; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .dh-left { display: flex; align-items: center; gap: 10px; }
+        .dh-ico { width: 36px; height: 36px; border-radius: 11px; background: var(--blue-pale); display: flex; align-items: center; justify-content: center; font-size: 17px; }
+        .dh-title { font-family: var(--font-head); font-size: 18px; color: var(--blue-dark); }
+        .dh-close {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: #F1F5FF; color: var(--text-mid);
+            border: 1.5px solid var(--border); font-size: 17px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: transform .3s var(--spring), background .2s, color .2s, border-color .2s;
+        }
+        .dh-close:hover { background: #FEE2E2; color: var(--red); border-color: #FECACA; transform: rotate(90deg); }
+        .d-body { padding: 16px 18px 24px; overflow-y: auto; flex: 1; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+        .d-body::-webkit-scrollbar { width: 4px; }
+        .d-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+        /* Form */
+        .fg { margin-bottom: 13px; }
+        .fl { display: block; font-size: 11px; font-weight: 800; color: var(--blue-mid); letter-spacing: .9px; text-transform: uppercase; margin-bottom: 6px; }
+        .fi, .fs, .fta {
+            width: 100%; padding: 11px 13px;
+            border: 2px solid #D8E8FF; border-radius: 11px;
+            font-family: var(--font); font-size: 14px; color: var(--text-dark);
+            background: var(--blue-pale); outline: none;
+            transition: border-color .2s, box-shadow .2s, background .2s;
+        }
+        .fi:focus, .fs:focus, .fta:focus { border-color: var(--blue-light); box-shadow: 0 0 0 4px rgba(77,163,255,.13); background: white; }
+        .fta { resize: none; min-height: 78px; line-height: 1.5; }
+        .fs { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231255CC' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 11px center; padding-right: 34px; }
+        .fg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+
+        /* Image Preview */
+        .img-prev { display: none; margin-top: 7px; border-radius: 11px; overflow: hidden; border: 2px solid var(--border); height: 116px; background: var(--blue-pale); align-items: center; justify-content: center; }
+        .img-prev.on { display: flex; }
+        .img-prev img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Submit */
+        .sub-btn {
+            width: 100%; padding: 14px 18px; margin-top: 10px;
+            background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid), var(--blue-light));
+            background-size: 200% 200%;
+            color: white; border: none; border-radius: 13px;
+            font-family: var(--font); font-size: 15px; font-weight: 800;
+            cursor: pointer; letter-spacing: .3px;
+            box-shadow: 0 6px 22px rgba(18,85,204,.37), inset 0 1px 0 rgba(255,255,255,.14);
+            transition: transform .2s, box-shadow .2s, background-position .4s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .sub-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(18,85,204,.5); background-position: 100% 0%; }
+        .sub-btn:active { transform: translateY(1px); }
+        .sub-btn:disabled { opacity: .65; pointer-events: none; }
+
+        /* ─── CONFIRM DIALOG ─── */
+        .con-overlay {
+            position: fixed; inset: 0; z-index: 10000;
+            background: rgba(7,30,74,.57); backdrop-filter: blur(6px);
+            display: flex; align-items: center; justify-content: center; padding: 20px;
+            opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s;
+        }
+        .con-overlay.on { opacity: 1; visibility: visible; }
+        .con-box {
+            background: white; border-radius: 26px; padding: 28px 22px;
+            width: 100%; max-width: 312px; box-shadow: var(--shadow-lg);
+            border: 1.5px solid var(--border); text-align: center;
+            transform: scale(.88); transition: transform .3s var(--spring);
+        }
+        .con-overlay.on .con-box { transform: scale(1); }
+        .con-ico { font-size: 42px; margin-bottom: 11px; }
+        .con-box h3 { font-family: var(--font-head); font-size: 18px; color: var(--blue-dark); margin-bottom: 7px; }
+        .con-box p  { color: var(--text-mid); font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
+        .con-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+        .con-cancel { padding: 12px; border: 2px solid var(--border); border-radius: 12px; background: white; color: var(--text-mid); font-family: var(--font); font-size: 14px; font-weight: 700; cursor: pointer; transition: background .2s; }
+        .con-cancel:hover { background: var(--blue-pale); }
+        .con-del    { padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, #DC2626, #EF4444); color: white; font-family: var(--font); font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(220,38,38,.3); transition: transform .2s; }
+        .con-del:hover { transform: translateY(-2px); }
+
+        /* ─── TOAST ─── */
+        .toast {
+            position: fixed; bottom: 86px; left: 50%;
+            transform: translateX(-50%) translateY(22px) scale(.9);
+            background: var(--blue-dark); color: white;
+            padding: 10px 18px; border-radius: 50px;
+            font-size: 13px; font-weight: 700;
+            box-shadow: 0 8px 26px rgba(7,30,74,.4);
+            opacity: 0; transition: opacity .3s, transform .3s var(--spring);
+            z-index: 9999; white-space: nowrap; max-width: calc(100vw - 36px);
+            display: flex; align-items: center; gap: 7px; pointer-events: none;
+        }
+        .toast.on    { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+        .toast.succ  { background: linear-gradient(135deg, #065F46, #059669); }
+        .toast.err   { background: linear-gradient(135deg, #7F1D1D, #DC2626); }
+        .toast.info  { background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid)); }
+
+        /* ─── DESKTOP ─── */
+        @media (min-width: 640px) {
+            .drawer { max-width: 460px; left: auto; border-radius: 24px 0 0 24px; height: 100dvh; max-height: 100dvh; top: 0; bottom: 0; right: 0; }
+            .drawer.open { transform: translateX(0); }
+            .drawer:not(.open) { transform: translateX(110%); }
+            .products-list { display: grid; grid-template-columns: 1fr 1fr; }
+        }
+        @media (min-width: 900px) { .products-list { grid-template-columns: repeat(3, 1fr); } }
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .products-list { padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
+            .fab-host { bottom: calc(22px + env(safe-area-inset-bottom)); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- BG -->
+<div class="bg-canvas">
+    <div class="bg-gradient"></div>
+    <div class="bg-grid"></div>
+    <div class="orb o1"></div><div class="orb o2"></div>
+    <div class="orb o3"></div><div class="orb o4"></div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+    <div class="loader-logo">
+        <img src="https://scontent.flhe2-4.fna.fbcdn.net/v/t39.30808-6/295888334_117388544374333_406723974692594063_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeGxTlZUacSYXgWQc_8mSypkPMkvrfF97J48yS-t8X3snjh5qf3fQrAmwQ-iQCd6pND-4eahxWcgBTirKIPl584G&_nc_ohc=te_bEskqE9gQ7kNvwEdEO-6&_nc_oc=AdrBHQWaHJLODEOYfC8WH1ZlbR4G2MTt0nDiOrgP4svYqdVjqTm-e4jZ6vQe4nAx6m0&_nc_zt=23&_nc_ht=scontent.flhe2-4.fna&_nc_gid=AU0A5dyBPf6H93B1iVudmQ&_nc_ss=7a32e&oh=00_AfxW3xgxYG6_nY0KURgDSDvN5zeBB-tunwkQmyFBuZu6SA&oe=69C827A2" alt="Al Noor Solar"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><circle cx=%2240%22 cy=%2240%22 r=%2240%22 fill=%22%231255CC%22/><text x=%2240%22 y=%2248%22 text-anchor=%22middle%22 font-size=%2228%22 fill=%22white%22 font-weight=%22bold%22>AN</text></svg>'">
+    </div>
+    <div class="loader-name">Al Noor Solar</div>
+    <div class="loader-sub">Initializing Admin Panel…</div>
+    <div class="lbar-wrap"><div class="lbar"></div></div>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+    <div class="login-hero">
+        <div class="logo-host">
+            <div class="logo-spin-ring"></div>
+            <div class="logo-circle">
+                <img src="https://scontent.flhe2-4.fna.fbcdn.net/v/t39.30808-6/295888334_117388544374333_406723974692594063_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeGxTlZUacSYXgWQc_8mSypkPMkvrfF97J48yS-t8X3snjh5qf3fQrAmwQ-iQCd6pND-4eahxWcgBTirKIPl584G&_nc_ohc=te_bEskqE9gQ7kNvwEdEO-6&_nc_oc=AdrBHQWaHJLODEOYfC8WH1ZlbR4G2MTt0nDiOrgP4svYqdVjqTm-e4jZ6vQe4nAx6m0&_nc_zt=23&_nc_ht=scontent.flhe2-4.fna&_nc_gid=AU0A5dyBPf6H93B1iVudmQ&_nc_ss=7a32e&oh=00_AfxW3xgxYG6_nY0KURgDSDvN5zeBB-tunwkQmyFBuZu6SA&oe=69C827A2" alt="Al Noor Solar"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><circle cx=%2240%22 cy=%2240%22 r=%2240%22 fill=%22%231255CC%22/><text x=%2240%22 y=%2248%22 text-anchor=%22middle%22 font-size=%2228%22 fill=%22white%22 font-weight=%22bold%22>AN</text></svg>'">
+            </div>
+        </div>
+        <div class="brand-name">Al <em>Noor</em> Solar</div>
+        <div class="brand-tag">✦ Admin Portal ✦</div>
+    </div>
+
+    <div class="login-card">
+        <div class="card-h2">Welcome Back 👋</div>
+        <div class="card-sub">Sign in to manage your product catalog</div>
+
+        <div class="f-wrap">
+            <label class="f-lbl">Email Address</label>
+            <div style="position:relative">
+                <input class="f-in" type="email" id="email" placeholder="admin@alnoor.com" autocomplete="email">
+                <span class="f-icon">✉️</span>
+            </div>
+        </div>
+        <div class="f-wrap">
+            <label class="f-lbl">Password</label>
+            <div style="position:relative">
+                <input class="f-in" type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+                <span class="f-icon">🔐</span>
+            </div>
+        </div>
+
+        <button class="login-btn" id="loginBtn" onclick="doLogin()">
+            <span class="btn-txt">Sign In <span class="btn-arrow">→</span></span>
+            <div class="spin-ring"></div>
+        </button>
+        <div class="err-box" id="errBox"></div>
+        <div class="card-foot"><span>🔒 Secured with Firebase Auth</span></div>
+    </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminContent">
+    <!-- NAV -->
+    <nav class="top-nav">
+        <div class="nb">
+            <div class="nav-logo">
+                <img src="https://scontent.flhe2-4.fna.fbcdn.net/v/t39.30808-6/295888334_117388544374333_406723974692594063_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeGxTlZUacSYXgWQc_8mSypkPMkvrfF97J48yS-t8X3snjh5qf3fQrAmwQ-iQCd6pND-4eahxWcgBTirKIPl584G&_nc_ohc=te_bEskqE9gQ7kNvwEdEO-6&_nc_oc=AdrBHQWaHJLODEOYfC8WH1ZlbR4G2MTt0nDiOrgP4svYqdVjqTm-e4jZ6vQe4nAx6m0&_nc_zt=23&_nc_ht=scontent.flhe2-4.fna&_nc_gid=AU0A5dyBPf6H93B1iVudmQ&_nc_ss=7a32e&oh=00_AfxW3xgxYG6_nY0KURgDSDvN5zeBB-tunwkQmyFBuZu6SA&oe=69C827A2" alt="Logo"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><circle cx=%2240%22 cy=%2240%22 r=%2240%22 fill=%22%231255CC%22/><text x=%2240%22 y=%2248%22 text-anchor=%22middle%22 font-size=%2228%22 fill=%22white%22 font-weight=%22bold%22>AN</text></svg>'">
+            </div>
+            <div class="nav-label">Al Noor Solar <small>Admin Dashboard</small></div>
+        </div>
+        <button class="logout-btn" onclick="doLogout()">⏻ Logout</button>
+    </nav>
+
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat-card"><div class="si">📦</div><div class="sv" id="s1">—</div><div class="sk">Total Products</div></div>
+        <div class="stat-card"><div class="si">✅</div><div class="sv" id="s2">—</div><div class="sk">In Stock</div></div>
+        <div class="stat-card"><div class="si">⚡</div><div class="sv" id="s3">—</div><div class="sk">Inverters</div></div>
+        <div class="stat-card"><div class="si">☀️</div><div class="sv" id="s4">—</div><div class="sk">Solar Panels</div></div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+        <div class="search-wrap">
+            <span class="sico">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search by name, brand or category…" oninput="applyFilters()">
+        </div>
+        <button class="refresh-btn" onclick="showToast('🔄 Data refreshed!','info')" title="Refresh">↻</button>
+    </div>
+
+    <!-- CATEGORY CHIPS -->
+    <div class="chips">
+        <div class="chip on"  data-cat="All"              onclick="selectChip(this)">All</div>
+        <div class="chip"     data-cat="Solar Inverters"  onclick="selectChip(this)">⚡ Inverters</div>
+        <div class="chip"     data-cat="Solar Panels"     onclick="selectChip(this)">☀️ Panels</div>
+        <div class="chip"     data-cat="Lithium Batteries" onclick="selectChip(this)">🔋 Batteries</div>
+        <div class="chip"     data-cat="VFD Inverters"    onclick="selectChip(this)">🔧 VFD</div>
+        <div class="chip"     data-cat="Other Accessories" onclick="selectChip(this)">📦 Other</div>
+    </div>
+
+    <!-- SECTION HEADER -->
+    <div class="sec-head">
+        <div class="sec-title">Products <span class="cnt-badge" id="prodCnt">0</span></div>
+    </div>
+
+    <!-- LIST -->
+    <div class="products-list" id="pList">
+        <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+    </div>
+
+    <!-- FAB -->
+    <div class="fab-host">
+        <div class="fab-tip">Add New Product</div>
+        <button class="fab" onclick="openDrawer(false)" aria-label="Add Product">＋</button>
+    </div>
+</div>
+
+<!-- OVERLAY + DRAWER -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+    <div class="dh-bar"><div class="dh-bar-line"></div></div>
+    <div class="dh">
+        <div class="dh-left">
+            <div class="dh-ico" id="dIcon">➕</div>
+            <div class="dh-title" id="dTitle">Add New Product</div>
+        </div>
+        <button class="dh-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="d-body">
+        <input type="hidden" id="pid">
+
+        <div class="fg-grid">
+            <div class="fg"><label class="fl">Product Name *</label><input class="fi" type="text" id="name" placeholder="e.g. Knox 6KW Hybrid"></div>
+            <div class="fg"><label class="fl">Brand / Vendor *</label><input class="fi" type="text" id="vendor" placeholder="e.g. Knox"></div>
+        </div>
+        <div class="fg-grid">
+            <div class="fg"><label class="fl">Price (Rs.) *</label><input class="fi" type="number" id="price" placeholder="160000"></div>
+            <div class="fg"><label class="fl">Old Price</label><input class="fi" type="number" id="oldPrice" placeholder="180000"></div>
+        </div>
+        <div class="fg-grid">
+            <div class="fg">
+                <label class="fl">Category *</label>
+                <select class="fs" id="category">
+                    <option>Solar Inverters</option><option>Solar Panels</option>
+                    <option>Lithium Batteries</option><option>VFD Inverters</option>
+                    <option>Other Accessories</option>
+                </select>
+            </div>
+            <div class="fg">
+                <label class="fl">Availability *</label>
+                <select class="fs" id="availability">
+                    <option>In stock</option><option>Out of stock</option>
+                </select>
+            </div>
+        </div>
+        <div class="fg">
+            <label class="fl">Image URL *</label>
+            <input class="fi" type="text" id="image" placeholder="https://…" oninput="previewImg()">
+            <div class="img-prev" id="imgPrev"><img id="imgPrevEl" src="" alt="Preview"></div>
+        </div>
+        <div class="fg">
+            <label class="fl">Description</label>
+            <textarea class="fta" id="description" placeholder="Brief product description…"></textarea>
+        </div>
+
+        <button class="sub-btn" id="subBtn" onclick="saveProduct()">
+            <span id="subIco">💾</span> <span id="subTxt">Save Product</span>
+        </button>
+    </div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div class="con-overlay" id="conOvr">
+    <div class="con-box">
+        <div class="con-ico">🗑️</div>
+        <h3>Delete Product?</h3>
+        <p>This action cannot be undone. The product will be permanently removed from the database.</p>
+        <div class="con-btns">
+            <button class="con-cancel" onclick="closeConfirm()">Cancel</button>
+            <button class="con-del" id="conDelBtn">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script>
+/* ── FIREBASE ── */
+firebase.initializeApp({
+    apiKey: "AIzaSyACRvTs97pVRQEZkDVkivq7vf1xhaU8g0M",
+    authDomain: "al-noor-solar-energy.firebaseapp.com",
+    projectId: "al-noor-solar-energy",
+    storageBucket: "al-noor-solar-energy.firebasestorage.app",
+    messagingSenderId: "789267821397",
+    appId: "1:789267821397:web:27816d097bc0a6896e35dc"
+});
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+/* ── STATE ── */
+let allProducts = [];
+let activeCat   = "All";
+let pendingId   = null;
+
+/* ── AUTH OBSERVER ── */
+auth.onAuthStateChanged(user => {
+    const ls = document.getElementById("loginScreen");
+    const ac = document.getElementById("adminContent");
+    setTimeout(() => document.getElementById("loadingScreen").classList.add("hide"), 1000);
+    if (user) {
+        ls.classList.remove("show"); ls.style.display = "none";
+        ac.classList.add("show");
+        loadProducts();
+    } else {
+        ac.classList.remove("show"); ac.style.display = "none";
+        ls.classList.add("show");
+    }
+});
+
+/* ── LOGIN ── */
+function doLogin() {
+    const email = document.getElementById("email").value.trim();
+    const pass  = document.getElementById("password").value;
+    const btn   = document.getElementById("loginBtn");
+    const err   = document.getElementById("errBox");
+
+    if (!email || !pass) { setErr("Please fill in both email and password."); return; }
+    btn.classList.add("loading"); err.classList.remove("on");
+
+    auth.signInWithEmailAndPassword(email, pass)
+        .catch(() => {
+            btn.classList.remove("loading");
+            setErr("Incorrect email or password. Please try again.");
+        });
+}
+
+function setErr(msg) {
+    const e = document.getElementById("errBox");
+    e.textContent = "⚠️ " + msg;
+    e.classList.remove("on"); void e.offsetWidth; e.classList.add("on");
+}
+
+function doLogout() { auth.signOut(); }
+
+document.addEventListener("keydown", e => {
+    if (e.key === "Enter" && document.getElementById("loginScreen").classList.contains("show")) doLogin();
+});
+
+/* ── LOAD ── */
+function loadProducts() {
+    db.collection("products").onSnapshot(snap => {
+        allProducts = [];
+        snap.forEach(doc => allProducts.push({ id: doc.id, ...doc.data() }));
+        updateStats(); applyFilters();
+    });
+}
+
+/* ── STATS ── */
+function updateStats() {
+    anim("s1", allProducts.length);
+    anim("s2", allProducts.filter(p => p.availability === "In stock").length);
+    anim("s3", allProducts.filter(p => p.category === "Solar Inverters").length);
+    anim("s4", allProducts.filter(p => p.category === "Solar Panels").length);
+}
+function anim(id, target) {
+    const el = document.getElementById(id);
+    let c = parseInt(el.textContent) || 0;
+    if (c === target) { el.textContent = target; return; }
+    const step = c < target ? 1 : -1;
+    const iv = setInterval(() => { c += step; el.textContent = c; if (c === target) clearInterval(iv); }, 40);
+}
+
+/* ── FILTER ── */
+function selectChip(el) {
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("on"));
+    el.classList.add("on");
+    activeCat = el.dataset.cat;
+    applyFilters();
+}
+function applyFilters() {
+    const q = (document.getElementById("searchInput").value || "").toLowerCase();
+    let res = activeCat === "All" ? [...allProducts] : allProducts.filter(p => p.category === activeCat);
+    if (q) res = res.filter(p => (p.name||"").toLowerCase().includes(q) || (p.vendor||"").toLowerCase().includes(q) || (p.category||"").toLowerCase().includes(q));
+    renderProducts(res);
+}
+
+/* ── RENDER ── */
+function renderProducts(items) {
+    const list = document.getElementById("pList");
+    document.getElementById("prodCnt").textContent = items.length;
+    if (!items.length) {
+        list.innerHTML = `<div class="empty"><div class="empty-ico">📭</div><h4>No Products Found</h4><p>Try a different search or filter, or add a new product using the + button.</p></div>`;
+        return;
+    }
+    list.innerHTML = items.map((p, i) => {
+        const inStock = p.availability === "In stock";
+        const oprice  = p.oldPrice ? `<span class="pc-old">Rs. ${Number(p.oldPrice).toLocaleString()}</span>` : "";
+        return `
+        <div class="pc" style="animation-delay:${Math.min(i*.04,.4)}s">
+            <div class="pc-img">
+                <img src="${p.image||''}" alt="${p.name||''}" onerror="this.parentElement.innerHTML='<span style=font-size:28px>📦</span>'">
+            </div>
+            <div class="pc-body">
+                <div>
+                    <div class="pc-top">
+                        <div class="pc-name">${p.name||'—'}</div>
+                        <div class="stk ${inStock?'in':'out'}">${inStock?'● In Stock':'● Out'}</div>
+                    </div>
+                    <div class="pc-vendor">${p.vendor||'—'}</div>
+                    <div class="pc-meta">
+                        <span class="pc-price">Rs. ${Number(p.price).toLocaleString()}</span>
+                        ${oprice}
+                        <span class="pc-cat">${p.category}</span>
+                    </div>
+                </div>
+                <div class="pc-acts">
+                    <button class="pbtn edit" onclick="editProduct('${p.id}')">✏️ Edit</button>
+                    <button class="pbtn del"  onclick="askDelete('${p.id}')">🗑 Delete</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+/* ── DRAWER ── */
+function openDrawer(isEdit) {
+    document.getElementById("overlay").classList.add("open");
+    document.getElementById("drawer").classList.add("open");
+    document.getElementById("dIcon").textContent  = isEdit ? "✏️" : "➕";
+    document.getElementById("dTitle").textContent = isEdit ? "Edit Product" : "Add New Product";
+    document.getElementById("subIco").textContent = isEdit ? "🔄" : "💾";
+    document.getElementById("subTxt").textContent = isEdit ? "Update Product" : "Save Product";
+    document.body.style.overflow = "hidden";
+}
+function closeDrawer() {
+    document.getElementById("overlay").classList.remove("open");
+    document.getElementById("drawer").classList.remove("open");
+    document.body.style.overflow = "";
+    resetForm();
+}
+
+/* ── SAVE ── */
+async function saveProduct() {
+    const id     = document.getElementById("pid").value;
+    const name   = document.getElementById("name").value.trim();
+    const vendor = document.getElementById("vendor").value.trim();
+    const price  = document.getElementById("price").value;
+    const image  = document.getElementById("image").value.trim();
+
+    if (!name || !vendor || !price || !image) { showToast("⚠️ Please fill all required fields.", "err"); return; }
+
+    const btn = document.getElementById("subBtn");
+    btn.disabled = true;
+    document.getElementById("subIco").textContent = "⏳";
+    document.getElementById("subTxt").textContent = "Saving…";
+
+    const data = {
+        name, vendor,
+        price: Number(price),
+        oldPrice: document.getElementById("oldPrice").value ? Number(document.getElementById("oldPrice").value) : null,
+        category: document.getElementById("category").value,
+        availability: document.getElementById("availability").value,
+        image,
+        description: document.getElementById("description").value,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    try {
+        if (id) {
+            await db.collection("products").doc(id).update(data);
+            showToast("✅ Product updated successfully!", "succ");
+        } else {
+            data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            await db.collection("products").add(data);
+            showToast("🎉 New product added!", "succ");
+        }
+        closeDrawer();
+    } catch(e) {
+        console.error(e);
+        showToast("❌ Error saving. Please try again.", "err");
+        btn.disabled = false;
+        document.getElementById("subIco").textContent = id ? "🔄" : "💾";
+        document.getElementById("subTxt").textContent = id ? "Update Product" : "Save Product";
+    }
+}
+
+/* ── EDIT ── */
+async function editProduct(id) {
+    const doc = await db.collection("products").doc(id).get();
+    const p   = doc.data();
+    document.getElementById("pid").value          = id;
+    document.getElementById("name").value         = p.name||"";
+    document.getElementById("vendor").value       = p.vendor||"";
+    document.getElementById("price").value        = p.price||"";
+    document.getElementById("oldPrice").value     = p.oldPrice||"";
+    document.getElementById("category").value     = p.category||"Solar Inverters";
+    document.getElementById("availability").value = p.availability||"In stock";
+    document.getElementById("image").value        = p.image||"";
+    document.getElementById("description").value  = p.description||"";
+    previewImg(); openDrawer(true);
+}
+
+/* ── DELETE ── */
+function askDelete(id) {
+    pendingId = id;
+    document.getElementById("conOvr").classList.add("on");
+    document.getElementById("conDelBtn").onclick = async () => {
+        closeConfirm();
+        await db.collection("products").doc(pendingId).delete();
+        showToast("🗑️ Product deleted.", "info");
+        pendingId = null;
+    };
+}
+function closeConfirm() { document.getElementById("conOvr").classList.remove("on"); }
+
+/* ── UTILS ── */
+function previewImg() {
+    const url  = document.getElementById("image").value.trim();
+    const wrap = document.getElementById("imgPrev");
+    const img  = document.getElementById("imgPrevEl");
+    if (url) { img.src = url; wrap.classList.add("on"); img.onerror = () => wrap.classList.remove("on"); }
+    else wrap.classList.remove("on");
+}
+function resetForm() {
+    ["pid","name","vendor","price","oldPrice","image","description"].forEach(id => document.getElementById(id).value = "");
+    document.getElementById("category").value     = "Solar Inverters";
+    document.getElementById("availability").value = "In stock";
+    document.getElementById("imgPrev").classList.remove("on");
+    const btn = document.getElementById("subBtn");
+    btn.disabled = false;
+}
+let ttimer;
+function showToast(msg, type = "info") {
+    const t = document.getElementById("toast");
+    t.textContent = msg; t.className = `toast ${type}`;
+    void t.offsetWidth; t.classList.add("on");
+    clearTimeout(ttimer);
+    ttimer = setTimeout(() => t.classList.remove("on"), 3200);
+}
+</script>
+</body>
+</html>
