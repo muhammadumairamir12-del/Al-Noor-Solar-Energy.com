@@ -2007,11 +2007,13 @@
         .product-detail-page .product-info .product-meta strong {
             color: var(--dark-blue);
         }
-        
-        /* New Product Detail HTML Styles */
+        /* =========================================
+           Product Detail Page HTML Styles
+        ========================================= */
         .pd-wrap {
             padding: 20px;
         }
+
         .pd-img-main {
             width: 100%;
             height: 250px;
@@ -2028,6 +2030,7 @@
             background-position: center;
             background-repeat: no-repeat;
         }
+
         #pdSaleTag {
             background-color: var(--danger-color);
             color: var(--white);
@@ -2038,46 +2041,56 @@
             display: inline-block;
             margin-bottom: 10px;
         }
+
         .pd-vendor {
             font-size: 0.9em;
             color: var(--secondary-text-color);
             margin-bottom: 5px;
         }
+
         .pd-name {
             font-size: 1.8em;
             font-weight: bold;
             color: var(--dark-blue);
             margin-bottom: 10px;
         }
+
         .pd-prices {
             display: flex;
             align-items: baseline;
             gap: 10px;
             margin-bottom: 20px;
         }
+
         .pd-price {
             font-size: 2em;
             font-weight: bold;
             color: var(--primary-blue);
         }
+
         .pd-old {
             text-decoration: line-through;
             color: var(--secondary-text-color);
             font-size: 1.2em;
         }
+
         .pd-desc {
             color: var(--secondary-text-color);
             margin-bottom: 20px;
         }
+
+        /* Quantity Controls */
         .pd-qty-row {
             display: flex;
             align-items: center;
             gap: 15px;
             margin-bottom: 20px;
         }
+
         .pd-qty-row label {
             font-weight: bold;
         }
+
         .pd-qty-ctrl {
             display: flex;
             align-items: center;
@@ -2085,6 +2098,7 @@
             border-radius: 5px;
             overflow: hidden;
         }
+
         .pd-qty-btn {
             background-color: var(--light-gray);
             color: var(--text-color);
@@ -2092,10 +2106,14 @@
             font-size: 1.1em;
             line-height: 1;
             border-radius: 0;
+            border: none;
+            cursor: pointer;
         }
+
         .pd-qty-btn:hover {
             background-color: var(--border-color);
         }
+
         .pd-qty-n {
             padding: 8px 15px;
             min-width: 30px;
@@ -2103,6 +2121,8 @@
             font-weight: bold;
             color: var(--dark-blue);
         }
+
+        /* Add to Cart Button */
         .pd-add-btn {
             width: 100%;
             padding: 15px;
@@ -2115,10 +2135,15 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            border: none;
+            cursor: pointer;
         }
+
         .pd-add-btn:hover {
             background-color: var(--dark-blue);
         }
+
+        /* Share Row */
         .pd-share-row {
             display: flex;
             align-items: center;
@@ -2126,17 +2151,81 @@
             font-size: 0.9em;
             color: var(--secondary-text-color);
         }
+
         .pd-share-row a {
             color: var(--primary-blue);
             text-decoration: underline;
         }
 
-        /* Also Like / Best Sellers Scroll */
+        /* =========================================
+           New Data Sheet & Details Section
+        ========================================= */
+        .pd-datasheet-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--light-gray);
+            color: var(--dark-blue);
+            border: 2px solid var(--dark-blue);
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pd-datasheet-btn:hover {
+            background-color: var(--dark-blue);
+            color: var(--white);
+        }
+
+        .pd-long-desc {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--secondary-text-color);
+            line-height: 1.8;
+        }
+
+        .pd-long-desc h3 {
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+        }
+
+        .pd-long-desc table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .pd-long-desc th, 
+        .pd-long-desc td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+
+        .pd-long-desc th {
+            background-color: var(--light-blue);
+            color: var(--dark-blue);
+        }
+
+        /* =========================================
+           Also Like / Best Sellers Scroll
+        ========================================= */
         .also-like-sec {
             margin-top: 40px;
             background-color: var(--light-gray);
             padding: 30px 0;
         }
+
         .also-like-sec .als-title {
             font-size: 1.5em;
             font-weight: bold;
@@ -2144,6 +2233,7 @@
             margin-bottom: 20px;
             padding: 0 20px; 
         }
+
         .prod-scroll {
             display: flex;
             overflow-x: auto;
@@ -2152,29 +2242,37 @@
             -webkit-overflow-scrolling: touch;
             scroll-snap-type: x mandatory;
         }
+
         .prod-scroll .product-card {
             flex-shrink: 0;
             width: 250px; 
             scroll-snap-align: start;
         }
+
         .prod-scroll::-webkit-scrollbar {
             height: 8px;
         }
+
         .prod-scroll::-webkit-scrollbar-thumb {
             background-color: var(--primary-blue);
             border-radius: 10px;
         }
+
         .prod-scroll::-webkit-scrollbar-track {
             background-color: var(--light-blue);
             border-radius: 10px;
         }
 
+        /* =========================================
+           Checkout Form Wrap
+        ========================================= */
         .chk-wrap label {
             font-size: 0.9em;
             color: var(--secondary-text-color);
             margin-bottom: 5px;
             font-weight: bold;
         }
+
         .chk-wrap input[type="text"],
         .chk-wrap input[type="email"],
         .chk-wrap input[type="tel"] {
@@ -2185,11 +2283,14 @@
             box-sizing: border-box;
             margin-bottom: 10px; 
         }
+
         .chk-wrap .bank-row .bank-val {
             font-weight: 500;
         }
         
-        /* Bottom Nav */
+        /* =========================================
+           Bottom Nav
+        ========================================= */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -2203,6 +2304,7 @@
             align-items: center;
             z-index: 1000;
         }
+
         .bnav-item {
             display: flex;
             flex-direction: column;
@@ -2216,17 +2318,16 @@
             cursor: pointer;
             position: relative;
         }
+
         .bnav-item i {
             font-size: 1.4em;
             margin-bottom: 3px;
         }
-        .bnav-item.active {
-            color: var(--primary-blue);
-        }
+
+        .bnav-item.active,
         .bnav-item:hover {
             color: var(--primary-blue);
         }
-
         /* --- COMPREHENSIVE MOBILE RESPONSIVENESS TWEAKS --- */
         @media (max-width: 992px) {
             .product-grid {
@@ -2750,6 +2851,31 @@
         @media (max-width: 992px) {
             .hamburger-btn { display: flex; }
         }
+        .whatsapp-float {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9999;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  animation: bounce 2s infinite;
+}
+
+.whatsapp-float img {
+  width: 100%;
+  height: 100%;
+}
+
+/* Animation */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
 
     </style>
 </head>
@@ -3126,10 +3252,15 @@
   <div class="header-top">
     <span><i class="fas fa-map-marker-alt"></i> 
 155 A , Opposite Bank Alfalah Model Town Chowk Multan, Multan, Pakistan</span>
-    <span><i class="fas fa-phone"></i> Call us: <a href="tel:03026255188" aria-label="Call AL Noor Solar Energy">03026255188</a></span>
+  <span>
+  <i class="fas fa-phone"></i> Call us: 
+  <a href="tel:03026255188" aria-label="Call Al Noor Solar Energy">03026255188</a>
+</span>
+
 <span>
-  <i class="fas fa-envelope"></i> 
-  <a href="mailto:alnoorse786@gmail.com" aria-label="Email AL Noor Solar Energy">alnoorse786@gmail.com</a>
+  <i class="fas fa-phone"></i> Call us: 
+  <a href="tel:+923006771013" aria-label="Call Al Noor Solar Energy">+92 300 6771013</a>
+</span>
 </span>
     <span><i class="fas fa-clock"></i> Sat-Thu 09:00AM to 07:00PM ✨ Friday OFF</span>
   </div>
@@ -3144,7 +3275,7 @@
       </a>
       <ul class="nav-links">
         <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
-        <li class="nav-item"><a href="#products" class="nav-link">AlProducts</a></li>
+        <li class="nav-item"><a href="#products" class="nav-link">AllProducts</a></li>
         <li class="nav-item dropdown">
           <a href="#solar-inverters" class="nav-link" aria-haspopup="true" aria-expanded="false">Solar Inverters <i class="fas fa-caret-down"></i></a>
           <div class="dropdown-content">
@@ -3700,8 +3831,7 @@
 <section class="page container" id="page-services"></section>
 <section class="page container" id="page-about"></section>
     <section class="page container" id="page-products"></section>
-
-    <section class="page container" id="page-detail">
+<section class="page container" id="page-product"> <!-- ID change ki hai -->
       <div class="breadcrumb">
         <span onclick="history.back()" style="cursor:pointer; font-weight: bold; color: var(--primary-blue);">← Back</span>
         <i class="fas fa-chevron-right" style="margin: 0 10px; font-size: 0.8em; color: var(--secondary-text-color);"></i>
@@ -3725,6 +3855,9 @@
             <button class="pd-qty-btn" aria-label="Increase Quantity" onclick="changeDetailQty(1)">+</button>
           </div>
         </div>
+       <a id="pdDatasheetBtn" href="#" target="_blank" class="pd-datasheet-btn" style="display: none;">
+            <i class="fas fa-file-pdf" style="color: red;"></i> View / Download Datasheet
+        </a>
         <button class="pd-add-btn" onclick="addDetailToCart()"><i class="fas fa-cart-plus"></i> Add to Cart</button>
         <div class="pd-share-row" style="margin-top:12px">
           <i class="fas fa-share-alt" style="color:var(--primary-blue)"></i>
@@ -3733,6 +3866,10 @@
         <p style="font-size:10.5px;color:var(--secondary-text-color);margin-top:10px">
           ☑ I agree with <a href="#terms-of-service" class="nav-link" style="color:var(--primary-blue)">Terms & Conditions</a>
         </p>
+        
+        <!-- YAHAN MISSING DIV ADD KIYA HAI -->
+        <div id="pdLongDesc" class="pd-long-desc"></div>
+
       </div>
       <div class="also-like-sec">
         <div class="als-title">You May Also Like</div>
@@ -3833,8 +3970,14 @@ function ccNext(id){ if(_cc[id]){ _cc[id].go(_cc[id].cur()+1); _cc[id].run(); } 
 ══════════════════════════════════════════════ */
 (function() {
   function handleNavClick(e) {
-    // Find the closest anchor with nav-link class
     var el = e.target;
+    
+    // YEH 3 LINES ADD KI HAIN: Agar button par click hua hai, toh link ko rok do aur button apna kaam karega
+    if (el.tagName === 'BUTTON' || el.closest('button')) {
+        return; 
+    }
+
+    // Find the closest anchor with nav-link class
     while (el && el !== document) {
       if (el.tagName === 'A' && el.classList.contains('nav-link')) break;
       el = el.parentElement;
@@ -3887,7 +4030,6 @@ function ccNext(id){ if(_cc[id]){ _cc[id].go(_cc[id].cur()+1); _cc[id].run(); } 
   // Use capture:true so we intercept before any SPA handlers
   document.addEventListener('click', handleNavClick, true);
 })();
-
 /* ══════════════════════════════════════════════
    EXIT POPUP — Sirf browser Back button pe
    "Stay"  = popup band, user page pe rehta hai
@@ -4824,7 +4966,7 @@ function doExit() {
                 const querySnapshot = await db.collection('products').get();
                 let fetchedProducts = [];
                 
-                querySnapshot.forEach((doc) => {
+               querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     fetchedProducts.push({
                         id: doc.id, 
@@ -4836,7 +4978,10 @@ function doExit() {
                         type: data.type || '',
                         image: data.image || 'https://via.placeholder.com/150',
                         description: data.description || 'Premium quality product.',
-                        availability: data.availability || 'In stock'
+                        availability: data.availability || 'In stock',
+                        // --- NEW VARIABLES ADDED ---
+                        datasheetUrl: data.datasheetUrl || '', 
+                        longDescription: data.longDescription || '' 
                     });
                 });
 
@@ -5584,7 +5729,7 @@ function doExit() {
                 return;
             }
 
-            const pageDetail = document.getElementById('page-detail');
+              const pageDetail = document.getElementById('page-product');
             pageDetail.classList.add('active'); // Show product detail page
 
             // Update breadcrumbs
@@ -5604,7 +5749,31 @@ function doExit() {
                 document.getElementById('pdSaleTag').style.display = 'none';
             }
             document.getElementById('pdDesc').textContent = product.description;
+            document.getElementById('pdDesc').textContent = product.description;
+
+            // --- NEW: Datasheet Button Logic (HAMESHA SHOW HOGA) ---
+            const datasheetBtn = document.getElementById('pdDatasheetBtn');
+            datasheetBtn.style.display = 'flex'; // Button HAMESHA show karega
             
+            if (product.datasheetUrl && product.datasheetUrl.trim() !== '') {
+                datasheetBtn.href = product.datasheetUrl;
+                datasheetBtn.onclick = null; // Agar link hai to open ho jayega
+            } else {
+                datasheetBtn.href = "#";
+                datasheetBtn.onclick = function(e) {
+                    e.preventDefault();
+                    alert("Datasheet PDF link is not added for this product in Admin Panel yet.");
+                };
+            }
+
+            // --- NEW: Long Description / Table Logic ---
+            const longDescDiv = document.getElementById('pdLongDesc');
+            if (product.longDescription && product.longDescription.trim() !== '') {
+                longDescDiv.innerHTML = product.longDescription; // HTML render karega taakay table show ho
+                longDescDiv.style.display = 'block';
+            } else {
+                longDescDiv.style.display = 'none';
+            }
             currentDetailQuantity = 1;
             document.getElementById('detailQty').textContent = currentDetailQuantity;
 
@@ -6308,6 +6477,10 @@ function renderAboutPage() {
             <div class="mnp-contact-row" style="color:#888;font-size:12px;">🕐 Mon–Thu, Sat–Sun: 9AM–7PM</div>
         </div>
     </div>
-
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/923006771013?text=Hello%20Al%20Noor%20Solar%20Energy%2C%20mujhe%20solar%20system%20ki%20details%20chahiye.%20Please%20guide%20me." 
+   class="whatsapp-float" target="_blank">
+  <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+</a>
 </body>
 </html>
