@@ -678,8 +678,22 @@
             <input class="fi" type="text" id="image" placeholder="https://…" oninput="previewImg()">
             <div class="img-prev" id="imgPrev"><img id="imgPrevEl" src="" alt="Preview"></div>
         </div>
+
+        <!-- ════ NEW FIELDS ADDED HERE ════ -->
         <div class="fg">
-            <label class="fl">Description</label>
+            <label class="fl">Datasheet URL (PDF Link)</label>
+            <input class="fi" type="text" id="datasheetUrl" placeholder="https://link-to-your-pdf-file.pdf">
+            <small style="font-size: 10px; color: var(--text-mid); display: block; margin-top: 4px;">Paste the Google Drive or direct link to the PDF datasheet.</small>
+        </div>
+        <div class="fg">
+            <label class="fl">Detailed Specs / Table (HTML allowed)</label>
+            <textarea class="fta" id="longDescription" placeholder="<table>...</table>" style="min-height: 120px; font-family: monospace;"></textarea>
+            <small style="font-size: 10px; color: var(--text-mid); display: block; margin-top: 4px;">For best results, paste HTML table code here.</small>
+        </div>
+        <!-- ════ END NEW FIELDS ════ -->
+
+        <div class="fg">
+            <label class="fl">Short Description</label>
             <textarea class="fta" id="description" placeholder="Brief product description…"></textarea>
         </div>
 
@@ -871,6 +885,8 @@ async function saveProduct() {
     const vendor = document.getElementById("vendor").value.trim();
     const price  = document.getElementById("price").value;
     const image  = document.getElementById("image").value.trim();
+    const datasheetUrl = document.getElementById("datasheetUrl").value.trim(); // NEW
+    const longDescription = document.getElementById("longDescription").value.trim(); // NEW
 
     if (!name || !vendor || !price || !image) { showToast("⚠️ Please fill all required fields.", "err"); return; }
 
@@ -886,6 +902,8 @@ async function saveProduct() {
         category: document.getElementById("category").value,
         availability: document.getElementById("availability").value,
         image,
+        datasheetUrl, // NEW
+        longDescription, // NEW
         description: document.getElementById("description").value,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
@@ -920,6 +938,8 @@ async function editProduct(id) {
     document.getElementById("category").value     = p.category||"Solar Inverters";
     document.getElementById("availability").value = p.availability||"In stock";
     document.getElementById("image").value        = p.image||"";
+    document.getElementById("datasheetUrl").value = p.datasheetUrl||""; // NEW
+    document.getElementById("longDescription").value = p.longDescription||""; // NEW
     document.getElementById("description").value  = p.description||"";
     previewImg(); openDrawer(true);
 }
@@ -946,7 +966,7 @@ function previewImg() {
     else wrap.classList.remove("on");
 }
 function resetForm() {
-    ["pid","name","vendor","price","oldPrice","image","description"].forEach(id => document.getElementById(id).value = "");
+    ["pid","name","vendor","price","oldPrice","image","datasheetUrl","longDescription","description"].forEach(id => document.getElementById(id).value = "");
     document.getElementById("category").value     = "Solar Inverters";
     document.getElementById("availability").value = "In stock";
     document.getElementById("imgPrev").classList.remove("on");
