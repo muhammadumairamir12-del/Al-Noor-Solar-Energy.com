@@ -246,6 +246,17 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </noscript>
     
+    <!-- Critical first-paint: show Home (hero) immediately so footer cannot appear first -->
+    <style>
+      html { scroll-behavior: auto; }
+      .page { display: none; }
+      .page.active { display: block; }
+    </style>
+    <script>
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+    </script>
+
     <!-- Main Stylesheet -->
     <link rel="preload" href="assets/css/style.css" as="style">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -306,7 +317,7 @@
 @keyframes splashAutoHide {
     to { opacity: 0; visibility: hidden; pointer-events: none; }
 }
-#preloader { animation: splashAutoHide 0.2s ease 1.2s forwards; }
+#preloader { animation: splashAutoHide 0.2s ease 0.7s forwards; }
 #preloader.preloader-done {
     opacity: 0 !important;
     visibility: hidden !important;
@@ -336,14 +347,14 @@
         }, 220);
     }
     window.hideSplashScreen = hideSplash;
-    function hideSoon() { setTimeout(hideSplash, 350); }
+    function hideSoon() { setTimeout(hideSplash, 180); }
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
         hideSoon();
     } else {
         document.addEventListener('DOMContentLoaded', hideSoon);
     }
     window.addEventListener('load', hideSplash);
-    setTimeout(hideSplash, 1500);
+    setTimeout(hideSplash, 900);
 })();
 </script>
 <noscript>
@@ -456,7 +467,7 @@
   </div>
 
   <main id="app-content">
-    <section class="page container" id="page-home">
+    <section class="page active" id="page-home">
 <!-- Hero -->
       <section class="hero-section" id="hero">
         <div class="hero-carousel" id="heroCarousel">
@@ -464,9 +475,9 @@
           <img src="assets/images/rooftop-showcase.webp" alt="AL Noor Solar Rooftop Showcase Multan" loading="lazy" decoding="async">
           <img src="assets/images/engineers-team.webp" alt="AL Noor Solar Professional Engineering Team Multan" loading="lazy" decoding="async">
         </div>
-        <div class="hero-overlay-static" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(7,30,74,0.92) 0%, rgba(7,30,74,0.7) 50%, rgba(7,30,74,0.1) 100%); z-index: 2; pointer-events: none;"></div>
+        <div class="hero-overlay-static"></div>
 
-        <div class="container" style="position: relative; z-index: 10; display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; height: 100%;">
+        <div class="hero-inner container">
           <div class="hero-content-wrap">
             <span class="hero-tag"><i class="fas fa-solar-panel"></i> Certified Solar Energy Provider</span>
             <h1>Powering Your Future With <span>Clean Energy</span></h1>
@@ -496,7 +507,7 @@
           
           <div class="floating-decorations">
             <div class="decor-panel">
-              <img src="assets/images/hero/hero-image.webp" alt="Modern Luxury Villa Solar Rooftop Installation by AL Noor Solar Energy Multan" title="Modern Solar Rooftop Installation by AL Noor Solar Energy" width="520" height="360" fetchpriority="high" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;">
+              <img src="assets/images/hero/hero-image.webp" alt="Modern Luxury Villa Solar Rooftop Installation by AL Noor Solar Energy Multan" title="Modern Solar Rooftop Installation by AL Noor Solar Energy" width="520" height="360" fetchpriority="high" decoding="async">
             </div>
           </div>
         </div>
@@ -2378,7 +2389,12 @@ function doExit() {
             }
 
             updateBottomNavActiveState(pageId);
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scroll to top on navigate
+            if (document.documentElement.classList.contains('is-ready')) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                window.scrollTo(0, 0);
+                document.documentElement.classList.add('is-ready');
+            }
         }
         
         // Function jo Firebase se data laayega
@@ -2484,7 +2500,7 @@ function doExit() {
                 }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
                 const revealTargets = document.querySelectorAll(
-                    '.cat-item, .feature-card, .prod-section, .brands-we-love, .special-offer-section, .promo-slider-section, .image-links-grid, footer'
+                    '.cat-item, .feature-card, .prod-section, .brands-we-love, .special-offer-section, .promo-slider-section, .image-links-grid'
                 );
                 revealTargets.forEach(el => {
                     el.classList.add('scroll-reveal');
