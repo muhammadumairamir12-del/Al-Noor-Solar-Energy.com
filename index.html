@@ -225,16 +225,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://firestore.googleapis.com">
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
 
     <!-- Preload Hero LCP Image -->
     <link rel="preload" as="image" href="assets/images/hero/hero-bg.webp" fetchpriority="high">
     <link rel="preload" as="image" href="assets/images/hero/hero-image.webp" fetchpriority="high">
 
-    <!-- Google Fonts (Optimized & Asynchronous) -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- Google Fonts (async — matches CSS families, display=swap) -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap">
     </noscript>
 
     <!-- Font Awesome (Async) -->
@@ -252,13 +255,14 @@
     <meta name="msapplication-TileColor" content="#071E4A">
 
     <!-- Clean Content Security Policy (Without Invalid Meta Directives) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com https://*.googleapis.com; base-uri 'self'; form-action 'self' https://wa.me;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; frame-src 'self' https://www.google.com https://maps.google.com; base-uri 'self'; form-action 'self' https://wa.me https://api.whatsapp.com;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+</head>
 <body style="overflow-x: hidden;">
 
-<!-- Fullscreen Preloader -->
-<div id="preloader" style="
+<!-- Fullscreen Preloader — CSS + JS both hide it so a JS error cannot trap the user -->
+<div id="preloader" role="status" aria-live="polite" aria-label="Loading AL Noor Solar Energy" style="
     position: fixed;
     top: 0;
     left: 0;
@@ -270,16 +274,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.15s ease, visibility 0.15s ease;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    pointer-events: auto;
 ">
     <div style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
         <div style="position: relative; margin-bottom: 20px;">
-            <img src="favicon.png" alt="Al Noor Solar Logo" width="100" height="100" style="width: 100px; height: 100px; animation: pulse 1.8s infinite ease-in-out; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: white; padding: 10px;">
+            <img src="favicon.png" alt="Al Noor Solar Logo" width="100" height="100" fetchpriority="high" style="width: 100px; height: 100px; animation: pulse 1.8s infinite ease-in-out; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: white; padding: 10px;">
         </div>
-        <div style="font-family: 'Montserrat', 'Segoe UI', sans-serif; font-size: 2.2rem; font-weight: 800; color: #ffffff; letter-spacing: 1px;">
+        <div style="font-family: Outfit, 'Segoe UI', sans-serif; font-size: 2.2rem; font-weight: 800; color: #ffffff; letter-spacing: 1px;">
             AL Noor
         </div>
-        <div style="font-family: 'Montserrat', 'Segoe UI', sans-serif; font-size: 0.95rem; color: #4DA3FF; text-transform: uppercase; letter-spacing: 5px; margin-top: 5px; font-weight: 700;">
+        <div style="font-family: Outfit, 'Segoe UI', sans-serif; font-size: 0.95rem; color: #4DA3FF; text-transform: uppercase; letter-spacing: 5px; margin-top: 5px; font-weight: 700;">
             Solar Energy
         </div>
         <div style="margin-top: 30px; width: 140px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; position: relative;">
@@ -298,7 +303,52 @@
     50% { transform: translate3d(60px, 0, 0); }
     100% { transform: translate3d(160px, 0, 0); }
 }
+@keyframes splashAutoHide {
+    to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+#preloader { animation: splashAutoHide 0.2s ease 1.2s forwards; }
+#preloader.preloader-done {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    #preloader { animation: splashAutoHide 0.01s ease 0.05s forwards; }
+    #preloader img { animation: none !important; }
+}
 </style>
+<script>
+(function () {
+    var hidden = false;
+    function hideSplash() {
+        if (hidden) return;
+        hidden = true;
+        var el = document.getElementById('preloader');
+        if (!el) return;
+        el.classList.add('preloader-done');
+        el.setAttribute('aria-hidden', 'true');
+        setTimeout(function () {
+            if (el && el.parentNode) {
+                el.style.display = 'none';
+                el.remove();
+            }
+        }, 220);
+    }
+    window.hideSplashScreen = hideSplash;
+    function hideSoon() { setTimeout(hideSplash, 350); }
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        hideSoon();
+    } else {
+        document.addEventListener('DOMContentLoaded', hideSoon);
+    }
+    window.addEventListener('load', hideSplash);
+    setTimeout(hideSplash, 1500);
+})();
+</script>
+<noscript>
+<style>#preloader { display: none !important; }</style>
+</noscript>
 
 <div id="app-wrapper">
 
@@ -1153,7 +1203,7 @@
   </main>
 </div>
 
-<!-- FIREBASE COMPAT LIBRARIES (DEFERRED) -->
+<!-- FIREBASE COMPAT LIBRARIES (DEFERRED — never block first paint) -->
 <script defer src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 
@@ -1178,11 +1228,15 @@
   const slides=document.querySelectorAll('#promoSlider .promo-slide');
   const dots=document.querySelectorAll('#promoDots .promo-dot');
   const bar=document.getElementById('promoProgress');
+  if (!slides.length) return;
   let cur=0,tmr;
   function go(i){
-    slides[cur].classList.remove('active');dots[cur].classList.remove('active');
+    if (!slides[cur]) return;
+    slides[cur].classList.remove('active');
+    if (dots[cur]) dots[cur].classList.remove('active');
     cur=(i+slides.length)%slides.length;
-    slides[cur].classList.add('active');dots[cur].classList.add('active');
+    slides[cur].classList.add('active');
+    if (dots[cur]) dots[cur].classList.add('active');
     if(bar){bar.style.transition='none';bar.style.width='0%';
       requestAnimationFrame(()=>requestAnimationFrame(()=>{
         bar.style.transition=`width ${IV}ms linear`;bar.style.width='100%';}));}
@@ -1698,9 +1752,40 @@ function doExit() {
             measurementId: "G-EYG2H2E5X6"
         };
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // Initialize Firebase only after the deferred SDK scripts exist.
+        // Calling firebase.* immediately used to crash the whole page and freeze the splash screen.
+        let db = null;
+
+        function initFirebase() {
+            if (typeof firebase === 'undefined' || !firebase.apps) return false;
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                db = firebase.firestore();
+                return !!db;
+            } catch (err) {
+                console.warn('Firebase init skipped:', err && err.message ? err.message : err);
+                return false;
+            }
+        }
+
+        function whenFirebaseReady(callback) {
+            if (initFirebase()) {
+                callback();
+                return;
+            }
+            var tries = 0;
+            var timer = setInterval(function () {
+                tries += 1;
+                if (initFirebase()) {
+                    clearInterval(timer);
+                    callback();
+                } else if (tries > 60) {
+                    clearInterval(timer);
+                }
+            }, 50);
+        }
 
         // Khali array jisme Firebase se data aayega
         let products = []; 
@@ -1715,7 +1800,13 @@ function doExit() {
         };
 
         // Cart state
-        let cart = JSON.parse(localStorage.getItem('alnoorCart')) || [];
+        let cart = [];
+        try {
+            cart = JSON.parse(localStorage.getItem('alnoorCart')) || [];
+            if (!Array.isArray(cart)) cart = [];
+        } catch (e) {
+            cart = [];
+        }
         const SHIPPING_COST = 1500; // Fixed shipping cost
         let selectedDeliveryMethod = localStorage.getItem('alnoorDeliveryMethod') || 'pickup';
 
@@ -1757,6 +1848,7 @@ function doExit() {
         // Helper to show toast messages — supports type: 'success' | 'warning' | 'error'
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
+            if (!toast) return;
             toast.textContent = message;
             // Clear previous type classes
             toast.classList.remove('toast-success', 'toast-warning', 'toast-error');
@@ -2141,16 +2233,31 @@ function doExit() {
         function showPreloader() {
             const preloader = document.getElementById('preloader');
             if (preloader) {
+                preloader.classList.remove('preloader-done');
+                preloader.style.display = 'flex';
                 preloader.style.opacity = '1';
                 preloader.style.visibility = 'visible';
+                preloader.style.pointerEvents = 'auto';
             }
         }
 
         function hidePreloader() {
+            if (typeof window.hideSplashScreen === 'function') {
+                window.hideSplashScreen();
+                return;
+            }
             const preloader = document.getElementById('preloader');
             if (preloader) {
+                preloader.classList.add('preloader-done');
                 preloader.style.opacity = '0';
                 preloader.style.visibility = 'hidden';
+                preloader.style.pointerEvents = 'none';
+                setTimeout(function () {
+                    if (preloader.parentNode) {
+                        preloader.style.display = 'none';
+                        preloader.remove();
+                    }
+                }, 220);
             }
         }
 
@@ -2175,21 +2282,24 @@ function doExit() {
             const panel   = document.getElementById('mobileNavPanel');
             const overlay = document.getElementById('mobOverlay');
             const btn     = document.getElementById('hamburgerBtn');
+            if (!panel) return;
             const isOpen  = panel.classList.contains('open');
             if (isOpen) {
                 closeMobileMenu();
             } else {
                 panel.classList.add('open');
-                overlay.classList.add('open');
-                btn.classList.add('open');
+                if (overlay) overlay.classList.add('open');
+                if (btn) btn.classList.add('open');
                 document.body.style.overflow = 'hidden';
             }
         }
  
         function closeMobileMenu() {
-            document.getElementById('mobileNavPanel').classList.remove('open');
-            document.getElementById('mobOverlay').classList.remove('open');
+            const panel = document.getElementById('mobileNavPanel');
+            const overlay = document.getElementById('mobOverlay');
             const btn = document.getElementById('hamburgerBtn');
+            if (panel) panel.classList.remove('open');
+            if (overlay) overlay.classList.remove('open');
             if (btn) btn.classList.remove('open');
             document.body.style.overflow = '';
         }
@@ -2253,7 +2363,8 @@ function doExit() {
             if (activePageElement) {
                 activePageElement.classList.add('active');
             } else {
-                document.getElementById('page-home').classList.add('active');
+                const homePage = document.getElementById('page-home');
+                if (homePage) homePage.classList.add('active');
             }
             
             // Update SEO metadata dynamically
@@ -2273,8 +2384,7 @@ function doExit() {
         // Function jo Firebase se data laayega
         async function loadProductsFromFirebase() {
             try {
-                if (typeof firebase === 'undefined' || typeof db === 'undefined') {
-                    // Firebase still loading or offline — site is already visible
+                if (!initFirebase() || !db) {
                     return;
                 }
                 const querySnapshot = await db.collection('products').get();
@@ -2313,27 +2423,33 @@ function doExit() {
             }
         }
         
-        // Jab page load ho to FORAN website dikhao
+        // Jab page load ho to FORAN website dikhao — splash never waits on Firebase
         window.addEventListener('DOMContentLoaded', () => {
-            // 1. Fauran Home page open karo (Bina Firebase ka wait kiye)
-            const initialHash = window.location.hash.substring(1);
-            
-            closeMiniCart(); 
-            closeSearch();
-            closeMobileMenu();
-            renderPageFromHash(initialHash || 'home'); 
-            
-            updateCartUI();
-            addGlobalEventListeners();
-            startCountdownTimer();
+            try {
+                const initialHash = window.location.hash.substring(1);
+                
+                closeMiniCart(); 
+                closeSearch();
+                closeMobileMenu();
+                renderPageFromHash(initialHash || 'home'); 
+                
+                updateCartUI();
+                addGlobalEventListeners();
+                startCountdownTimer();
+            } catch (err) {
+                console.warn('Startup notice:', err && err.message ? err.message : err);
+                try {
+                    var home = document.getElementById('page-home');
+                    if (home) home.classList.add('active');
+                } catch (e2) {}
+            } finally {
+                hidePreloader();
+            }
 
-            // IMMEDIATELY hide preloader — site is ready to use
-            hidePreloader();
+            // Background mein aaram se Firebase se data mangwao
+            whenFirebaseReady(loadProductsFromFirebase);
 
-            // 2. Background mein aaram se Firebase se data mangwao
-            loadProductsFromFirebase();
-
-            // 3. Sticky bottom bar scroll handler
+            // Sticky bottom bar scroll handler
             window.addEventListener('scroll', () => {
                 const stickyBar = document.getElementById('pdp-sticky-bar');
                 if (stickyBar) {
@@ -2345,9 +2461,10 @@ function doExit() {
                 }
             }, { passive: true });
 
-            // 3. Header shrink-on-scroll
+            // Header shrink-on-scroll
             const header = document.querySelector('header');
             window.addEventListener('scroll', () => {
+                if (!header) return;
                 if (window.scrollY > 60) {
                     header.classList.add('shrink');
                 } else {
@@ -2355,24 +2472,25 @@ function doExit() {
                 }
             }, { passive: true });
 
-            // 4. Scroll-reveal animations (IntersectionObserver)
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('revealed');
-                        revealObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+            // Scroll-reveal animations (IntersectionObserver)
+            if ('IntersectionObserver' in window) {
+                const revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('revealed');
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-            // Observe sections and key elements
-            const revealTargets = document.querySelectorAll(
-                '.cat-item, .feature-card, .prod-section, .brands-we-love, .special-offer-section, .promo-slider-section, .image-links-grid, footer'
-            );
-            revealTargets.forEach(el => {
-                el.classList.add('scroll-reveal');
-                revealObserver.observe(el);
-            });
+                const revealTargets = document.querySelectorAll(
+                    '.cat-item, .feature-card, .prod-section, .brands-we-love, .special-offer-section, .promo-slider-section, .image-links-grid, footer'
+                );
+                revealTargets.forEach(el => {
+                    el.classList.add('scroll-reveal');
+                    revealObserver.observe(el);
+                });
+            }
         });
 
         // Popstate event for browser back/forward buttons
@@ -2399,17 +2517,15 @@ function doExit() {
                 });
             });
 
-            // Event listener for desktop search input (if exists)
             if (desktopSearchInput) {
                 desktopSearchInput.addEventListener('keydown', (event) => {
                     if (event.key === 'Enter') {
                         doSearch(desktopSearchInput.value);
-                        desktopSearchInput.value = ''; // Clear after search
+                        desktopSearchInput.value = '';
                     }
                 });
             }
 
-            // Event listeners for bottom nav
             bnavItems.forEach(item => {
                 item.addEventListener('click', (event) => {
                     const targetPage = item.dataset.target;
@@ -2423,9 +2539,10 @@ function doExit() {
                 });
             });
 
-            // Event listener for closing mini cart
-            document.getElementById('closeMiniCart').addEventListener('click', closeMiniCart);
-            document.getElementById('overlay').addEventListener('click', closeMiniCart);
+            const closeCartBtn = document.getElementById('closeMiniCart');
+            if (closeCartBtn) closeCartBtn.addEventListener('click', closeMiniCart);
+            const pageOverlay = document.getElementById('overlay');
+            if (pageOverlay) pageOverlay.addEventListener('click', closeMiniCart);
         }
 
         function updateBottomNavActiveState(pageId) {
@@ -2540,16 +2657,18 @@ function doExit() {
             const cartAlsoScroll = document.getElementById('cartAlsoScroll');
             
             if (cart.length === 0) {
+                if (miniCartItemsContainer) {
                 miniCartItemsContainer.innerHTML = `
                     <div class="empty-cart" style="animation: fadeIn 0.4s ease;">
                         <i class="fas fa-shopping-cart"></i>
                         <p>Your cart is empty</p>
                     </div>
                 `;
-                miniCartFooter.style.display = 'none';
-                cartAlsoLike.style.display = 'block'; // Show "You May Also Like" when cart is empty
+                }
+                if (miniCartFooter) miniCartFooter.style.display = 'none';
+                if (cartAlsoLike) cartAlsoLike.style.display = 'block';
                 if(cartAlsoScroll) cartAlsoScroll.innerHTML = products.filter(p => p.category === 'Solar Inverters').slice(0, 5).map(productCardTemplate).join('');
-            } else {
+            } else if (miniCartItemsContainer) {
                 miniCartItemsContainer.innerHTML = cart.map(item => `
                     <div class="mini-cart-item" style="animation: fadeIn 0.4s ease;">
                         <img src="${item.product.image}" alt="${item.product.name}">
@@ -2566,28 +2685,31 @@ function doExit() {
                         </div>
                     </div>
                 `).join('');
-                miniCartFooter.style.display = 'block';
-                cartAlsoLike.style.display = 'none'; // Hide "You May Also Like" when cart has items
+                if (miniCartFooter) miniCartFooter.style.display = 'block';
+                if (cartAlsoLike) cartAlsoLike.style.display = 'none';
             }
             
-            miniCartSubtotalSpan.textContent = formatPrice(getCartTotal());
-            miniCartTotalSpan.textContent = formatPrice(getCartTotal() + getCartShipping());
+            if (miniCartSubtotalSpan) miniCartSubtotalSpan.textContent = formatPrice(getCartTotal());
+            if (miniCartTotalSpan) miniCartTotalSpan.textContent = formatPrice(getCartTotal() + getCartShipping());
             
             // Update delivery method UI
             document.querySelectorAll('.del-opt').forEach(opt => opt.classList.remove('selected'));
-            document.getElementById(`del${selectedDeliveryMethod.charAt(0).toUpperCase() + selectedDeliveryMethod.slice(1)}`).classList.add('selected');
+            const delId = 'del' + selectedDeliveryMethod.charAt(0).toUpperCase() + selectedDeliveryMethod.slice(1);
+            const delEl = document.getElementById(delId);
+            if (delEl) delEl.classList.add('selected');
         }
 
         function openMiniCart() {
+            if (!miniCartSidebar || !overlay) return;
             miniCartSidebar.classList.add('open');
             overlay.classList.add('open');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling background
+            document.body.style.overflow = 'hidden';
         }
 
         function closeMiniCart() {
-            miniCartSidebar.classList.remove('open');
-            overlay.classList.remove('open');
-            document.body.style.overflow = ''; // Restore scrolling
+            if (miniCartSidebar) miniCartSidebar.classList.remove('open');
+            if (overlay) overlay.classList.remove('open');
+            document.body.style.overflow = '';
         }
 
         function selectDelivery(method) {
@@ -2716,6 +2838,11 @@ function doExit() {
             
             if (orderIds.length === 0) {
                 container.innerHTML = `<p style="font-size:12px; color:#64748B; text-align:center; padding:10px 0;">No past orders found in this browser.</p>`;
+                return;
+            }
+
+            if (!db) {
+                container.innerHTML = `<p style="font-size:12px; color:#64748B; text-align:center; padding:10px 0;">Orders will appear here once connected.</p>`;
                 return;
             }
             
@@ -4709,21 +4836,24 @@ function renderInfoPage(title, contentHtml) {
         let searchDebounceTimer = null;
 
         function toggleSearch() {
+            if (!searchWrap) return;
             if (searchWrap.classList.contains('active')) {
                 closeSearch();
             } else {
                 searchWrap.style.display = 'block';
                 setTimeout(() => searchWrap.classList.add('active'), 10);
-                mobileSearchInput.focus();
-                overlay.classList.add('open');
+                if (mobileSearchInput) mobileSearchInput.focus();
+                if (overlay) overlay.classList.add('open');
             }
         }
 
         function closeSearch() {
-            searchWrap.classList.remove('active');
-            overlay.classList.remove('open');
-            setTimeout(() => { searchWrap.style.display = 'none'; }, 400);
-            mobileSearchInput.value = '';
+            if (searchWrap) {
+                searchWrap.classList.remove('active');
+                setTimeout(() => { if (searchWrap) searchWrap.style.display = 'none'; }, 400);
+            }
+            if (overlay) overlay.classList.remove('open');
+            if (mobileSearchInput) mobileSearchInput.value = '';
             const mobileAc = document.getElementById('mobileSearchAutocomplete');
             if (mobileAc) {
                 mobileAc.classList.remove('show');

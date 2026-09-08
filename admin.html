@@ -72,8 +72,12 @@
             background: var(--blue-dark);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: opacity .6s ease, visibility .6s;
+            animation: adminSplashHide 0.3s ease 2s forwards;
         }
-        #loadingScreen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+        #loadingScreen.hide { opacity: 0; visibility: hidden; pointer-events: none; animation: none; }
+        @keyframes adminSplashHide {
+            to { opacity: 0; visibility: hidden; pointer-events: none; }
+        }
         .loader-logo {
             width: 78px; height: 78px; border-radius: 50%;
             background: rgba(255,255,255,.07); border: 2px solid rgba(77,163,255,.3);
@@ -739,17 +743,37 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 <script>
 /* ── FIREBASE ── */
-firebase.initializeApp({
-    apiKey: "AIzaSyCsvVPVJNYL2946DqJHP3Aj3ag4GXZv2LE",
-    authDomain: "alnoor-solar-c7326.firebaseapp.com",
-    projectId: "alnoor-solar-c7326",
-    storageBucket: "alnoor-solar-c7326.firebasestorage.app",
-    messagingSenderId: "347399543862",
-    appId: "1:347399543862:web:7337ea33fdf860879c4c97",
-    measurementId: "G-EYG2H2E5X6"
-});
-const auth = firebase.auth();
-const db   = firebase.firestore();
+let auth = null;
+let db = null;
+try {
+    firebase.initializeApp({
+        apiKey: "AIzaSyCsvVPVJNYL2946DqJHP3Aj3ag4GXZv2LE",
+        authDomain: "alnoor-solar-c7326.firebaseapp.com",
+        projectId: "alnoor-solar-c7326",
+        storageBucket: "alnoor-solar-c7326.firebasestorage.app",
+        messagingSenderId: "347399543862",
+        appId: "1:347399543862:web:7337ea33fdf860879c4c97",
+        measurementId: "G-EYG2H2E5X6"
+    });
+    auth = firebase.auth();
+    db   = firebase.firestore();
+} catch (e) {
+    console.warn("Admin Firebase init:", e);
+}
+
+function hideAdminSplash() {
+    var loading = document.getElementById("loadingScreen");
+    if (loading) loading.classList.add("hide");
+    var ls = document.getElementById("loginScreen");
+    var ac = document.getElementById("adminContent");
+    var loggedIn = !!(ac && ac.classList.contains("show"));
+    if (!loggedIn && ls) {
+        ls.classList.add("show");
+        ls.style.display = "flex";
+    }
+}
+
+setTimeout(hideAdminSplash, 2500);
 
 /* ── STATE ── */
 let allProducts = [];
@@ -888,24 +912,23 @@ let activeCat   = "All";
 let pendingId   = null;
 
 /* ── AUTH OBSERVER ── */
+if (auth) {
+    auth.onAuthStateChanged(user => {
+        const ls = document.getElementById("loginScreen");
+        const ac = document.getElementById("adminContent");
+        hideAdminSplash();
+        if (user) {
+            if (ls) { ls.classList.remove("show"); ls.style.display = "none"; }
+            if (ac) { ac.classList.add("show"); ac.style.display = ""; }
+            loadProducts(); loadOrders();
+        } else {
+            if (ac) { ac.classList.remove("show"); ac.style.display = "none"; }
+            if (ls) { ls.classList.add("show"); ls.style.display = "flex"; }
+        }
+    });
+} else {
+    hideAdminSplash();
 }
-let activeCat   = "All";
-let pendingId   = null;
-
-/* ── AUTH OBSERVER ── */
-auth.onAuthStateChanged(user => {
-    const ls = document.getElementById("loginScreen");
-    const ac = document.getElementById("adminContent");
-    setTimeout(() => document.getElementById("loadingScreen").classList.add("hide"), 1000);
-    if (user) {
-        ls.classList.remove("show"); ls.style.display = "none";
-        ac.classList.add("show");
-        loadProducts(); loadOrders();
-    } else {
-        ac.classList.remove("show"); ac.style.display = "none";
-        ls.classList.add("show");
-    }
-});
 
 /* ── LOGIN RATE LIMITING ── */
 const LOGIN_MAX_ATTEMPTS = 5;
@@ -1104,10 +1127,35 @@ async function saveProduct() {
         category: document.getElementById("category").value,
         availability: document.getElementById("availability").value,
         image,
-        datasheetUrl, // NEW
-        longDescription, // NEW
+        datasheetUrl,
+        longDescription,
         description: document.getElementById("description").value,
-    const p   = doc.data();
+        promoBadge
+    };
+
+    try {
+        if (!db) throw new Error("Database not ready");
+        if (id) {
+            await db.collection("products").doc(id).update(data);
+            showToast("✅ Product updated.", "succ");
+        } else {
+            await db.collection("products").add(data);
+            showToast("✅ Product added.", "succ");
+        }
+        closeDrawer();
+    } catch (e) {
+        console.error(e);
+        showToast("❌ Could not save product.", "err");
+    } finally {
+        btn.disabled = false;
+        document.getElementById("subIco").textContent = id ? "🔄" : "💾";
+        document.getElementById("subTxt").textContent = id ? "Update Product" : "Save Product";
+    }
+}
+
+function editProduct(id) {
+    const p = allProducts.find(item => item.id === id);
+    if (!p) { showToast("❌ Product not found.", "err"); return; }
     document.getElementById("pid").value          = id;
     document.getElementById("name").value         = p.name||"";
     document.getElementById("vendor").value       = p.vendor||"";
@@ -1116,8 +1164,8 @@ async function saveProduct() {
     document.getElementById("category").value     = p.category||"Solar Inverters";
     document.getElementById("availability").value = p.availability||"In stock";
     document.getElementById("image").value        = p.image||"";
-    document.getElementById("datasheetUrl").value = p.datasheetUrl||""; // NEW
-    document.getElementById("longDescription").value = p.longDescription||""; // NEW
+    document.getElementById("datasheetUrl").value = p.datasheetUrl||"";
+    document.getElementById("longDescription").value = p.longDescription||"";
     document.getElementById("description").value  = p.description||"";
     document.getElementById("promoBadge").value   = p.promoBadge||"";
     previewImg(); openDrawer(true);
