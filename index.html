@@ -270,7 +270,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
 ">
     <div style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
         <div style="position: relative; margin-bottom: 20px;">
@@ -1741,8 +1741,12 @@ function doExit() {
 
         function getProductById(id) {
             // Handle special offer product variants
-            if (id === 'so1') return { ...products.find(p => p.id === 'so_base'), id: 'so1', name: 'Al Noor Local Dasi Solar Inverter 10KW', price: products.find(p => p.id === 'so_base').price_10kw, oldPrice: products.find(p => p.id === 'so_base').oldPrice_10kw };
-            if (id === 'so2') return { ...products.find(p => p.id === 'so_base'), id: 'so2', name: 'Al Noor Local Dasi Solar Inverter 7KW', price: products.find(p => p.id === 'so_base').price_7kw, oldPrice: products.find(p => p.id === 'so_base').oldPrice_7kw };
+            if (id === 'so1' || id === 'so2') {
+                const base = products.find(p => p.id === 'so_base');
+                if (!base) return undefined;
+                if (id === 'so1') return { ...base, id: 'so1', name: 'Al Noor Local Dasi Solar Inverter 10KW', price: base.price_10kw, oldPrice: base.oldPrice_10kw };
+                return { ...base, id: 'so2', name: 'Al Noor Local Dasi Solar Inverter 7KW', price: base.price_7kw, oldPrice: base.oldPrice_7kw };
+            }
             return products.find(p => p.id === id);
         }
 
@@ -2159,17 +2163,12 @@ function doExit() {
             const url = new URL(window.location.href);
             url.hash = hash;
 
-            showPreloader();
-
-            setTimeout(() => {
-                if (pushState) {
-                    history.pushState({ page: hash }, '', url.href);
-                } else {
-                    history.replaceState({ page: hash }, '', url.href);
-                }
-                renderPageFromHash(hash);
-                setTimeout(hidePreloader, 350);
-            }, 300);
+            if (pushState) {
+                history.pushState({ page: hash }, '', url.href);
+            } else {
+                history.replaceState({ page: hash }, '', url.href);
+            }
+            renderPageFromHash(hash);
         }
         
         function toggleMobileMenu() {
@@ -2275,8 +2274,7 @@ function doExit() {
         async function loadProductsFromFirebase() {
             try {
                 if (typeof firebase === 'undefined' || typeof db === 'undefined') {
-                    // Firebase still loading or offline; hide preloader gracefully
-                    setTimeout(hidePreloader, 300);
+                    // Firebase still loading or offline — site is already visible
                     return;
                 }
                 const querySnapshot = await db.collection('products').get();
@@ -2310,17 +2308,13 @@ function doExit() {
                     updateCartUI();
                 }
 
-                setTimeout(hidePreloader, 300);
-
             } catch (error) {
                 console.warn("Firebase products notice:", error.message || error);
-                setTimeout(hidePreloader, 300);
             }
         }
         
         // Jab page load ho to FORAN website dikhao
         window.addEventListener('DOMContentLoaded', () => {
-            showPreloader();
             // 1. Fauran Home page open karo (Bina Firebase ka wait kiye)
             const initialHash = window.location.hash.substring(1);
             
@@ -2332,6 +2326,9 @@ function doExit() {
             updateCartUI();
             addGlobalEventListeners();
             startCountdownTimer();
+
+            // IMMEDIATELY hide preloader — site is ready to use
+            hidePreloader();
 
             // 2. Background mein aaram se Firebase se data mangwao
             loadProductsFromFirebase();
@@ -2783,7 +2780,7 @@ function doExit() {
                                 <div style="margin-top:4px;"><span class="status-badge ${statusClass}">${order.status}</span></div>
                             </div>
                         </div>
-                        <p style="font-size:11px; color:var(--primary); cursor:pointer; margin-top:10px; text-align:center;" onclick="addOrderToHistory('&nbsp;${orderId}')">Save this order to my local history</p>
+                        <p style="font-size:11px; color:var(--primary); cursor:pointer; margin-top:10px; text-align:center;" onclick="addOrderToHistory('${orderId}')">Save this order to my local history</p>
                     `;
                 } else {
                     container.innerHTML = `<p style="font-size:12px; color:#EF4444; text-align:center; padding:10px 0;">Order ID not found in database.</p>`;
