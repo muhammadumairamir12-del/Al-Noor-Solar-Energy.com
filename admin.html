@@ -881,8 +881,7 @@ document.addEventListener("keydown", e => {
 
 /* ── LOAD PRODUCTS ── */
 function loadProducts() {
-    const localItems = getLocalCustomProducts();
-    allProducts = [...localItems];
+    allProducts = [];
     updateStats();
     applyFilters();
 
@@ -891,23 +890,25 @@ function loadProducts() {
             db.collection("products").onSnapshot(snap => {
                 const fbList = [];
                 snap.forEach(doc => fbList.push({ id: doc.id, ...doc.data() }));
-                // Merge Firebase products with local products (avoid duplicate IDs)
-                const map = new Map();
-                fbList.forEach(p => map.set(p.id, p));
-                localItems.forEach(p => { if (!map.has(p.id)) map.set(p.id, p); });
-                allProducts = Array.from(map.values());
+                // Firebase is the only catalog source (matches the live storefront)
+                allProducts = fbList;
+                // Keep a local cache mirror of Firebase for offline UI only
+                saveLocalCustomProducts(fbList);
                 updateStats();
                 applyFilters();
             }, err => {
                 console.warn("Firestore snapshot notice:", err);
-                // Gracefully fallback to local storage items
-                allProducts = getLocalCustomProducts();
+                allProducts = [];
                 updateStats();
                 applyFilters();
+                showToast("Could not load products from Firebase.", "err");
             });
         } catch(err) {
             console.warn("Firestore error:", err);
+            showToast("Firebase error while loading products.", "err");
         }
+    } else {
+        showToast("Firebase is not connected.", "err");
     }
 }
 

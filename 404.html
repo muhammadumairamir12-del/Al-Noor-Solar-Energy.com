@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AL Noor Solar Energy</title>
+  <script>
+    // GitHub Pages project sites: redirect unknown paths back to index with hash route
+    (function () {
+      var path = location.pathname || '/';
+      var segments = path.split('/').filter(Boolean);
+      // username.github.io/repo-name/...  → keep first segment as base
+      var base = segments.length ? '/' + segments[0] + '/' : '/';
+      var rest = segments.slice(1).join('/');
+      var hash = rest ? '#' + rest : (location.hash || '#home');
+      location.replace(base + hash + location.search);
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting… <a href="./">Go to homepage</a></p>
+</body>
+</html>

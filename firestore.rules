@@ -1,6 +1,8 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Storefront must be able to read products without login.
+    // Only signed-in admins can write.
     match /products/{productId} {
       allow read: if true;
       allow create, update, delete: if request.auth != null;

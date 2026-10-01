@@ -255,50 +255,9 @@ function doExit() {
             console.error('Firebase initialization failed:', err);
         }
 
-        // Khali array jisme Firebase se data aayega
-        
-        // Default Catalog of Verified Products (Panels, Inverters, Batteries, VFDs, Accessories)
-        const DEFAULT_PRODUCTS = [
-            // Solar Inverters
-            { id: 'p_knox_6kw', name: 'Knox 6KW Hybrid Smart Inverter', vendor: 'Knox', price: 185000, oldPrice: 205000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_4_c4ecf26b-84da-45b7-803b-8f32e85635a1_1066x.png?v=1753016905', description: 'Dual Output Support, Pure Sine Wave, Net Metering Ready.', availability: 'In stock' },
-            { id: 'p_knox_5kw', name: 'Knox 5KW Hybrid Solar Inverter', vendor: 'Knox', price: 195000, oldPrice: 215000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox_6KW_pv8000_Hybrid_1_1066x.png?v=1753255194', description: 'Advanced Hybrid Solar Inverter with official manufacturer warranty.', availability: 'In stock' },
-            { id: 'p_crown_58kw', name: 'Crown Arceus 5.8KW Solar Inverter', vendor: 'CrownSolar', price: 145000, oldPrice: 165000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/CrownArceus5.8KWsolarinverterHybrid_1066x.png?v=1753256284', description: 'Net Metering Certified Smart Grid Inverter with high efficiency.', availability: 'In stock' },
-            { id: 'p_livoltek_62kw', name: 'LIVOLTEK 6.2KW Hybrid Inverter', vendor: 'LIVOLTEK', price: 125000, oldPrice: 140000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/LIVOLTEK6.2KWsolarinverterhybrid_1066x.png?v=1751349951', description: 'Heavy duty backup inverter with smart monitoring application.', availability: 'In stock' },
-            { id: 'p_goodwe_6kw', name: 'Goodwe 6KW Smart Inverter', vendor: 'Goodwe', price: 215000, oldPrice: 235000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_4_c4ecf26b-84da-45b7-803b-8f32e85635a1_1066x.png?v=1753016905', description: 'Global Tier-1 inverter technology with dual MPPT trackers.', availability: 'In stock' },
-            { id: 'p_solis_8kw', name: 'Solis 8KW Grid-Tied Inverter', vendor: 'Solis', price: 235000, oldPrice: 260000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/Fronus6KWPV6000WithNetmeteringOffGridSolarInverter_1066x.png?v=1754204638', description: 'High-performance three phase solar inverter for large homes.', availability: 'In stock' },
-            { id: 'p_huawei_10kw', name: 'Huawei 10KW Smart Inverter', vendor: 'Huawei', price: 285000, oldPrice: 310000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/EnvyPV9000_1066x.png?v=1767696239', description: 'AI-powered arc fault circuit protection with digital loggers.', availability: 'In stock' },
-            { id: 'p_growatt_8kw', name: 'Growatt 8KW Solar Inverter', vendor: 'Growatt', price: 198000, oldPrice: 220000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/KnoxKrypton6.5kWPV9055HybridSolarInverter_1066x.png?v=1753688748', description: 'Transformerless hybrid unit with extreme durability.', availability: 'In stock' },
-            { id: 'p_inverex_52kw', name: 'Inverex Yukon 5.2KW Solar Inverter', vendor: 'Inverex', price: 175000, oldPrice: 190000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox04KWHybrid_1-min_750x.png?v=1737898390', description: 'Local bestselling inverter with built-in Wi-Fi monitoring.', availability: 'In stock' },
-            { id: 'p_tigersolar_6kw', name: 'Tiger Solar 6KW Hybrid Unit', vendor: 'TigerSolar', price: 165000, oldPrice: 180000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/CrownArceus5.8KWsolarinverterHybrid_1066x.png?v=1753256284', description: 'Affordable pure sine wave inverter for standard households.', availability: 'In stock' },
-            { id: 'p_anicsun_6kw', name: 'Anicsun 6KW Smart Inverter', vendor: 'Anicsun', price: 170000, oldPrice: 185000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_4_c4ecf26b-84da-45b7-803b-8f32e85635a1_1066x.png?v=1753016905', description: 'High surge capacity unit compatible with lithium and tubular batteries.', availability: 'In stock' },
-            { id: 'p_canadian_5kw', name: 'Canadian Solar 5KW Inverter', vendor: 'CanadianSolar', price: 190000, oldPrice: 210000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/EnvyPV9000_1066x.png?v=1767696239', description: 'World-renowned Canadian Solar inverter engineering.', availability: 'In stock' },
-
-            // Solar Panels
-            { id: 'p_jinko_neo', name: 'Jinko Tiger Neo 585W N-Type Panel', vendor: 'Jinko', price: 19500, oldPrice: 22000, category: 'Solar Panels', image: 'https://kamalsolar.pk/cdn/shop/files/longi-horizon-225W-front_870x.png?v=1738082522', description: 'Double Glass Bifacial N-Type Module with 30 Years Linear Power Warranty.', availability: 'In stock' },
-            { id: 'p_longi_himo6', name: 'Longi Hi-MO 6 580W Solar Panel', vendor: 'Longi', price: 19200, oldPrice: 21500, category: 'Solar Panels', image: 'https://as2.ftcdn.net/v2/jpg/04/40/70/41/1000_F_440704131_EFZAB3Dhv6TKhEoPbNM0K6OevFVHDkep.jpg', description: 'High Efficiency Mono PERC panel designed for harsh environments.', availability: 'In stock' },
-            { id: 'p_canadian_panel', name: 'Canadian Solar TopHiKu6 580W', vendor: 'Canadian', price: 17800, oldPrice: 19500, category: 'Solar Panels', image: 'https://as2.ftcdn.net/v2/jpg/06/97/42/13/1000_F_697421378_Uty8CrKYDVo0IsOCR81CcgM3YG4udGsz.webp', description: 'Tier-1 high wattage module with low temperature coefficient.', availability: 'In stock' },
-            { id: 'p_trina_vertex', name: 'Trina Solar Vertex S+ 580W', vendor: 'Trina', price: 16500, oldPrice: 18500, category: 'Solar Panels', image: 'https://as2.ftcdn.net/v2/jpg/03/44/42/69/1000_F_344426997_HyMa1OV2oVp53KM0Qqtn50vqjiPFaszh.jpg', description: 'Vertex series multi-busbar technology for maximum energy yield.', availability: 'In stock' },
-            { id: 'p_ja_solar', name: 'JA Solar Deep Blue 4.0 Pro 580W', vendor: 'JASolar', price: 17000, oldPrice: 19000, category: 'Solar Panels', image: 'https://t4.ftcdn.net/jpg/03/24/07/85/240_F_324078546_0djvv4y7pbO9FdzGSB5zl5JqwJDLnFCe.jpg', description: 'Deep Blue 4.0 N-Type technology delivering reliable output.', availability: 'In stock' },
-            { id: 'p_risen_titan', name: 'Risen Energy Titan 550W Panel', vendor: 'Risen', price: 15900, oldPrice: 17500, category: 'Solar Panels', image: 'https://t3.ftcdn.net/jpg/04/96/15/42/240_F_496154205_SSN7m8XzMYiLqYsAka0aZ321sGRz48mv.jpg', description: 'Cost-effective commercial grade solar panel.', availability: 'In stock' },
-            { id: 'p_astronergy_chsm', name: 'Astronergy CHSM72M 550W Module', vendor: 'Astronergy', price: 16200, oldPrice: 18000, category: 'Solar Panels', image: 'https://t3.ftcdn.net/jpg/05/36/49/26/240_F_536492602_3nG9hPdsy1NGdj3uJETSMdAeKikCQoE7.jpg', description: 'Tested and proven Tier-1 module with anti-PID assurance.', availability: 'In stock' },
-            { id: 'p_seraphim_eclipse', name: 'Seraphim Eclipse Series 540W', vendor: 'Seraphim', price: 15500, oldPrice: 17000, category: 'Solar Panels', image: 'https://t3.ftcdn.net/jpg/03/16/90/16/240_F_316901683_Biz4WZy12zLIysQMWUBGlp9CcfW2M57N.jpg', description: 'Durable framing designed to withstand extreme wind & snow loads.', availability: 'In stock' },
-
-            // Lithium Batteries
-            { id: 'p_narada_48v', name: 'Narada 48V 100Ah Lithium Battery', vendor: 'Narada', price: 290000, oldPrice: 320000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_166_510x.png?v=1737531157', description: '6000+ cycle life LiFePO4 battery pack with smart BMS.', availability: 'In stock' },
-            { id: 'p_pylontech_us3000', name: 'Pylontech US3000C 48V Lithium', vendor: 'Pylontech', price: 320000, oldPrice: 350000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_166_510x.png?v=1737531157', description: 'Modular rack-mountable battery compatible with all hybrid inverters.', availability: 'In stock' },
-            { id: 'p_dyness_48v', name: 'Dyness 48V 100Ah Solar Battery', vendor: 'Dyness', price: 275000, oldPrice: 295000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_166_510x.png?v=1737531157', description: 'Compact wall-mounted design with CAN & RS485 communication.', availability: 'In stock' },
-            { id: 'p_shoto_48v', name: 'Shoto 48V 100Ah LiFePO4 Battery', vendor: 'Shoto', price: 260000, oldPrice: 285000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_166_510x.png?v=1737531157', description: 'Telecom-grade reliability and high discharge depth.', availability: 'In stock' },
-
-            // VFD Inverters
-            { id: 'p_invt_gd100', name: 'INVT GD100-PV Solar Pump Inverter', vendor: 'INVT', price: 65000, oldPrice: 75000, category: 'VFD Inverters', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_168_1_1_510x.png?v=1737897746', description: 'Dedicated agricultural solar tube-well inverter with MPPT.', availability: 'In stock' },
-            { id: 'p_veichi_si23', name: 'Veichi SI23 Solar Pump VFD', vendor: 'Veichi', price: 72000, oldPrice: 80000, category: 'VFD Inverters', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_168_1_1_510x.png?v=1737897746', description: 'IP65 weather resistant solar water pump controller.', availability: 'In stock' },
-            { id: 'p_frecon_vfd', name: 'Frecon Solar VFD 7.5KW', vendor: 'Frecon', price: 68000, oldPrice: 76000, category: 'VFD Inverters', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_168_1_1_510x.png?v=1737897746', description: 'Smart sensorless vector control for irrigation pumps.', availability: 'In stock' },
-
-            // Other Accessories
-            { id: 'p_schneider_spd', name: 'AC/DC Breakers & SPD Surge Protector', vendor: 'Schneider', price: 8500, oldPrice: 10000, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_167_1_1_510x.png?v=1737897762', description: 'Essential system protection kit against surges and short circuits.', availability: 'In stock' },
-            { id: 'p_mc4_connectors', name: 'MC4 Solar Connectors (10 Pairs)', vendor: 'Multi-Contact', price: 2500, oldPrice: 3200, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_167_1_1_510x.png?v=1737897762', description: 'IP68 waterproof UV-resistant cable connectors.', availability: 'In stock' },
-            { id: 'p_solar_cable', name: 'Solar DC Cable 6mm Twin Core (100m)', vendor: 'Pakistan Cables', price: 14000, oldPrice: 16000, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_167_1_1_510x.png?v=1737897762', description: 'Pure copper tinned solar cable with double insulation.', availability: 'In stock' }
-        ];
+        // Catalog comes ONLY from Firebase — no mock/default/localStorage product fallbacks.
+        let catalogStatus = 'loading'; // loading | ready | error
+        let catalogErrorMessage = '';
 
         function normalizeStoreProduct(id, data) {
             data = data || {};
@@ -322,39 +281,36 @@ function doExit() {
             };
         }
 
-        // Synchronize and merge custom products from localStorage and Firebase
-        function refreshProductList(extraFirebaseProducts = []) {
-            let customList = [];
-            try {
-                const stored = localStorage.getItem('alnoorCustomProducts');
-                if (stored) customList = JSON.parse(stored);
-            } catch(e) {}
-
-            const map = new Map();
-            // 1. Defaults
-            DEFAULT_PRODUCTS.forEach(p => map.set(p.id, p));
-            // 2. Custom local products
-            customList.forEach(p => map.set(p.id, normalizeStoreProduct(p.id, p)));
-            // 3. Remote Firebase products (these win so the live site matches the admin panel)
-            extraFirebaseProducts.forEach(p => map.set(p.id, normalizeStoreProduct(p.id, p)));
-
-            products = Array.from(map.values());
-            if (!products.some(p => p.id === 'so_base')) {
-                products.push(specialOfferBase);
-            }
+        function emptyProductsMessage(title, detail) {
+            return `
+                <div class="catalog-empty" style="text-align:center;padding:40px 16px;color:var(--secondary-text-color);grid-column:1/-1;">
+                    <i class="fas fa-box-open" style="font-size:36px;color:#ccd6e0;display:block;margin-bottom:12px;"></i>
+                    <h3 style="color:var(--dark-blue);margin:0 0 8px;font-size:1.1rem;">${title}</h3>
+                    <p style="margin:0;font-size:0.92rem;line-height:1.5;">${detail}</p>
+                </div>
+            `;
         }
 
-        // Special offer ke liye base product (Homepage ke liye zaroori)
-        const specialOfferBase = { 
-            id: 'so_base', name: 'AL Noor Local Dasi Solar Inverter', vendor: '@AlNoor solar energy', 
-            price_10kw: 40000, oldPrice_10kw: 50000, price_7kw: 35000, oldPrice_7kw: 45000, 
-            category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/6KW_1066x.png?v=1753256037', 
-            description: 'Pakistan\'s No. 1 Pure Sine wave and Modified Sine wave Local Solar Inverter.', 
-            capacity: ['10KW', '7KW'], availability: 'In stock' 
+        // Apply Firebase products only (empty array = empty storefront)
+        function refreshProductList(firebaseProducts = []) {
+            const map = new Map();
+            (firebaseProducts || []).forEach(p => {
+                const normalized = normalizeStoreProduct(p.id, p);
+                if (normalized.id) map.set(normalized.id, normalized);
+            });
+            products = Array.from(map.values());
+        }
+
+        // Homepage special-offer section only (not part of the Firebase catalog)
+        const specialOfferBase = {
+            id: 'so_base', name: 'AL Noor Local Dasi Solar Inverter', vendor: '@AlNoor solar energy',
+            price_10kw: 40000, oldPrice_10kw: 50000, price_7kw: 35000, oldPrice_7kw: 45000,
+            category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/6KW_1066x.png?v=1753256037',
+            description: 'Pakistan\'s No. 1 Pure Sine wave and Modified Sine wave Local Solar Inverter.',
+            capacity: ['10KW', '7KW'], availability: 'In stock'
         };
 
         let products = [];
-        refreshProductList();
 
         // Cart state
         let cart = JSON.parse(localStorage.getItem('alnoorCart')) || [];
@@ -371,14 +327,15 @@ function doExit() {
         }
 
         function getProductById(id) {
-            // Handle special offer product variants
-            if (id === 'so1') return { ...products.find(p => p.id === 'so_base'), id: 'so1', name: 'Al Noor Local Dasi Solar Inverter 10KW', price: products.find(p => p.id === 'so_base').price_10kw, oldPrice: products.find(p => p.id === 'so_base').oldPrice_10kw };
-            if (id === 'so2') return { ...products.find(p => p.id === 'so_base'), id: 'so2', name: 'Al Noor Local Dasi Solar Inverter 7KW', price: products.find(p => p.id === 'so_base').price_7kw, oldPrice: products.find(p => p.id === 'so_base').oldPrice_7kw };
+            // Homepage special-offer variants (static promo, not Firebase catalog)
+            if (id === 'so1') return { ...specialOfferBase, id: 'so1', name: 'Al Noor Local Dasi Solar Inverter 10KW', price: specialOfferBase.price_10kw, oldPrice: specialOfferBase.oldPrice_10kw };
+            if (id === 'so2') return { ...specialOfferBase, id: 'so2', name: 'Al Noor Local Dasi Solar Inverter 7KW', price: specialOfferBase.price_7kw, oldPrice: specialOfferBase.oldPrice_7kw };
+            if (id === 'so_base') return specialOfferBase;
             return products.find(p => p.id === id);
         }
 
         function getProductsByCategory(categoryName) {
-            return products.filter(p => p.category === categoryName && p.id !== 'so_base');
+            return products.filter(p => p.category === categoryName);
         }
 
         // Helper to show toast messages
@@ -840,12 +797,20 @@ function doExit() {
         let catalogOfflineNoticeShown = false;
         function reportCatalogError(error) {
             const code = (error && error.code) || '';
-            console.warn('Product catalog sync:', code || error);
+            console.error('Product catalog sync failed:', code || error);
+            catalogStatus = 'error';
+            catalogErrorMessage = code === 'permission-denied'
+                ? 'Unable to load products (permission denied). Check Firestore rules / Firebase authorized domains.'
+                : (typeof navigator !== 'undefined' && navigator.onLine === false)
+                    ? 'You appear to be offline. Check your internet connection.'
+                    : 'Unable to load products from Firebase. Please refresh the page.';
+            refreshProductList([]);
+            applyCatalogToCurrentPage();
             const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
             const isNetwork = offline || code === 'unavailable' || code === 'deadline-exceeded';
-            if (isNetwork && !catalogOfflineNoticeShown) {
+            if (!catalogOfflineNoticeShown) {
                 catalogOfflineNoticeShown = true;
-                showToast('Please check your internet connection.');
+                showToast(isNetwork ? 'Please check your internet connection.' : 'Could not load products from Firebase.');
             }
         }
 
@@ -861,29 +826,34 @@ function doExit() {
 
         let productsUnsubscribe = null;
         function loadProductsFromFirebase() {
-            refreshProductList();
-            if (!db) return;
+            catalogStatus = 'loading';
+            catalogErrorMessage = '';
+            refreshProductList([]);
+            applyCatalogToCurrentPage();
+
+            if (!db) {
+                reportCatalogError({ code: 'unavailable', message: 'Firebase SDK not initialized' });
+                return;
+            }
             if (productsUnsubscribe) productsUnsubscribe();
             productsUnsubscribe = db.collection('products').onSnapshot((querySnapshot) => {
                 const fetchedProducts = [];
                 querySnapshot.forEach((doc) => {
                     fetchedProducts.push(normalizeStoreProduct(doc.id, doc.data()));
                 });
+                catalogStatus = 'ready';
+                catalogErrorMessage = '';
                 refreshProductList(fetchedProducts);
                 applyCatalogToCurrentPage();
             }, reportCatalogError);
         }
         
-        // Jab page load ho to FORAN website dikhao
         window.addEventListener('DOMContentLoaded', () => {
-            // 1. Fauran Home page open karo (Bina Firebase ka wait kiye)
             const initialHash = window.location.hash.substring(1);
-            navigate(initialHash || 'home', false); 
+            navigate(initialHash || 'home', false);
             updateCartUI();
             addGlobalEventListeners();
             startCountdownTimer();
-
-            // 2. Background mein aaram se Firebase se data mangwao
             loadProductsFromFirebase();
         });
 
@@ -1188,25 +1158,38 @@ function doExit() {
 
         function populateHomeCategoryCarousels() {
             const categories = [
-                { id: 'ct-panels', category: 'Solar Panels' },
-                { id: 'ct-inverters', category: 'Solar Inverters' },
-                { id: 'ct-batteries', category: 'Lithium Batteries' },
-                { id: 'ct-vfd', category: 'VFD Inverters' }
+                { id: 'ct-panels', category: 'Solar Panels', grid: 'grid4' },
+                { id: 'ct-inverters', category: 'Solar Inverters', grid: 'grid4' },
+                { id: 'ct-batteries', category: 'Lithium Batteries', grid: 'grid3' },
+                { id: 'ct-vfd', category: 'VFD Inverters', grid: 'grid3' }
             ];
 
             categories.forEach(cat => {
                 const track = document.getElementById(cat.id);
                 if (!track) return;
-                const catProducts = products.filter(p => p.category === cat.category && p.id !== 'so_base');
-                if (catProducts.length === 0) return;
+                const catProducts = products.filter(p => p.category === cat.category);
 
+                if (catalogStatus === 'loading') {
+                    track.innerHTML = `<div class="cards-slide ${cat.grid}">${emptyProductsMessage('Loading products…', 'Fetching the latest catalog from Firebase.')}</div>`;
+                    return;
+                }
+                if (catalogStatus === 'error') {
+                    track.innerHTML = `<div class="cards-slide ${cat.grid}">${emptyProductsMessage('Products unavailable', catalogErrorMessage || 'Could not connect to Firebase.')}</div>`;
+                    return;
+                }
+                if (catProducts.length === 0) {
+                    track.innerHTML = `<div class="cards-slide ${cat.grid}">${emptyProductsMessage('No products available', 'No items in this category yet. Check back soon.')}</div>`;
+                    return;
+                }
+
+                const perSlide = cat.grid === 'grid3' ? 3 : 4;
                 const slides = [];
-                for (let i = 0; i < catProducts.length; i += 4) {
-                    slides.push(catProducts.slice(i, i + 4));
+                for (let i = 0; i < catProducts.length; i += perSlide) {
+                    slides.push(catProducts.slice(i, i + perSlide));
                 }
 
                 track.innerHTML = slides.map(slide => `
-                    <div class="cards-slide grid4">
+                    <div class="cards-slide ${cat.grid}">
                         ${slide.map(p => productCardTemplate(p)).join('')}
                     </div>
                 `).join('');
@@ -1355,8 +1338,21 @@ function doExit() {
             }
         }
 
+        function productsGridHtml(list) {
+            if (catalogStatus === 'loading') {
+                return emptyProductsMessage('Loading products…', 'Fetching the latest catalog from Firebase.');
+            }
+            if (catalogStatus === 'error') {
+                return emptyProductsMessage('Products unavailable', catalogErrorMessage || 'Could not connect to Firebase.');
+            }
+            if (!list.length) {
+                return emptyProductsMessage('No products available', 'There are no products in the catalog right now.');
+            }
+            return list.map(productCardTemplate).join('');
+        }
+
         function renderAllProducts(params) {
-            let filteredProducts = products.filter(p => p.id !== 'so_base'); // Exclude base special offer product
+            let filteredProducts = products.slice();
             
             const categoryFilter = params.get('category');
             if (categoryFilter) {
@@ -1380,10 +1376,11 @@ function doExit() {
             } else if (sortBy === 'Price, high to low') {
                 filteredProducts.sort((a, b) => b.price - a.price);
             } else if (sortBy === 'Best selling') {
-                 // For demo, just show some random order or default. In real app, this needs a metric.
-                 // For now, let's keep it same as alphabetical
                  filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
             }
+
+            const featuredHtml = products.filter(p => p.price > 200000 && p.availability === 'In stock').slice(0,3).map(productCardTemplate).join('')
+                || '<p style="font-size:12px;color:var(--secondary-text-color);">No featured products yet.</p>';
 
             document.getElementById('page-products').innerHTML = `
                 <div class="page-header" style="animation: fadeIn 0.6s ease;">
@@ -1413,10 +1410,10 @@ function doExit() {
                             <h4>Availability</h4>
                             <div class="filter-group">
                                 <label>
-                                    <input type="checkbox" id="filterInStock" aria-label="In Stock Filter" ${inStockOnly ? 'checked' : ''}> In stock (${products.filter(p => p.availability === 'In stock' && p.id !== 'so_base').length})
+                                    <input type="checkbox" id="filterInStock" aria-label="In Stock Filter" ${inStockOnly ? 'checked' : ''}> In stock (${products.filter(p => p.availability === 'In stock').length})
                                 </label>
                                 <label>
-                                    <input type="checkbox" id="filterOutOfStock" aria-label="Out of Stock Filter" ${!inStockOnly && params.get('availability') !== null ? 'checked' : ''} disabled> Out of stock (${products.filter(p => p.availability === 'Out of stock' && p.id !== 'so_base').length})
+                                    <input type="checkbox" id="filterOutOfStock" aria-label="Out of Stock Filter" ${!inStockOnly && params.get('availability') !== null ? 'checked' : ''} disabled> Out of stock (${products.filter(p => p.availability === 'Out of stock').length})
                                 </label>
                             </div>
                         </div>
@@ -1432,7 +1429,7 @@ function doExit() {
                         <div class="sidebar-section">
                             <h4>Featured Products</h4>
                             <div class="product-grid" style="grid-template-columns: 1fr; gap: 15px;">
-                                ${products.filter(p => p.price > 200000 && p.availability === 'In stock' && p.id !== 'so_base').slice(0,3).map(productCardTemplate).join('')}
+                                ${featuredHtml}
                             </div>
                         </div>
                     </aside>
@@ -1464,13 +1461,13 @@ function doExit() {
                         </div>
 
                         <div class="product-grid">
-                            ${filteredProducts.map(productCardTemplate).join('')}
+                            ${productsGridHtml(filteredProducts)}
                         </div>
 
                         <p style="text-align: center; margin-top: 30px; font-size: 0.9em; color: var(--secondary-text-color);">
-                            Showing 1 -${Math.min(parseInt(params.get('items_per_page') || 20), filteredProducts.length)} of ${filteredProducts.length} total
+                            Showing ${filteredProducts.length ? '1' : '0'} -${Math.min(parseInt(params.get('items_per_page') || 20), filteredProducts.length)} of ${filteredProducts.length} total
                         </p>
-                        <button class="primary show-more-btn" id="showMoreProductsBtn">Show more</button>
+                        ${filteredProducts.length ? '<button class="primary show-more-btn" id="showMoreProductsBtn">Show more</button>' : ''}
                     </div>
                 </div>
             `;
@@ -1520,7 +1517,7 @@ function doExit() {
         }
 
         function renderCategoryPage(categoryName, params) {
-            let filteredProducts = products.filter(p => p.category === categoryName && p.id !== 'so_base');
+            let filteredProducts = products.filter(p => p.category === categoryName);
             
             const brandFilter = params.get('brand');
             if (brandFilter) {
@@ -1546,6 +1543,9 @@ function doExit() {
             } else if (sortBy === 'Best selling') {
                  filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
             }
+
+            const featuredHtml = products.filter(p => p.price > 200000 && p.availability === 'In stock').slice(0,3).map(productCardTemplate).join('')
+                || '<p style="font-size:12px;color:var(--secondary-text-color);">No featured products yet.</p>';
             
             document.getElementById('page-products').innerHTML = `
                 <div class="page-header" style="animation: fadeIn 0.6s ease;">
@@ -1594,7 +1594,7 @@ function doExit() {
                         <div class="sidebar-section">
                             <h4>Featured Products</h4>
                             <div class="product-grid" style="grid-template-columns: 1fr; gap: 15px;">
-                                ${products.filter(p => p.price > 200000 && p.availability === 'In stock' && p.id !== 'so_base').slice(0,3).map(productCardTemplate).join('')}
+                                ${featuredHtml}
                             </div>
                         </div>
                     </aside>
@@ -1627,12 +1627,12 @@ function doExit() {
                         </div>
 
                         <div class="product-grid">
-                            ${filteredProducts.map(productCardTemplate).join('')}
+                            ${productsGridHtml(filteredProducts)}
                         </div>
                         <p style="text-align: center; margin-top: 30px; font-size: 0.9em; color: var(--secondary-text-color);">
-                            Showing 1 -${Math.min(parseInt(params.get('items_per_page') || 20), filteredProducts.length)} of ${filteredProducts.length} total
+                            Showing ${filteredProducts.length ? '1' : '0'} -${Math.min(parseInt(params.get('items_per_page') || 20), filteredProducts.length)} of ${filteredProducts.length} total
                         </p>
-                        <button class="primary show-more-btn" id="showMoreProductsBtn">Show more</button>
+                        ${filteredProducts.length ? '<button class="primary show-more-btn" id="showMoreProductsBtn">Show more</button>' : ''}
                     </div>
                 </div>
             `;
@@ -1752,7 +1752,7 @@ function doExit() {
             // Populate "You May Also Like"
             const alsoLikeScroll = document.getElementById('alsoLikeScroll');
             if (alsoLikeScroll) {
-                const relatedProducts = products.filter(p => p.category === product.category && p.id !== product.id && p.id !== 'so_base').slice(0, 5);
+                const relatedProducts = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 5);
                 if (relatedProducts.length === 0) {
                     alsoLikeScroll.innerHTML = `<p style="text-align:center;color:var(--secondary-text-color);">No similar products found.</p>`;
                 } else {
@@ -1818,7 +1818,8 @@ function doExit() {
 
             // Populate best sellers
             if (bestSellersScroll) {
-                bestSellersScroll.innerHTML = products.filter(p => p.price > 100000 && p.id !== 'so_base').slice(0, 10).map(productCardTemplate).join('');
+                bestSellersScroll.innerHTML = products.filter(p => p.price > 100000).slice(0, 10).map(productCardTemplate).join('')
+                    || emptyProductsMessage('No products available', 'Best sellers will appear here once products are added.');
             }
             
             // Add event listener for proceed button (after content is rendered)
@@ -2036,7 +2037,7 @@ function doExit() {
 
             searchTermDisplay.textContent = searchTerm;
 
-            const results = products.filter(p => p.id !== 'so_base' && 
+            const results = products.filter(p =>
                                                 (p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                                                 p.vendor.toLowerCase().includes(searchTerm.toLowerCase()) ||
                                                 p.category.toLowerCase().includes(searchTerm.toLowerCase())));
