@@ -3602,3 +3602,45 @@ h1, h2, h3, h4, h5, h6 {
         height: 220px !important;
     }
 }
+
+/* Offer badge on product cards — matches existing #pdSaleTag / .sale-badge look */
+.product-card .card-img-wrap {
+    position: relative !important;
+}
+.product-card .offer-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    background-color: var(--danger-color, #ef5350);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.75em;
+    font-weight: bold;
+    line-height: 1.2;
+}
+.pd-thumbs {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+.pd-thumb {
+    width: 56px;
+    height: 56px;
+    padding: 4px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    overflow: hidden;
+}
+.pd-thumb.active {
+    border-color: var(--primary-blue, #1565C0);
+}
+.pd-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}

@@ -242,12 +242,12 @@ function doExit() {
             measurementId: "G-EYG2H2E5X6"
         };
 
-        // Initialize Firebase (safe — site still opens if Firebase CDN is blocked)
+        // Initialize Firebase Realtime Database (safe — site still opens if Firebase CDN is blocked)
         let db = null;
         try {
             if (typeof firebase !== 'undefined') {
                 firebase.initializeApp(firebaseConfig);
-                db = firebase.firestore();
+                db = firebase.database();
             } else {
                 console.warn('Firebase SDK not loaded — products will load when connection is available.');
             }
@@ -265,6 +265,11 @@ function doExit() {
             const oldPrice = data.oldPrice === null || data.oldPrice === undefined || data.oldPrice === ''
                 ? null
                 : Number(data.oldPrice);
+            const images = Array.isArray(data.images) && data.images.length
+                ? data.images.filter(Boolean)
+                : (data.image || data.imageUrl ? [data.image || data.imageUrl] : []);
+            let availability = data.availability || 'In stock';
+            if (data.stockQty === 0) availability = 'Out of stock';
             return {
                 id: id || data.id,
                 name: data.name || 'Unnamed Product',
@@ -273,11 +278,18 @@ function doExit() {
                 oldPrice: Number.isFinite(oldPrice) ? oldPrice : null,
                 category: String(data.category || 'Other Accessories').trim(),
                 type: data.type || '',
-                image: data.image || data.imageUrl || 'logo.png',
+                image: images[0] || data.image || data.imageUrl || 'logo.png',
+                images,
                 description: data.description || 'Premium quality product.',
-                availability: data.availability || 'In stock',
+                availability,
                 datasheetUrl: data.datasheetUrl || '',
-                longDescription: data.longDescription || ''
+                longDescription: data.longDescription || '',
+                sku: data.sku || '',
+                warranty: data.warranty || '',
+                offerTag: data.offerTag || '',
+                stockQty: (data.stockQty === 0 || data.stockQty) ? Number(data.stockQty) : null,
+                isNew: !!data.isNew,
+                isBestSeller: !!data.isBestSeller
             };
         }
 
@@ -799,8 +811,8 @@ function doExit() {
             const code = (error && error.code) || '';
             console.error('Product catalog sync failed:', code || error);
             catalogStatus = 'error';
-            catalogErrorMessage = code === 'permission-denied'
-                ? 'Unable to load products (permission denied). Check Firestore rules / Firebase authorized domains.'
+            catalogErrorMessage = code === 'PERMISSION_DENIED' || code === 'permission-denied'
+                ? 'Unable to load products (permission denied). Check Realtime Database rules / Firebase authorized domains.'
                 : (typeof navigator !== 'undefined' && navigator.onLine === false)
                     ? 'You appear to be offline. Check your internet connection.'
                     : 'Unable to load products from Firebase. Please refresh the page.';
@@ -835,12 +847,12 @@ function doExit() {
                 reportCatalogError({ code: 'unavailable', message: 'Firebase SDK not initialized' });
                 return;
             }
-            if (productsUnsubscribe) productsUnsubscribe();
-            productsUnsubscribe = db.collection('products').onSnapshot((querySnapshot) => {
-                const fetchedProducts = [];
-                querySnapshot.forEach((doc) => {
-                    fetchedProducts.push(normalizeStoreProduct(doc.id, doc.data()));
-                });
+            if (productsUnsubscribe) {
+                try { db.ref('products').off('value', productsUnsubscribe); } catch (e) {}
+            }
+            productsUnsubscribe = db.ref('products').on('value', (snap) => {
+                const val = snap.val() || {};
+                const fetchedProducts = Object.keys(val).map((id) => normalizeStoreProduct(id, val[id]));
                 catalogStatus = 'ready';
                 catalogErrorMessage = '';
                 refreshProductList(fetchedProducts);
@@ -1133,22 +1145,28 @@ function doExit() {
         // ====================================================================================================
 
         function productCardTemplate(product) {
+            const inStock = product.availability === 'In stock';
             const hasOldPrice = product.oldPrice && product.oldPrice > product.price;
             const priceHtml = hasOldPrice ? 
                 `<span class="price">${formatPrice(product.price)} <span class="old-price">${formatPrice(product.oldPrice)}</span></span>` :
                 `<span class="price">${formatPrice(product.price)}</span>`;
-            const addToCartBtn = product.availability === 'In stock' ?
+            const addToCartBtn = inStock ?
                 `<button class="primary" aria-label="Add ${product.name} to cart" onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}')">Add to cart</button>` :
-                `<button class="secondary" disabled aria-label="Out of stock">Notify me</button>`;
+                `<button class="secondary" disabled aria-label="Out of stock">Out of Stock</button>`;
+            const badgeText = product.offerTag || (hasOldPrice ? 'Sale' : (product.isNew ? 'New' : (product.isBestSeller ? 'Best Seller' : '')));
+            const badgeHtml = badgeText ? `<span class="offer-badge">${badgeText}</span>` : '';
+            const stockNote = inStock ? '' : `<p class="vendor" style="color:#c62828;font-weight:700;">Out of Stock</p>`;
 
             return `
                 <a href="#product?id=${product.id}" class="product-card nav-link" style="animation: fadeInUp 0.6s ease backwards;">
                     <div class="card-img-wrap">
+                        ${badgeHtml}
                         <img src="${product.image || 'logo.png'}" alt="${product.name}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='logo.png';">
                     </div>
                     <div class="product-card-content">
                         <h3>${product.name}</h3>
-                        <p class="vendor">Vendor: ${product.vendor}</p>
+                        <p class="vendor">${product.vendor || ''}</p>
+                        ${stockNote}
                         ${priceHtml}
                         ${addToCartBtn}
                     </div>
@@ -1379,7 +1397,7 @@ function doExit() {
                  filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
             }
 
-            const featuredHtml = products.filter(p => p.price > 200000 && p.availability === 'In stock').slice(0,3).map(productCardTemplate).join('')
+            const featuredHtml = products.filter(p => (p.isBestSeller || p.price > 200000) && p.availability === 'In stock').slice(0,3).map(productCardTemplate).join('')
                 || '<p style="font-size:12px;color:var(--secondary-text-color);">No featured products yet.</p>';
 
             document.getElementById('page-products').innerHTML = `
@@ -1521,7 +1539,19 @@ function doExit() {
             
             const brandFilter = params.get('brand');
             if (brandFilter) {
-                filteredProducts = filteredProducts.filter(p => p.vendor.includes(brandFilter));
+                filteredProducts = filteredProducts.filter(p => (p.vendor || '').toLowerCase().includes(brandFilter.toLowerCase()));
+            }
+
+            const typeFilter = params.get('type');
+            if (typeFilter === 'new') {
+                filteredProducts = filteredProducts.filter(p => p.isNew);
+            } else if (typeFilter === 'best-selling') {
+                filteredProducts = filteredProducts.filter(p => p.isBestSeller);
+            } else if (typeFilter) {
+                filteredProducts = filteredProducts.filter(p =>
+                    String(p.type || '').toLowerCase() === typeFilter.toLowerCase() ||
+                    String(p.type || '').toLowerCase().includes(typeFilter.toLowerCase())
+                );
             }
 
             const inStockOnly = params.get('availability') === 'in_stock';
@@ -1541,10 +1571,10 @@ function doExit() {
             } else if (sortBy === 'Price, high to low') {
                 filteredProducts.sort((a, b) => b.price - a.price);
             } else if (sortBy === 'Best selling') {
-                 filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                 filteredProducts.sort((a, b) => Number(b.isBestSeller) - Number(a.isBestSeller) || a.name.localeCompare(b.name));
             }
 
-            const featuredHtml = products.filter(p => p.price > 200000 && p.availability === 'In stock').slice(0,3).map(productCardTemplate).join('')
+            const featuredHtml = products.filter(p => (p.isBestSeller || p.price > 200000) && p.availability === 'In stock').slice(0,3).map(productCardTemplate).join('')
                 || '<p style="font-size:12px;color:var(--secondary-text-color);">No featured products yet.</p>';
             
             document.getElementById('page-products').innerHTML = `
@@ -1689,43 +1719,73 @@ function doExit() {
 
             // Populate main image, vendor, name, prices, description
             const pdImgEl = document.getElementById('pdImg');
+            const gallery = (product.images && product.images.length) ? product.images : [product.image || 'logo.png'];
             if (pdImgEl) {
-                pdImgEl.innerHTML = `<img src="${product.image || 'logo.png'}" alt="${product.name}" onerror="this.onerror=null;this.src='logo.png';" loading="eager">`;
+                pdImgEl.innerHTML = `
+                    <img id="pdMainImg" src="${gallery[0]}" alt="${product.name}" onerror="this.onerror=null;this.src='logo.png';" loading="eager">
+                    ${gallery.length > 1 ? `<div class="pd-thumbs">${gallery.map((src, i) => `
+                        <button type="button" class="pd-thumb${i===0?' active':''}" onclick="document.getElementById('pdMainImg').src='${src}';this.parentElement.querySelectorAll('.pd-thumb').forEach(b=>b.classList.remove('active'));this.classList.add('active');">
+                            <img src="${src}" alt="Thumbnail ${i+1}" onerror="this.onerror=null;this.src='logo.png';">
+                        </button>`).join('')}</div>` : ''}
+                `;
                 pdImgEl.style.backgroundImage = 'none';
             }
-            document.getElementById('pdVendor').textContent = `Vendor: ${product.vendor}`;
+            document.getElementById('pdVendor').textContent = product.vendor || '';
             document.getElementById('pdName').textContent = product.name;
             document.getElementById('pdPrice').textContent = formatPrice(product.price);
-            if (product.oldPrice) {
+
+            const saleTag = document.getElementById('pdSaleTag');
+            const badgeText = product.offerTag || (product.oldPrice && product.oldPrice > product.price ? 'Sale' : '');
+            if (badgeText) {
+                saleTag.textContent = badgeText;
+                saleTag.style.display = 'inline-block';
+            } else {
+                saleTag.textContent = '';
+                saleTag.style.display = 'none';
+            }
+            if (product.oldPrice && product.oldPrice > product.price) {
                 document.getElementById('pdOld').textContent = formatPrice(product.oldPrice);
-                document.getElementById('pdSaleTag').textContent = 'Sale';
-                document.getElementById('pdSaleTag').style.display = 'inline-block';
             } else {
                 document.getElementById('pdOld').textContent = '';
-                document.getElementById('pdSaleTag').style.display = 'none';
             }
             document.getElementById('pdDesc').textContent = product.description;
-            document.getElementById('pdDesc').textContent = product.description;
 
-            // --- NEW: Datasheet Button Logic (HAMESHA SHOW HOGA) ---
+            // Extra meta: stock / SKU / warranty (reuse existing typography)
+            let metaEl = document.getElementById('pdMetaExtra');
+            if (!metaEl) {
+                metaEl = document.createElement('div');
+                metaEl.id = 'pdMetaExtra';
+                metaEl.className = 'pd-desc';
+                const descEl = document.getElementById('pdDesc');
+                descEl.parentNode.insertBefore(metaEl, descEl.nextSibling);
+            }
+            const stockLabel = product.availability === 'In stock'
+                ? `<span style="color:#15803D;font-weight:700;">● In Stock</span>`
+                : `<span style="color:#B91C1C;font-weight:700;">● Out of Stock</span>`;
+            metaEl.innerHTML = `
+                <div style="margin-top:8px;font-size:0.92em;line-height:1.7;">
+                    ${stockLabel}
+                    ${product.sku ? `<br><strong>SKU:</strong> ${product.sku}` : ''}
+                    ${product.warranty ? `<br><strong>Warranty:</strong> ${product.warranty}` : ''}
+                </div>
+            `;
+
+            // --- Datasheet Button Logic ---
             const datasheetBtn = document.getElementById('pdDatasheetBtn');
-            datasheetBtn.style.display = 'flex'; // Button HAMESHA show karega
-            
             if (product.datasheetUrl && product.datasheetUrl.trim() !== '') {
+                datasheetBtn.style.display = 'flex';
                 datasheetBtn.href = product.datasheetUrl;
-                datasheetBtn.onclick = null; // Agar link hai to open ho jayega
+                datasheetBtn.onclick = null;
             } else {
+                datasheetBtn.style.display = 'none';
                 datasheetBtn.href = "#";
-                datasheetBtn.onclick = function(e) {
-                    e.preventDefault();
-                    alert("Datasheet PDF link is not added for this product in Admin Panel yet.");
-                };
+                datasheetBtn.onclick = null;
             }
 
-            // --- NEW: Long Description / Table Logic ---
+            // --- Long Description / Table Logic ---
             const longDescDiv = document.getElementById('pdLongDesc');
             if (product.longDescription && product.longDescription.trim() !== '') {
-                longDescDiv.innerHTML = product.longDescription; // HTML render karega taakay table show ho
+                longDescDiv.innerHTML = product.longDescription;
                 longDescDiv.style.display = 'block';
             } else {
                 longDescDiv.style.display = 'none';
@@ -1736,17 +1796,17 @@ function doExit() {
             // Handle add to cart button / out of stock
             const addToCartButton = pageDetail.querySelector('.pd-add-btn');
             if (product.availability === 'Out of stock') {
-                addToCartButton.textContent = 'Out of Stock - Notify Me';
+                addToCartButton.textContent = 'Out of Stock';
                 addToCartButton.classList.remove('primary');
                 addToCartButton.classList.add('secondary');
                 addToCartButton.disabled = true;
-                addToCartButton.onclick = null; // Disable click
+                addToCartButton.onclick = null;
             } else {
                 addToCartButton.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
                 addToCartButton.classList.remove('secondary');
                 addToCartButton.classList.add('primary');
                 addToCartButton.disabled = false;
-                addToCartButton.onclick = addDetailToCart; // Re-enable click
+                addToCartButton.onclick = addDetailToCart;
             }
 
             // Populate "You May Also Like"
@@ -1818,7 +1878,7 @@ function doExit() {
 
             // Populate best sellers
             if (bestSellersScroll) {
-                bestSellersScroll.innerHTML = products.filter(p => p.price > 100000).slice(0, 10).map(productCardTemplate).join('')
+                bestSellersScroll.innerHTML = products.filter(p => p.isBestSeller || p.price > 100000).slice(0, 10).map(productCardTemplate).join('')
                     || emptyProductsMessage('No products available', 'Best sellers will appear here once products are added.');
             }
             

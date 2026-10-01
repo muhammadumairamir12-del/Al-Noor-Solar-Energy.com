@@ -651,11 +651,21 @@
 
         <div class="fg-grid">
             <div class="fg"><label class="fl">Product Name *</label><input class="fi" type="text" id="name" placeholder="e.g. Knox 6KW Hybrid"></div>
-            <div class="fg"><label class="fl">Brand / Vendor *</label><input class="fi" type="text" id="vendor" placeholder="e.g. Knox"></div>
+            <div class="fg">
+                <label class="fl">Brand *</label>
+                <input class="fi" type="text" id="vendor" list="brandList" placeholder="e.g. Knox">
+                <datalist id="brandList">
+                    <option value="Knox"></option><option value="Solis"></option><option value="Goodwe"></option>
+                    <option value="Growatt"></option><option value="Huawei"></option><option value="Inverex"></option>
+                    <option value="CrownSolar"></option><option value="TigerSolar"></option><option value="Anicsun"></option>
+                    <option value="CanadianSolar"></option><option value="Longi"></option><option value="JASolar"></option>
+                    <option value="Canadian"></option><option value="Trina"></option><option value="Jinko"></option>
+                </datalist>
+            </div>
         </div>
         <div class="fg-grid">
             <div class="fg"><label class="fl">Price (Rs.) *</label><input class="fi" type="number" id="price" placeholder="160000"></div>
-            <div class="fg"><label class="fl">Old Price</label><input class="fi" type="number" id="oldPrice" placeholder="180000"></div>
+            <div class="fg"><label class="fl">Original Price (Was)</label><input class="fi" type="number" id="oldPrice" placeholder="180000"><small style="font-size:10px;color:var(--text-mid);display:block;margin-top:4px;">Optional. If higher than Price, site shows was/now sale pricing.</small></div>
         </div>
         <div class="fg-grid">
             <div class="fg">
@@ -667,40 +677,67 @@
                 </select>
             </div>
             <div class="fg">
-                <label class="fl">Availability *</label>
+                <label class="fl">Stock Status *</label>
                 <select class="fs" id="availability">
                     <option>In stock</option><option>Out of stock</option>
                 </select>
             </div>
         </div>
-        <div class="fg">
-            <label class="fl">Product Image *</label>
-            <div style="display:flex; gap:10px; align-items:center;">
-                <input class="fi" type="text" id="image" placeholder="Paste image URL (https://...) or choose file" oninput="previewImg()" style="flex:1;">
-                <label for="imgFileInput" style="padding:10px 14px; background:#1255CC; color:#fff; border-radius:8px; cursor:pointer; font-size:12px; font-weight:700; white-space:nowrap; display:inline-flex; align-items:center; gap:5px;">
-                    📁 Upload File
-                </label>
-                <input type="file" id="imgFileInput" accept="image/*" style="display:none;" onchange="handleImageFile(this)">
-            </div>
-            <div class="img-prev" id="imgPrev"><img id="imgPrevEl" src="" alt="Preview"></div>
+        <div class="fg-grid">
+            <div class="fg"><label class="fl">SKU / Product Code</label><input class="fi" type="text" id="sku" placeholder="e.g. KNX-6KW-HYB"></div>
+            <div class="fg"><label class="fl">Stock Qty (optional)</label><input class="fi" type="number" id="stockQty" placeholder="e.g. 12" min="0"></div>
         </div>
-
-        <!-- ════ NEW FIELDS ADDED HERE ════ -->
+        <div class="fg-grid">
+            <div class="fg">
+                <label class="fl">Offer Tag / Badge</label>
+                <select class="fs" id="offerTag">
+                    <option value="">None</option>
+                    <option value="Sale">Sale</option>
+                    <option value="New">New</option>
+                    <option value="Best Seller">Best Seller</option>
+                    <option value="Hot Deal">Hot Deal</option>
+                </select>
+            </div>
+            <div class="fg"><label class="fl">Product Type (e.g. Hybrid / OnGrid)</label><input class="fi" type="text" id="productType" placeholder="Optional — Hybrid, OnGrid, etc."></div>
+        </div>
+        <div class="fg-grid">
+            <div class="fg"><label class="fl">Warranty Info</label><input class="fi" type="text" id="warranty" placeholder="e.g. 5 Years Company Warranty"></div>
+            <div class="fg" style="display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding-bottom:2px;">
+                <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text-dark);cursor:pointer;">
+                    <input type="checkbox" id="isNew" style="width:18px;height:18px;accent-color:var(--blue-mid);"> New Arrival
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text-dark);cursor:pointer;">
+                    <input type="checkbox" id="isBestSeller" style="width:18px;height:18px;accent-color:var(--blue-mid);"> Best Selling
+                </label>
+            </div>
+        </div>
+        <div class="fg">
+            <label class="fl">Product Images *</label>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <input class="fi" type="text" id="image" placeholder="Paste primary image URL (https://...)" oninput="previewImg()" style="flex:1;min-width:180px;">
+                <label for="imgFileInput" style="padding:10px 14px; background:#1255CC; color:#fff; border-radius:8px; cursor:pointer; font-size:12px; font-weight:700; white-space:nowrap; display:inline-flex; align-items:center; gap:5px;">
+                    📁 Upload Image(s)
+                </label>
+                <input type="file" id="imgFileInput" accept="image/*" multiple style="display:none;" onchange="handleImageFile(this)">
+            </div>
+            <small style="font-size:10px;color:var(--text-mid);display:block;margin-top:4px;">Primary image URL required. You can upload multiple files — first becomes the main image.</small>
+            <div class="img-prev" id="imgPrev"><img id="imgPrevEl" src="" alt="Preview"></div>
+            <div id="extraImagesList" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
+            <input type="hidden" id="imagesJson" value="[]">
+        </div>
         <div class="fg">
             <label class="fl">Datasheet URL (PDF Link)</label>
             <input class="fi" type="text" id="datasheetUrl" placeholder="https://link-to-your-pdf-file.pdf">
             <small style="font-size: 10px; color: var(--text-mid); display: block; margin-top: 4px;">Paste the Google Drive or direct link to the PDF datasheet.</small>
         </div>
         <div class="fg">
-            <label class="fl">Detailed Specs / Table (HTML allowed)</label>
-            <textarea class="fta" id="longDescription" placeholder="<table>...</table>" style="min-height: 120px; font-family: monospace;"></textarea>
-            <small style="font-size: 10px; color: var(--text-mid); display: block; margin-top: 4px;">For best results, paste HTML table code here.</small>
-        </div>
-        <!-- ════ END NEW FIELDS ════ -->
-
-        <div class="fg">
-            <label class="fl">Short Description</label>
+            <label class="fl">Short Description *</label>
             <textarea class="fta" id="description" placeholder="Brief product description…"></textarea>
+        </div>
+        <div class="fg">
+            <label class="fl">Full Description / Specifications</label>
+            <textarea class="fta" id="longDescription" placeholder="Full specs, features, or HTML table…" style="min-height: 120px;"></textarea>
+            <small style="font-size: 10px; color: var(--text-mid); display: block; margin-top: 4px;">Shown on the product detail page. HTML tables are supported.</small>
         </div>
 
         <button class="sub-btn" id="subBtn" onclick="saveProduct()">
@@ -728,7 +765,7 @@
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script>
 /* ── FIREBASE & APP CONFIG ── */
 const firebaseConfig = {
@@ -748,7 +785,7 @@ try {
     if (typeof firebase !== 'undefined') {
         firebase.initializeApp(firebaseConfig);
         auth = firebase.auth();
-        db = firebase.firestore();
+        db = firebase.database();
     }
 } catch(e) {
     console.warn("Firebase init notice:", e);
@@ -758,6 +795,40 @@ try {
 let allProducts = [];
 let activeCat   = "All";
 let pendingId   = null;
+let productsListener = null;
+
+function parseImagesJson() {
+    try {
+        const raw = document.getElementById("imagesJson").value || "[]";
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr.filter(Boolean) : [];
+    } catch(e) {
+        return [];
+    }
+}
+function setImagesList(images) {
+    const list = Array.isArray(images) ? images.filter(Boolean) : [];
+    const jsonEl = document.getElementById("imagesJson");
+    if (jsonEl) jsonEl.value = JSON.stringify(list);
+    const wrap = document.getElementById("extraImagesList");
+    if (!wrap) return;
+    if (!list.length) { wrap.innerHTML = ""; return; }
+    wrap.innerHTML = list.map((url, i) => `
+        <div style="width:64px;height:64px;border-radius:10px;overflow:hidden;border:1.5px solid var(--border);position:relative;background:var(--blue-pale);">
+            <img src="${url}" alt="img ${i+1}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=.3">
+            <button type="button" onclick="removeExtraImage(${i})" title="Remove" style="position:absolute;top:2px;right:2px;border:none;background:rgba(7,30,74,.75);color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;cursor:pointer;line-height:1;">×</button>
+        </div>
+    `).join('');
+}
+function removeExtraImage(index) {
+    const list = parseImagesJson();
+    list.splice(index, 1);
+    setImagesList(list);
+    if (!document.getElementById("image").value && list[0]) {
+        document.getElementById("image").value = list[0];
+        previewImg();
+    }
+}
 
 // Local storage catalog cache helper
 function getLocalCustomProducts() {
@@ -879,36 +950,40 @@ document.addEventListener("keydown", e => {
     if (e.key === "Enter" && document.getElementById("loginScreen") && document.getElementById("loginScreen").classList.contains("show")) doLogin();
 });
 
-/* ── LOAD PRODUCTS ── */
+/* ── LOAD PRODUCTS (Realtime Database) ── */
 function loadProducts() {
     allProducts = [];
     updateStats();
     applyFilters();
 
-    if (db) {
-        try {
-            db.collection("products").onSnapshot(snap => {
-                const fbList = [];
-                snap.forEach(doc => fbList.push({ id: doc.id, ...doc.data() }));
-                // Firebase is the only catalog source (matches the live storefront)
-                allProducts = fbList;
-                // Keep a local cache mirror of Firebase for offline UI only
-                saveLocalCustomProducts(fbList);
-                updateStats();
-                applyFilters();
-            }, err => {
-                console.warn("Firestore snapshot notice:", err);
-                allProducts = [];
-                updateStats();
-                applyFilters();
-                showToast("Could not load products from Firebase.", "err");
-            });
-        } catch(err) {
-            console.warn("Firestore error:", err);
-            showToast("Firebase error while loading products.", "err");
-        }
-    } else {
+    if (!db) {
         showToast("Firebase is not connected.", "err");
+        return;
+    }
+    try {
+        if (productsListener) {
+            db.ref("products").off("value", productsListener);
+        }
+        productsListener = db.ref("products").on("value", snap => {
+            const val = snap.val() || {};
+            const fbList = Object.keys(val).map(id => {
+                const row = val[id] || {};
+                return { ...row, id: row.id || id };
+            });
+            allProducts = fbList;
+            saveLocalCustomProducts(fbList);
+            updateStats();
+            applyFilters();
+        }, err => {
+            console.warn("Realtime Database notice:", err);
+            allProducts = [];
+            updateStats();
+            applyFilters();
+            showToast("Could not load products from Firebase.", "err");
+        });
+    } catch(err) {
+        console.warn("Firebase error:", err);
+        showToast("Firebase error while loading products.", "err");
     }
 }
 
@@ -938,7 +1013,7 @@ function selectChip(el) {
 function applyFilters() {
     const q = (document.getElementById("searchInput").value || "").toLowerCase();
     let res = activeCat === "All" ? [...allProducts] : allProducts.filter(p => p.category === activeCat);
-    if (q) res = res.filter(p => (p.name||"").toLowerCase().includes(q) || (p.vendor||"").toLowerCase().includes(q) || (p.category||"").toLowerCase().includes(q));
+    if (q) res = res.filter(p => (p.name||"").toLowerCase().includes(q) || (p.vendor||"").toLowerCase().includes(q) || (p.category||"").toLowerCase().includes(q) || (p.sku||"").toLowerCase().includes(q));
     renderProducts(res);
 }
 
@@ -954,6 +1029,7 @@ function renderProducts(items) {
     list.innerHTML = items.map((p, i) => {
         const inStock = p.availability === "In stock";
         const oprice  = p.oldPrice ? `<span class="pc-old">Rs. ${Number(p.oldPrice).toLocaleString()}</span>` : "";
+        const tag = p.offerTag ? `<span class="pc-cat" style="background:#FFF4E5;color:#B45309;">${p.offerTag}</span>` : "";
         return `
         <div class="pc" style="animation-delay:${Math.min(i*.04,.4)}s">
             <div class="pc-img">
@@ -965,11 +1041,12 @@ function renderProducts(items) {
                         <div class="pc-name">${p.name||'—'}</div>
                         <div class="stk ${inStock?'in':'out'}">${inStock?'● In Stock':'● Out'}</div>
                     </div>
-                    <div class="pc-vendor">${p.vendor||'—'}</div>
+                    <div class="pc-vendor">${p.vendor||'—'}${p.sku ? ' · ' + p.sku : ''}</div>
                     <div class="pc-meta">
                         <span class="pc-price">Rs. ${Number(p.price).toLocaleString()}</span>
                         ${oprice}
                         <span class="pc-cat">${p.category}</span>
+                        ${tag}
                     </div>
                 </div>
                 <div class="pc-acts">
@@ -1011,9 +1088,22 @@ async function saveProduct() {
     const description = document.getElementById("description").value.trim();
     const category = document.getElementById("category").value;
     const availability = document.getElementById("availability").value;
+    const sku = (document.getElementById("sku") || {}).value ? document.getElementById("sku").value.trim() : "";
+    const warranty = (document.getElementById("warranty") || {}).value ? document.getElementById("warranty").value.trim() : "";
+    const offerTag = (document.getElementById("offerTag") || {}).value ? document.getElementById("offerTag").value.trim() : "";
+    const productType = (document.getElementById("productType") || {}).value ? document.getElementById("productType").value.trim() : "";
+    const stockQtyRaw = (document.getElementById("stockQty") || {}).value;
+    const stockQty = stockQtyRaw === "" || stockQtyRaw === undefined ? null : Number(stockQtyRaw);
+    const isNew = !!(document.getElementById("isNew") || {}).checked;
+    const isBestSeller = !!(document.getElementById("isBestSeller") || {}).checked;
+    let images = parseImagesJson();
 
     if (!name || !vendor || !priceStr || !image) {
-        showToast("⚠️ Please fill all required fields (Name, Vendor, Price, Image).", "err");
+        showToast("⚠️ Please fill all required fields (Name, Brand, Price, Image).", "err");
+        return;
+    }
+    if (!description) {
+        showToast("⚠️ Short Description is required.", "err");
         return;
     }
 
@@ -1025,6 +1115,12 @@ async function saveProduct() {
 
     const oldPriceVal = document.getElementById("oldPrice").value;
     const oldPrice = oldPriceVal ? Number(oldPriceVal) : null;
+    if (oldPrice !== null && (isNaN(oldPrice) || oldPrice < 0)) {
+        showToast("⚠️ Original price must be a valid number.", "err");
+        return;
+    }
+
+    if (!images.includes(image)) images = [image, ...images.filter(u => u !== image)];
 
     const btn = document.getElementById("subBtn");
     btn.disabled = true;
@@ -1037,31 +1133,37 @@ async function saveProduct() {
         id: prodId,
         name,
         vendor,
+        brand: vendor,
         price,
-        oldPrice,
-        category,
-        availability,
+        oldPrice: oldPrice || null,
+        category: String(category || 'Other Accessories').trim(),
+        availability: availability || 'In stock',
         image,
+        images,
         datasheetUrl,
         longDescription,
-        description: description || 'Premium quality product.',
+        description,
+        sku,
+        warranty,
+        offerTag,
+        type: productType,
+        stockQty: Number.isFinite(stockQty) ? stockQty : null,
+        isNew,
+        isBestSeller,
         updatedAt: new Date().toISOString()
     };
+    if (!id) data.createdAt = new Date().toISOString();
 
     try {
-        if (String(data.image).startsWith('data:') && data.image.length > 500000) {
-            throw new Error('That image file is too large to store. Paste a shorter image URL (https://...) instead.');
+        const payloadSize = JSON.stringify(data).length;
+        if (payloadSize > 900000) {
+            throw new Error('Product data is too large (likely oversized image uploads). Use image URLs instead of large files.');
         }
         if (!db) {
             throw new Error('Firebase is not connected, so this product cannot be published to the website.');
         }
 
-        data.category = String(data.category || 'Other Accessories').trim();
-        data.price = Number(data.price);
-        data.availability = data.availability || 'In stock';
-        if (!id) data.createdAt = new Date().toISOString();
-
-        await db.collection("products").doc(prodId).set(data, { merge: true });
+        await db.ref('products/' + prodId).update(data);
 
         let locals = getLocalCustomProducts().filter(p => p.id !== prodId);
         locals.unshift(data);
@@ -1069,12 +1171,11 @@ async function saveProduct() {
 
         showToast(id ? "✅ Product updated on the live website!" : "🎉 Product published to the live website!", "succ");
         closeDrawer();
-        loadProducts();
     } catch(e) {
         console.error("Save error:", e);
         const code = e && e.code ? e.code : '';
-        if (code === 'permission-denied' || code === 'unauthenticated') {
-            showToast("Firebase blocked this save (permission denied). Sign in with the Firebase admin account. This is not an internet problem.", "err");
+        if (code === 'PERMISSION_DENIED' || String(e.message||'').toLowerCase().includes('permission')) {
+            showToast("Firebase blocked this save (permission denied). Sign in with the Firebase admin account.", "err");
         } else if (typeof navigator !== 'undefined' && navigator.onLine === false) {
             showToast("You are offline. Check your internet connection and try again.", "err");
         } else {
@@ -1096,7 +1197,7 @@ function editProduct(id) {
     }
     document.getElementById("pid").value          = p.id;
     document.getElementById("name").value         = p.name || "";
-    document.getElementById("vendor").value       = p.vendor || "";
+    document.getElementById("vendor").value       = p.vendor || p.brand || "";
     document.getElementById("price").value        = p.price || "";
     document.getElementById("oldPrice").value     = p.oldPrice || "";
     document.getElementById("category").value     = p.category || "Solar Inverters";
@@ -1105,6 +1206,15 @@ function editProduct(id) {
     document.getElementById("datasheetUrl").value = p.datasheetUrl || "";
     document.getElementById("longDescription").value = p.longDescription || "";
     document.getElementById("description").value  = p.description || "";
+    if (document.getElementById("sku")) document.getElementById("sku").value = p.sku || "";
+    if (document.getElementById("warranty")) document.getElementById("warranty").value = p.warranty || "";
+    if (document.getElementById("offerTag")) document.getElementById("offerTag").value = p.offerTag || "";
+    if (document.getElementById("productType")) document.getElementById("productType").value = p.type || "";
+    if (document.getElementById("stockQty")) document.getElementById("stockQty").value = (p.stockQty === 0 || p.stockQty) ? p.stockQty : "";
+    if (document.getElementById("isNew")) document.getElementById("isNew").checked = !!p.isNew;
+    if (document.getElementById("isBestSeller")) document.getElementById("isBestSeller").checked = !!p.isBestSeller;
+    const imgs = Array.isArray(p.images) && p.images.length ? p.images : (p.image ? [p.image] : []);
+    setImagesList(imgs);
     previewImg();
     openDrawer(true);
 }
@@ -1118,38 +1228,49 @@ function askDelete(id) {
         const idToDelete = pendingId;
         pendingId = null;
 
-        // 1. Delete from local storage
         let locals = getLocalCustomProducts();
         locals = locals.filter(p => p.id !== idToDelete);
         saveLocalCustomProducts(locals);
 
-        // 2. Delete from Firestore if available
         if (db) {
             try {
-                await db.collection("products").doc(idToDelete).delete();
+                await db.ref("products/" + idToDelete).remove();
             } catch(e) {
-                console.warn("Firestore delete notice:", e.message);
+                console.warn("Realtime Database delete notice:", e.message);
+                showToast("Delete failed: " + (e.message || "permission error"), "err");
+                return;
             }
         }
 
         showToast("🗑️ Product deleted.", "info");
-        loadProducts();
     };
 }
 function closeConfirm() { document.getElementById("conOvr").classList.remove("on"); }
 
 /* ── IMAGE UPLOAD & PREVIEW ── */
 function handleImageFile(input) {
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
+    if (!input.files || !input.files.length) return;
+    const files = Array.from(input.files);
+    let loaded = 0;
+    const collected = [];
+    files.forEach(file => {
         const reader = new FileReader();
         reader.onload = function(e) {
-            document.getElementById("image").value = e.target.result;
-            previewImg();
-            showToast("📁 Image loaded from file!", "info");
+            collected.push(e.target.result);
+            loaded++;
+            if (loaded === files.length) {
+                const existing = parseImagesJson();
+                const merged = [...existing, ...collected];
+                if (!document.getElementById("image").value) {
+                    document.getElementById("image").value = merged[0] || "";
+                }
+                setImagesList(merged);
+                previewImg();
+                showToast("📁 " + files.length + " image(s) loaded!", "info");
+            }
         };
         reader.readAsDataURL(file);
-    }
+    });
 }
 
 function previewImg() {
@@ -1160,13 +1281,15 @@ function previewImg() {
         img.src = url;
         wrap.classList.add("on");
         img.onerror = () => wrap.classList.remove("on");
+        const list = parseImagesJson();
+        if (!list.includes(url)) setImagesList([url, ...list]);
     } else {
         wrap.classList.remove("on");
     }
 }
 
 function resetForm() {
-    ["pid","name","vendor","price","oldPrice","image","datasheetUrl","longDescription","description"].forEach(id => {
+    ["pid","name","vendor","price","oldPrice","image","datasheetUrl","longDescription","description","sku","warranty","productType","stockQty"].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = "";
     });
@@ -1176,6 +1299,13 @@ function resetForm() {
     if (catEl) catEl.value = "Solar Inverters";
     const avEl = document.getElementById("availability");
     if (avEl) avEl.value = "In stock";
+    const tagEl = document.getElementById("offerTag");
+    if (tagEl) tagEl.value = "";
+    const isNew = document.getElementById("isNew");
+    if (isNew) isNew.checked = false;
+    const isBest = document.getElementById("isBestSeller");
+    if (isBest) isBest.checked = false;
+    setImagesList([]);
     const wrap = document.getElementById("imgPrev");
     if (wrap) wrap.classList.remove("on");
     const btn = document.getElementById("subBtn");
