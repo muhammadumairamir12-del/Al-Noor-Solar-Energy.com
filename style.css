@@ -206,13 +206,15 @@ h1, h2, h3, h4, h5, h6 {
 
         header {
             background-color: var(--white);
-            padding: 15px 0;
+            padding: 8px 0;
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            height: var(--header-height); /* Fixed height */
+            height: auto;
+            min-height: 72px;
+            overflow: visible;
             display: flex;
             align-items: center;
         }
@@ -220,39 +222,66 @@ h1, h2, h3, h4, h5, h6 {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
+            flex-wrap: nowrap;
+            gap: 16px;
+            width: 100%;
+            max-width: 1400px;
         }
 
-        .navbar .logo {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: var(--dark-blue);
+        .navbar .logo,
+        header .logo-wrap {
+            font-size: 16px;
+            font-weight: 800;
+            color: #232323;
             display: flex;
             align-items: center;
-            min-width: 150px;
+            gap: 10px;
+            flex: 0 0 auto;
+            min-width: 0;
             text-decoration: none;
-        }
-        .navbar .logo-text {
-            display: flex;
-            flex-direction: column;
             line-height: 1;
         }
-        .navbar .logo-text h1 {
-            font-size: 1.3em;
-            margin: 0;
-            color: var(--dark-blue);
+        .navbar .logo-text,
+        header .logo-wrap .logo-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 2px;
+            line-height: 1;
+            min-width: 0;
         }
-        .navbar .logo-text p {
-            font-size: 0.7em;
+        .navbar .logo-text .brand-name,
+        header .logo-wrap .logo-text .brand-name {
+            display: block;
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1;
             margin: 0;
-            color: var(--secondary-text-color);
+            padding: 0;
+            color: #232323;
+            white-space: nowrap;
+        }
+        .navbar .logo-text .brand-tag,
+        header .logo-wrap .logo-text .brand-tag {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1;
+            margin: 0;
+            padding: 0;
+            color: #666666;
+            white-space: nowrap;
         }
 
-
-        .navbar .logo img {
-            height: 40px;
-            margin-right: 10px;
+        .navbar .logo img,
+        header .logo-wrap img {
+            width: 44px;
+            height: 44px;
+            margin: 0;
+            object-fit: contain;
+            flex-shrink: 0;
+            display: block;
         }
 
         .nav-links {
@@ -260,16 +289,22 @@ h1, h2, h3, h4, h5, h6 {
             margin: 0;
             padding: 0;
             display: flex;
-            gap: 25px;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: nowrap;
+            flex: 1 1 auto;
+            justify-content: flex-end;
+            min-width: 0;
         }
 
         .nav-links li a {
             color: var(--text-color);
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 13px;
+            white-space: nowrap;
             transition: color 0.3s ease;
             position: relative;
-            padding: 5px 0;
+            padding: 8px 0;
         }
 
         .nav-links li a:hover {
@@ -304,7 +339,7 @@ h1, h2, h3, h4, h5, h6 {
             background-color: var(--white);
             min-width: 230px;
             box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
+            z-index: 1200;
             padding: 8px 0;
             border-radius: 8px;
             border: 1px solid #eaeaea;
@@ -402,33 +437,7 @@ h1, h2, h3, h4, h5, h6 {
             font-weight: bold;
         }
         
-        /* New Header Search & Icons */
-        header .logo-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-        }
-        header .logo-wrap img {
-            height: 40px;
-            width: 40px;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-        header .logo-wrap .logo-text h1 {
-            font-size: 1.5em;
-            margin: 0;
-            line-height: 1;
-            color: var(--dark-blue);
-        }
-        header .logo-wrap .logo-text p {
-            font-size: 0.7em;
-            margin: 0;
-            line-height: 1;
-            color: var(--secondary-text-color);
-        }
+        /* Logo sizing is locked above in px so it cannot drift with em/font-size overrides */
 
         header .hdr-icons {
             display: none; /* Hide for desktop */
@@ -460,12 +469,10 @@ h1, h2, h3, h4, h5, h6 {
         .hero-section {
             position: relative;
             width: 100%;
-            height: 520px;
-            max-height: 75vh;
-            min-height: 300px;
+            height: clamp(220px, 42vw, 520px);
             overflow: hidden;
             background-color: #0b1526;
-            margin-bottom: 40px;
+            margin: 0 0 28px;
             display: block;
         }
 
@@ -2626,15 +2633,16 @@ h1, h2, h3, h4, h5, h6 {
 
         /* Responsive Design Core */
         @media (max-width: 992px) {
+            header .container.navbar,
             .navbar {
-                flex-direction: column;
-                align-items: flex-start;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: nowrap;
+                width: 100%;
             }
             .nav-links {
-                width: 100%;
-                flex-direction: column;
-                gap: 10px;
-                margin-top: 15px;
+                display: none;
             }
             .search-cart {
                 width: 100%;
@@ -2649,7 +2657,7 @@ h1, h2, h3, h4, h5, h6 {
                 width: 100%;
             }
             .hero-section {
-                height: 350px;
+                height: clamp(220px, 52vw, 420px);
             }
             .categories-grid, .categories-layout {
                 flex-direction: column;
@@ -2717,11 +2725,13 @@ h1, h2, h3, h4, h5, h6 {
             .header-top span {
                 margin: 5px 10px;
             }
-            .navbar .logo {
-                font-size: 1.5em;
+            header .logo-wrap img,
+            .navbar .logo img {
+                width: 40px;
+                height: 40px;
             }
             .hero-section {
-                height: 250px;
+                height: clamp(200px, 56vw, 320px);
             }
             .category-item img {
                 height: 150px;
@@ -2739,8 +2749,17 @@ h1, h2, h3, h4, h5, h6 {
         }
 
         @media (max-width: 480px) {
+            header .logo-wrap .brand-name,
+            .navbar .logo-text .brand-name {
+                font-size: 17px;
+            }
+            header .logo-wrap img,
+            .navbar .logo img {
+                width: 36px;
+                height: 36px;
+            }
             .hero-section {
-                height: 200px;
+                height: clamp(180px, 62vw, 240px);
             }
             .product-grid {
                 grid-template-columns: 1fr;
@@ -2868,6 +2887,12 @@ h1, h2, h3, h4, h5, h6 {
         }
         .mob-overlay.open { opacity: 1; visibility: visible; }
  
+        @media (max-width: 1200px) {
+            .hamburger-btn { display: flex; }
+            header .container .nav-links,
+            header .container .search-cart { display: none; }
+            header .container .hdr-icons { display: flex; align-items: center; }
+        }
         @media (max-width: 992px) {
             .hamburger-btn { display: flex; }
         }

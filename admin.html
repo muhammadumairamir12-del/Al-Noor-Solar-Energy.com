@@ -1048,37 +1048,37 @@ async function saveProduct() {
     };
 
     try {
-        // 1. Dual persistence: Save into localStorage catalog immediately
-        let locals = getLocalCustomProducts();
-        if (id) {
-            const idx = locals.findIndex(p => p.id === id);
-            if (idx !== -1) locals[idx] = { ...locals[idx], ...data };
-            else locals.unshift(data);
-        } else {
-            data.createdAt = new Date().toISOString();
-            locals.unshift(data);
+        if (String(data.image).startsWith('data:') && data.image.length > 500000) {
+            throw new Error('That image file is too large to store. Paste a shorter image URL (https://...) instead.');
         }
+        if (!db) {
+            throw new Error('Firebase is not connected, so this product cannot be published to the website.');
+        }
+
+        data.category = String(data.category || 'Other Accessories').trim();
+        data.price = Number(data.price);
+        data.availability = data.availability || 'In stock';
+        if (!id) data.createdAt = new Date().toISOString();
+
+        await db.collection("products").doc(prodId).set(data, { merge: true });
+
+        let locals = getLocalCustomProducts().filter(p => p.id !== prodId);
+        locals.unshift(data);
         saveLocalCustomProducts(locals);
 
-        // 2. Try saving to Firestore if available
-        if (db) {
-            try {
-                if (id) {
-                    await db.collection("products").doc(id).set(data, { merge: true });
-                } else {
-                    await db.collection("products").doc(prodId).set(data);
-                }
-            } catch(fbErr) {
-                console.warn("Firestore sync notice (saved locally):", fbErr.message);
-            }
-        }
-
-        showToast(id ? "✅ Product updated successfully!" : "🎉 New product added successfully!", "succ");
+        showToast(id ? "✅ Product updated on the live website!" : "🎉 Product published to the live website!", "succ");
         closeDrawer();
         loadProducts();
     } catch(e) {
         console.error("Save error:", e);
-        showToast("❌ Error saving product: " + e.message, "err");
+        const code = e && e.code ? e.code : '';
+        if (code === 'permission-denied' || code === 'unauthenticated') {
+            showToast("Firebase blocked this save (permission denied). Sign in with the Firebase admin account. This is not an internet problem.", "err");
+        } else if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+            showToast("You are offline. Check your internet connection and try again.", "err");
+        } else {
+            showToast("❌ " + (e.message || "Could not publish this product."), "err");
+        }
     } finally {
         btn.disabled = false;
         document.getElementById("subIco").textContent = id ? "🔄" : "💾";

@@ -300,6 +300,28 @@ function doExit() {
             { id: 'p_solar_cable', name: 'Solar DC Cable 6mm Twin Core (100m)', vendor: 'Pakistan Cables', price: 14000, oldPrice: 16000, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_167_1_1_510x.png?v=1737897762', description: 'Pure copper tinned solar cable with double insulation.', availability: 'In stock' }
         ];
 
+        function normalizeStoreProduct(id, data) {
+            data = data || {};
+            const price = Number(data.price);
+            const oldPrice = data.oldPrice === null || data.oldPrice === undefined || data.oldPrice === ''
+                ? null
+                : Number(data.oldPrice);
+            return {
+                id: id || data.id,
+                name: data.name || 'Unnamed Product',
+                vendor: data.vendor || data.brand || 'Generic',
+                price: Number.isFinite(price) ? price : 0,
+                oldPrice: Number.isFinite(oldPrice) ? oldPrice : null,
+                category: String(data.category || 'Other Accessories').trim(),
+                type: data.type || '',
+                image: data.image || data.imageUrl || 'logo.png',
+                description: data.description || 'Premium quality product.',
+                availability: data.availability || 'In stock',
+                datasheetUrl: data.datasheetUrl || '',
+                longDescription: data.longDescription || ''
+            };
+        }
+
         // Synchronize and merge custom products from localStorage and Firebase
         function refreshProductList(extraFirebaseProducts = []) {
             let customList = [];
@@ -312,9 +334,9 @@ function doExit() {
             // 1. Defaults
             DEFAULT_PRODUCTS.forEach(p => map.set(p.id, p));
             // 2. Custom local products
-            customList.forEach(p => map.set(p.id, p));
-            // 3. Remote Firebase products
-            extraFirebaseProducts.forEach(p => map.set(p.id, p));
+            customList.forEach(p => map.set(p.id, normalizeStoreProduct(p.id, p)));
+            // 3. Remote Firebase products (these win so the live site matches the admin panel)
+            extraFirebaseProducts.forEach(p => map.set(p.id, normalizeStoreProduct(p.id, p)));
 
             products = Array.from(map.values());
             if (!products.some(p => p.id === 'so_base')) {
@@ -780,7 +802,8 @@ function doExit() {
             return 'page-' + pageId;
         }
 
-        function renderPageFromHash(hash) {
+        function renderPageFromHash(hash, options) {
+            options = options || {};
             let pageId = hash.split('?')[0];
             const params = new URLSearchParams(hash.split('?')[1]);
 
@@ -809,40 +832,46 @@ function doExit() {
             }
 
             updateBottomNavActiveState(pageId);
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scroll to top on navigate
+            if (options.scroll !== false) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
-        
-        // Function jo Firebase se data laayega
-        async function loadProductsFromFirebase() {
+
+        let catalogOfflineNoticeShown = false;
+        function reportCatalogError(error) {
+            const code = (error && error.code) || '';
+            console.warn('Product catalog sync:', code || error);
+            const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
+            const isNetwork = offline || code === 'unavailable' || code === 'deadline-exceeded';
+            if (isNetwork && !catalogOfflineNoticeShown) {
+                catalogOfflineNoticeShown = true;
+                showToast('Please check your internet connection.');
+            }
+        }
+
+        function applyCatalogToCurrentPage() {
+            updateCartUI();
+            if (currentPage === 'home') {
+                if (typeof populateHomeCategoryCarousels === 'function') populateHomeCategoryCarousels();
+                return;
+            }
+            const hash = window.location.hash.substring(1) || currentPage || 'home';
+            renderPageFromHash(hash, { scroll: false });
+        }
+
+        let productsUnsubscribe = null;
+        function loadProductsFromFirebase() {
             refreshProductList();
             if (!db) return;
-            try {
-                const querySnapshot = await db.collection('products').get();
-                let fetchedProducts = [];
+            if (productsUnsubscribe) productsUnsubscribe();
+            productsUnsubscribe = db.collection('products').onSnapshot((querySnapshot) => {
+                const fetchedProducts = [];
                 querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    fetchedProducts.push({
-                        id: doc.id,
-                        name: data.name || 'Unnamed Product',
-                        vendor: data.vendor || 'Generic',
-                        price: Number(data.price) || 0,
-                        oldPrice: Number(data.oldPrice) || null,
-                        category: data.category || 'Other Accessories',
-                        type: data.type || '',
-                        image: data.image || 'logo.png',
-                        description: data.description || 'Premium quality product.',
-                        availability: data.availability || 'In stock',
-                        datasheetUrl: data.datasheetUrl || '',
-                        longDescription: data.longDescription || ''
-                    });
+                    fetchedProducts.push(normalizeStoreProduct(doc.id, doc.data()));
                 });
                 refreshProductList(fetchedProducts);
-                const currentHash = window.location.hash.substring(1) || 'home';
-                renderPageFromHash(currentHash);
-                updateCartUI();
-            } catch (error) {
-                console.warn("Background Firebase product sync notice:", error.message || error);
-            }
+                applyCatalogToCurrentPage();
+            }, reportCatalogError);
         }
         
         // Jab page load ho to FORAN website dikhao
