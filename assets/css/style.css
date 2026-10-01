@@ -3,8 +3,6 @@
    Designed by Antigravity AI - Premium E-Commerce Theme
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400..700&display=swap');
-
 :root {
     --primary: #1A66FF;
     --primary-blue: var(--primary);
@@ -64,9 +62,12 @@ img {
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+}
+html.is-ready {
+    scroll-behavior: smooth;
 }
 body {
     font-family: var(--font-body);
@@ -729,8 +730,8 @@ header .container.navbar {
 .hero-section {
     position: relative;
     height: calc(100vh - var(--header-height));
-    min-height: 600px;
-    background: radial-gradient(circle at top right, rgba(26, 102, 255, 0.15) 0%, rgba(7, 30, 74, 0.05) 50%, var(--white) 100%);
+    min-height: 620px;
+    background: #071E4A;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -744,6 +745,7 @@ header .container.navbar {
     height: 100%;
     z-index: 1;
     overflow: hidden;
+    animation: heroKenBurns 16s ease-out 1;
 }
 
 .hero-carousel img {
@@ -755,17 +757,24 @@ header .container.navbar {
     transform: translate3d(-100%, 0, 0);
     transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s ease-in-out;
     backface-visibility: hidden;
-    perspective: 1000px;
 }
 
 .hero-carousel img.active {
-    opacity: 0.15; /* Soft background backplate opacity */
+    opacity: 0.28;
     transform: translate3d(0, 0, 0);
 }
 
 .hero-carousel img.exit {
     opacity: 0;
     transform: translate3d(100%, 0, 0);
+}
+
+.hero-overlay-static {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(105deg, rgba(7,30,74,0.94) 0%, rgba(7,30,74,0.78) 48%, rgba(7,30,74,0.35) 100%);
 }
 
 /* Sunlight Ray Animation */
@@ -776,62 +785,101 @@ header .container.navbar {
     right: -20%;
     width: 120%;
     height: 150%;
-    background: radial-gradient(circle, rgba(255,184,0,0.12) 0%, rgba(255,255,255,0) 60%);
+    background: radial-gradient(circle, rgba(255,184,0,0.16) 0%, rgba(255,255,255,0) 60%);
     transform: rotate(-15deg);
     pointer-events: none;
     animation: sunlightPulse 8s infinite alternate ease-in-out;
-    z-index: 2;
+    z-index: 3;
 }
 
 @keyframes sunlightPulse {
     0% { opacity: 0.7; transform: rotate(-15deg) scale(0.95); }
-    100% { opacity: 1.2; transform: rotate(-10deg) scale(1.05); }
+    100% { opacity: 1; transform: rotate(-10deg) scale(1.05); }
+}
+
+@keyframes heroKenBurns {
+    from { transform: scale(1.08); }
+    to { transform: scale(1); }
+}
+
+@keyframes heroFadeUp {
+    from { opacity: 0; transform: translate3d(0, 32px, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes heroFadeIn {
+    from { opacity: 0; transform: translate3d(36px, 16px, 0) scale(0.96); }
+    to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes heroShine {
+    from { transform: translateX(-130%); }
+    to { transform: translateX(130%); }
+}
+
+.hero-inner {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 36px;
+    align-items: center;
+    width: 100%;
 }
 
 .hero-content-wrap {
     position: relative;
     z-index: 5;
     max-width: 750px;
-    padding-left: 20px;
+    padding: 24px 0;
 }
 
 .hero-tag {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background-color: var(--primary-light);
-    color: var(--primary);
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
     padding: 6px 16px;
     border-radius: 30px;
     font-weight: 700;
     font-size: 0.82rem;
     margin-bottom: 24px;
-    border: 1px solid rgba(26, 102, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     text-transform: uppercase;
     letter-spacing: 1px;
+    backdrop-filter: blur(10px);
+    animation: heroFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .hero-section h1 {
-    font-size: 3.8rem;
+    font-size: clamp(2.4rem, 4.4vw, 3.8rem);
     line-height: 1.15;
-    color: var(--bg-dark);
+    color: #ffffff;
     margin-bottom: 20px;
     font-weight: 800;
+    animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
 }
 
 .hero-section h1 span {
-    color: var(--primary);
-    background: linear-gradient(135deg, var(--primary) 0%, #42A5F5 100%);
+    color: #7ec8ff;
+    background: linear-gradient(135deg, #7ec8ff 0%, #4DA3FF 50%, #FFB800 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .hero-section p.hero-subtitle {
-    font-size: 1.15rem;
-    color: var(--text-muted);
+    font-size: 1.12rem;
+    color: rgba(255, 255, 255, 0.82);
     margin-bottom: 35px;
     line-height: 1.7;
     max-width: 600px;
+    animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+}
+
+.hero-section p.hero-subtitle strong {
+    color: #ffffff;
 }
 
 .hero-btns {
@@ -839,6 +887,7 @@ header .container.navbar {
     gap: 16px;
     flex-wrap: wrap;
     margin-bottom: 50px;
+    animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.34s both;
 }
 
 .hero-btns button {
@@ -846,12 +895,38 @@ header .container.navbar {
     font-size: 1rem;
 }
 
-/* Experience & Trust Badges */
+.hero-btns .primary {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-btns .primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.35) 50%, transparent 65%);
+    transform: translateX(-130%);
+    animation: heroShine 2.6s ease 1.1s infinite;
+    pointer-events: none;
+}
+
+.hero-btns .secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.hero-btns .secondary:hover {
+    background: #ffffff;
+    color: var(--primary);
+}
+
 .hero-badges {
     display: flex;
     gap: 30px;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
     padding-top: 30px;
+    animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.46s both;
 }
 
 .hero-badge-item {
@@ -864,53 +939,75 @@ header .container.navbar {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background-color: var(--primary-light);
-    color: var(--primary);
+    background-color: rgba(77, 163, 255, 0.22);
+    color: #7ec8ff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.25rem;
 }
 
+.hero-badge-num {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #ffffff;
+    font-family: var(--font-heading);
+}
+
 .hero-badge-text h4 {
     font-size: 1.1rem;
     font-weight: 800;
     line-height: 1.1;
+    color: #ffffff;
 }
 
 .hero-badge-text p {
     font-size: 0.78rem;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.7);
     font-weight: 600;
 }
 
 /* Floating Solar Panel Shape Decorator */
 .floating-decorations {
-    position: absolute;
-    right: 8%;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 420px;
-    height: 420px;
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    width: 100%;
+    height: auto;
+    min-height: 340px;
     z-index: 4;
     pointer-events: none;
+    animation: heroFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
 }
 
 .decor-panel {
-    position: absolute;
-    width: 260px;
-    height: 180px;
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    margin-left: auto;
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.35);
     border-radius: var(--radius-lg);
-    transform: translateY(0);
     animation: floatPanel 6s infinite alternate ease-in-out;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+}
+
+.decor-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
 }
 
 .decor-panel::after {
@@ -918,13 +1015,14 @@ header .container.navbar {
     position: absolute;
     width: 90%;
     height: 90%;
-    border: 1.5px dashed rgba(255, 184, 0, 0.3);
+    border: 1.5px dashed rgba(255, 184, 0, 0.35);
     border-radius: calc(var(--radius-lg) - 4px);
+    pointer-events: none;
 }
 
 @keyframes floatPanel {
     0% { transform: translateY(0); }
-    100% { transform: translateY(-20px); }
+    100% { transform: translateY(-16px); }
 }
 
 /* Scroll Down Indicator */
@@ -939,16 +1037,17 @@ header .container.navbar {
     align-items: center;
     gap: 8px;
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.72);
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
+    animation: heroFadeUp 0.8s ease 0.7s both;
 }
 
 .scroll-indicator .mouse {
     width: 22px;
     height: 38px;
-    border: 2px solid var(--border-color);
+    border: 2px solid rgba(255, 255, 255, 0.4);
     border-radius: 20px;
     position: relative;
 }
@@ -2295,6 +2394,12 @@ header .container.navbar {
     display: block;
 }
 
+#page-home {
+    max-width: none;
+    padding: 0;
+    width: 100%;
+}
+
 .page-header {
     background: linear-gradient(135deg, var(--bg-dark) 0%, #0A3080 100%);
     color: var(--white);
@@ -3163,6 +3268,8 @@ footer {
     color: var(--white);
     padding: 80px 0 40px;
     position: relative;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 520px;
 }
 
 .footer-content {
@@ -3861,7 +3968,8 @@ footer {
     }
     
     .floating-decorations {
-        display: none;
+        display: block;
+        min-height: 220px;
     }
     
     .product-grid {
@@ -4209,19 +4317,22 @@ footer {
         gap: 30px;
     }
 
-    /* Hero vertical stacking & decoration hiding */
-    #hero .container {
+    /* Hero vertical stacking */
+    .hero-inner {
         display: flex !important;
         flex-direction: column !important;
         justify-content: center !important;
         gap: 20px !important;
         text-align: center !important;
         padding-top: 40px !important;
-        padding-bottom: 40px !important;
+        padding-bottom: 56px !important;
         height: auto !important;
     }
     .floating-decorations {
-        display: none !important;
+        display: block !important;
+        min-height: 200px;
+        max-width: 420px;
+        margin: 0 auto;
     }
     .hero-btns {
         justify-content: center !important;
@@ -5855,6 +5966,15 @@ footer::before {
     border-bottom: 1px solid var(--border-color);
 }
 
+.cat-section,
+.prod-section,
+.brands-we-love,
+.special-offer-section,
+.promo-slider-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 480px;
+}
+
 .prod-section:last-of-type {
     border-bottom: none;
 }
@@ -5886,7 +6006,7 @@ footer::before {
         padding-bottom: 40px;
     }
     
-    .hero-section .container {
+    .hero-inner {
         grid-template-columns: 1fr;
         gap: 20px;
         text-align: center;
@@ -5908,7 +6028,9 @@ footer::before {
     }
     
     .decor-panel {
-        display: none; /* Hide decorative floating panels on mobile */
+        display: block;
+        max-width: 100%;
+        margin: 0 auto;
     }
 
     .hero-badges {

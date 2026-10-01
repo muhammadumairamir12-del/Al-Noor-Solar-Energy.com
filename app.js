@@ -1,3 +1,27 @@
+
+        // Mobile Accordion Toggle function
+        window.toggleMobileSubmenu = function(event, accordionId) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            const acc = document.getElementById(accordionId);
+            if (!acc) return;
+            const wasOpen = acc.classList.contains('open');
+            document.querySelectorAll('.mnp-accordion').forEach(a => a.classList.remove('open'));
+            if (!wasOpen) {
+                acc.classList.add('open');
+            }
+        };
+
+        // Listen for admin changes in another tab and update products live
+        window.addEventListener('storage', () => {
+            refreshProductList();
+            const currentHash = window.location.hash.substring(1) || 'home';
+            renderPageFromHash(currentHash);
+            updateCartUI();
+        });
+
 /* ── Particles ── */
 (function(){
   const s=document.querySelector('.special-offer-section');
@@ -96,6 +120,9 @@ function ccNext(id){ if(_cc[id]){ _cc[id].go(_cc[id].cur()+1); _cc[id].run(); } 
       el = el.parentElement;
     }
     if (!el || el === document) return;
+
+    // Desktop dropdown parent links only open the menu (handled in addGlobalEventListeners)
+    if (el.classList.contains('dropdown-toggle')) return;
 
     var href = el.getAttribute('href') || '';
     if (!href || !href.startsWith('#')) return;
@@ -205,13 +232,14 @@ function doExit() {
         ];
         // Firebase Configuration (Aapki API keys)
         const firebaseConfig = {
-            apiKey: "AIzaSyACRvTs97pVRQEZkDVkivq7vf1xhaU8g0M",
-            authDomain: "al-noor-solar-energy.firebaseapp.com",
-            projectId: "al-noor-solar-energy",
-            storageBucket: "al-noor-solar-energy.firebasestorage.app",
-            messagingSenderId: "789267821397",
-            appId: "1:789267821397:web:27816d097bc0a6896e35dc",
-            measurementId: "G-TC47B22038"
+            apiKey: "AIzaSyCsvVPVJNYL2946DqJHP3Aj3ag4GXZv2LE",
+            authDomain: "alnoor-solar-c7326.firebaseapp.com",
+            databaseURL: "https://alnoor-solar-c7326-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "alnoor-solar-c7326",
+            storageBucket: "alnoor-solar-c7326.firebasestorage.app",
+            messagingSenderId: "347399543862",
+            appId: "1:347399543862:web:7337ea33fdf860879c4c97",
+            measurementId: "G-EYG2H2E5X6"
         };
 
         // Initialize Firebase (safe — site still opens if Firebase CDN is blocked)
@@ -228,7 +256,71 @@ function doExit() {
         }
 
         // Khali array jisme Firebase se data aayega
-        let products = []; 
+        
+        // Default Catalog of Verified Products (Panels, Inverters, Batteries, VFDs, Accessories)
+        const DEFAULT_PRODUCTS = [
+            // Solar Inverters
+            { id: 'p_knox_6kw', name: 'Knox 6KW Hybrid Smart Inverter', vendor: 'Knox', price: 185000, oldPrice: 205000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_4_c4ecf26b-84da-45b7-803b-8f32e85635a1_1066x.png?v=1753016905', description: 'Dual Output Support, Pure Sine Wave, Net Metering Ready.', availability: 'In stock' },
+            { id: 'p_knox_5kw', name: 'Knox 5KW Hybrid Solar Inverter', vendor: 'Knox', price: 195000, oldPrice: 215000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox_6KW_pv8000_Hybrid_1_1066x.png?v=1753255194', description: 'Advanced Hybrid Solar Inverter with official manufacturer warranty.', availability: 'In stock' },
+            { id: 'p_crown_58kw', name: 'Crown Arceus 5.8KW Solar Inverter', vendor: 'CrownSolar', price: 145000, oldPrice: 165000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/CrownArceus5.8KWsolarinverterHybrid_1066x.png?v=1753256284', description: 'Net Metering Certified Smart Grid Inverter with high efficiency.', availability: 'In stock' },
+            { id: 'p_livoltek_62kw', name: 'LIVOLTEK 6.2KW Hybrid Inverter', vendor: 'LIVOLTEK', price: 125000, oldPrice: 140000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/LIVOLTEK6.2KWsolarinverterhybrid_1066x.png?v=1751349951', description: 'Heavy duty backup inverter with smart monitoring application.', availability: 'In stock' },
+            { id: 'p_goodwe_6kw', name: 'Goodwe 6KW Smart Inverter', vendor: 'Goodwe', price: 215000, oldPrice: 235000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_4_c4ecf26b-84da-45b7-803b-8f32e85635a1_1066x.png?v=1753016905', description: 'Global Tier-1 inverter technology with dual MPPT trackers.', availability: 'In stock' },
+            { id: 'p_solis_8kw', name: 'Solis 8KW Grid-Tied Inverter', vendor: 'Solis', price: 235000, oldPrice: 260000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/Fronus6KWPV6000WithNetmeteringOffGridSolarInverter_1066x.png?v=1754204638', description: 'High-performance three phase solar inverter for large homes.', availability: 'In stock' },
+            { id: 'p_huawei_10kw', name: 'Huawei 10KW Smart Inverter', vendor: 'Huawei', price: 285000, oldPrice: 310000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/EnvyPV9000_1066x.png?v=1767696239', description: 'AI-powered arc fault circuit protection with digital loggers.', availability: 'In stock' },
+            { id: 'p_growatt_8kw', name: 'Growatt 8KW Solar Inverter', vendor: 'Growatt', price: 198000, oldPrice: 220000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/KnoxKrypton6.5kWPV9055HybridSolarInverter_1066x.png?v=1753688748', description: 'Transformerless hybrid unit with extreme durability.', availability: 'In stock' },
+            { id: 'p_inverex_52kw', name: 'Inverex Yukon 5.2KW Solar Inverter', vendor: 'Inverex', price: 175000, oldPrice: 190000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox04KWHybrid_1-min_750x.png?v=1737898390', description: 'Local bestselling inverter with built-in Wi-Fi monitoring.', availability: 'In stock' },
+            { id: 'p_tigersolar_6kw', name: 'Tiger Solar 6KW Hybrid Unit', vendor: 'TigerSolar', price: 165000, oldPrice: 180000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/CrownArceus5.8KWsolarinverterHybrid_1066x.png?v=1753256284', description: 'Affordable pure sine wave inverter for standard households.', availability: 'In stock' },
+            { id: 'p_anicsun_6kw', name: 'Anicsun 6KW Smart Inverter', vendor: 'Anicsun', price: 170000, oldPrice: 185000, category: 'Solar Inverters', type: 'Hybrid', image: 'https://kamalsolar.pk/cdn/shop/files/Knox6KWpv8000Hybrid_4_c4ecf26b-84da-45b7-803b-8f32e85635a1_1066x.png?v=1753016905', description: 'High surge capacity unit compatible with lithium and tubular batteries.', availability: 'In stock' },
+            { id: 'p_canadian_5kw', name: 'Canadian Solar 5KW Inverter', vendor: 'CanadianSolar', price: 190000, oldPrice: 210000, category: 'Solar Inverters', type: 'OnGrid', image: 'https://kamalsolar.pk/cdn/shop/files/EnvyPV9000_1066x.png?v=1767696239', description: 'World-renowned Canadian Solar inverter engineering.', availability: 'In stock' },
+
+            // Solar Panels
+            { id: 'p_jinko_neo', name: 'Jinko Tiger Neo 585W N-Type Panel', vendor: 'Jinko', price: 19500, oldPrice: 22000, category: 'Solar Panels', image: 'https://kamalsolar.pk/cdn/shop/files/longi-horizon-225W-front_870x.png?v=1738082522', description: 'Double Glass Bifacial N-Type Module with 30 Years Linear Power Warranty.', availability: 'In stock' },
+            { id: 'p_longi_himo6', name: 'Longi Hi-MO 6 580W Solar Panel', vendor: 'Longi', price: 19200, oldPrice: 21500, category: 'Solar Panels', image: 'https://as2.ftcdn.net/v2/jpg/04/40/70/41/1000_F_440704131_EFZAB3Dhv6TKhEoPbNM0K6OevFVHDkep.jpg', description: 'High Efficiency Mono PERC panel designed for harsh environments.', availability: 'In stock' },
+            { id: 'p_canadian_panel', name: 'Canadian Solar TopHiKu6 580W', vendor: 'Canadian', price: 17800, oldPrice: 19500, category: 'Solar Panels', image: 'https://as2.ftcdn.net/v2/jpg/06/97/42/13/1000_F_697421378_Uty8CrKYDVo0IsOCR81CcgM3YG4udGsz.webp', description: 'Tier-1 high wattage module with low temperature coefficient.', availability: 'In stock' },
+            { id: 'p_trina_vertex', name: 'Trina Solar Vertex S+ 580W', vendor: 'Trina', price: 16500, oldPrice: 18500, category: 'Solar Panels', image: 'https://as2.ftcdn.net/v2/jpg/03/44/42/69/1000_F_344426997_HyMa1OV2oVp53KM0Qqtn50vqjiPFaszh.jpg', description: 'Vertex series multi-busbar technology for maximum energy yield.', availability: 'In stock' },
+            { id: 'p_ja_solar', name: 'JA Solar Deep Blue 4.0 Pro 580W', vendor: 'JASolar', price: 17000, oldPrice: 19000, category: 'Solar Panels', image: 'https://t4.ftcdn.net/jpg/03/24/07/85/240_F_324078546_0djvv4y7pbO9FdzGSB5zl5JqwJDLnFCe.jpg', description: 'Deep Blue 4.0 N-Type technology delivering reliable output.', availability: 'In stock' },
+            { id: 'p_risen_titan', name: 'Risen Energy Titan 550W Panel', vendor: 'Risen', price: 15900, oldPrice: 17500, category: 'Solar Panels', image: 'https://t3.ftcdn.net/jpg/04/96/15/42/240_F_496154205_SSN7m8XzMYiLqYsAka0aZ321sGRz48mv.jpg', description: 'Cost-effective commercial grade solar panel.', availability: 'In stock' },
+            { id: 'p_astronergy_chsm', name: 'Astronergy CHSM72M 550W Module', vendor: 'Astronergy', price: 16200, oldPrice: 18000, category: 'Solar Panels', image: 'https://t3.ftcdn.net/jpg/05/36/49/26/240_F_536492602_3nG9hPdsy1NGdj3uJETSMdAeKikCQoE7.jpg', description: 'Tested and proven Tier-1 module with anti-PID assurance.', availability: 'In stock' },
+            { id: 'p_seraphim_eclipse', name: 'Seraphim Eclipse Series 540W', vendor: 'Seraphim', price: 15500, oldPrice: 17000, category: 'Solar Panels', image: 'https://t3.ftcdn.net/jpg/03/16/90/16/240_F_316901683_Biz4WZy12zLIysQMWUBGlp9CcfW2M57N.jpg', description: 'Durable framing designed to withstand extreme wind & snow loads.', availability: 'In stock' },
+
+            // Lithium Batteries
+            { id: 'p_narada_48v', name: 'Narada 48V 100Ah Lithium Battery', vendor: 'Narada', price: 290000, oldPrice: 320000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_166_510x.png?v=1737531157', description: '6000+ cycle life LiFePO4 battery pack with smart BMS.', availability: 'In stock' },
+            { id: 'p_pylontech_us3000', name: 'Pylontech US3000C 48V Lithium', vendor: 'Pylontech', price: 320000, oldPrice: 350000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_166_510x.png?v=1737531157', description: 'Modular rack-mountable battery compatible with all hybrid inverters.', availability: 'In stock' },
+            { id: 'p_dyness_48v', name: 'Dyness 48V 100Ah Solar Battery', vendor: 'Dyness', price: 275000, oldPrice: 295000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_166_510x.png?v=1737531157', description: 'Compact wall-mounted design with CAN & RS485 communication.', availability: 'In stock' },
+            { id: 'p_shoto_48v', name: 'Shoto 48V 100Ah LiFePO4 Battery', vendor: 'Shoto', price: 260000, oldPrice: 285000, category: 'Lithium Batteries', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_166_510x.png?v=1737531157', description: 'Telecom-grade reliability and high discharge depth.', availability: 'In stock' },
+
+            // VFD Inverters
+            { id: 'p_invt_gd100', name: 'INVT GD100-PV Solar Pump Inverter', vendor: 'INVT', price: 65000, oldPrice: 75000, category: 'VFD Inverters', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_168_1_1_510x.png?v=1737897746', description: 'Dedicated agricultural solar tube-well inverter with MPPT.', availability: 'In stock' },
+            { id: 'p_veichi_si23', name: 'Veichi SI23 Solar Pump VFD', vendor: 'Veichi', price: 72000, oldPrice: 80000, category: 'VFD Inverters', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_168_1_1_510x.png?v=1737897746', description: 'IP65 weather resistant solar water pump controller.', availability: 'In stock' },
+            { id: 'p_frecon_vfd', name: 'Frecon Solar VFD 7.5KW', vendor: 'Frecon', price: 68000, oldPrice: 76000, category: 'VFD Inverters', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_168_1_1_510x.png?v=1737897746', description: 'Smart sensorless vector control for irrigation pumps.', availability: 'In stock' },
+
+            // Other Accessories
+            { id: 'p_schneider_spd', name: 'AC/DC Breakers & SPD Surge Protector', vendor: 'Schneider', price: 8500, oldPrice: 10000, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_167_1_1_510x.png?v=1737897762', description: 'Essential system protection kit against surges and short circuits.', availability: 'In stock' },
+            { id: 'p_mc4_connectors', name: 'MC4 Solar Connectors (10 Pairs)', vendor: 'Multi-Contact', price: 2500, oldPrice: 3200, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_167_1_1_510x.png?v=1737897762', description: 'IP68 waterproof UV-resistant cable connectors.', availability: 'In stock' },
+            { id: 'p_solar_cable', name: 'Solar DC Cable 6mm Twin Core (100m)', vendor: 'Pakistan Cables', price: 14000, oldPrice: 16000, category: 'Other Accessories', image: 'https://kamalsolar.pk/cdn/shop/files/Frame_167_1_1_510x.png?v=1737897762', description: 'Pure copper tinned solar cable with double insulation.', availability: 'In stock' }
+        ];
+
+        // Synchronize and merge custom products from localStorage and Firebase
+        function refreshProductList(extraFirebaseProducts = []) {
+            let customList = [];
+            try {
+                const stored = localStorage.getItem('alnoorCustomProducts');
+                if (stored) customList = JSON.parse(stored);
+            } catch(e) {}
+
+            const map = new Map();
+            // 1. Defaults
+            DEFAULT_PRODUCTS.forEach(p => map.set(p.id, p));
+            // 2. Custom local products
+            customList.forEach(p => map.set(p.id, p));
+            // 3. Remote Firebase products
+            extraFirebaseProducts.forEach(p => map.set(p.id, p));
+
+            products = Array.from(map.values());
+            if (!products.some(p => p.id === 'so_base')) {
+                products.push(specialOfferBase);
+            }
+        }
 
         // Special offer ke liye base product (Homepage ke liye zaroori)
         const specialOfferBase = { 
@@ -238,6 +330,9 @@ function doExit() {
             description: 'Pakistan\'s No. 1 Pure Sine wave and Modified Sine wave Local Solar Inverter.', 
             capacity: ['10KW', '7KW'], availability: 'In stock' 
         };
+
+        let products = [];
+        refreshProductList();
 
         // Cart state
         let cart = JSON.parse(localStorage.getItem('alnoorCart')) || [];
@@ -294,6 +389,21 @@ function doExit() {
             'products': renderAllProducts,
             'services': renderServicesPage,
             'about': renderAboutPage,
+            'about-us': renderAboutPage,
+            'contact': () => renderInfoPage('Contact Information', `
+                <p>Have questions or need assistance? Our team is here to help!</p>
+                <p><strong>Address:</strong> 155 A , Opposite Bank Alfalah Model Town Chowk Multan , Pakistan</p>
+                <p><strong>Phone:</strong> <a href="tel:03006771013">03006771013</a> / <a href="tel:03026255188">03026255188</a></p>
+                <p><strong>Email:</strong> <a href="mailto:alnoorse786@gmail.com">alnoorse786@gmail.com</a></p>
+                <p><strong>Business Hours:</strong> Saturday - Thursday: 09:00 AM to 07:00 PM (Friday OFF)</p>
+            `),
+            'contact-us': () => renderInfoPage('Contact Information', `
+                <p>Have questions or need assistance? Our team is here to help!</p>
+                <p><strong>Address:</strong> 155 A , Opposite Bank Alfalah Model Town Chowk Multan , Pakistan</p>
+                <p><strong>Phone:</strong> <a href="tel:03006771013">03006771013</a> / <a href="tel:03026255188">03026255188</a></p>
+                <p><strong>Email:</strong> <a href="mailto:alnoorse786@gmail.com">alnoorse786@gmail.com</a></p>
+                <p><strong>Business Hours:</strong> Saturday - Thursday: 09:00 AM to 07:00 PM (Friday OFF)</p>
+            `),
             'solar-inverters': (params) => renderCategoryPage('Solar Inverters', params),
             'lithium-batteries': (params) => renderCategoryPage('Lithium Batteries', params),
             'vfd-inverters': (params) => renderCategoryPage('VFD Inverters', params),
@@ -394,7 +504,7 @@ function doExit() {
         <!-- HERO -->
         <div class="acc-hero">
             <img class="acc-logo"
-                src="https://scontent.flhe2-4.fna.fbcdn.net/v/t39.30808-6/650372276_927700843343095_6940458157978706973_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=2a1932&_nc_eui2=AeHsdo0w7QVwsbN2-vbGrjuwo0fuUanAAAmjR-5RqcAACXcKq2ycMmyHX6cBKt0CXblE6HoNYG4kwKP8NoT4mlnT&_nc_ohc=CROPX-rDL74Q7kNvwEGtapo&_nc_oc=AdqTlVlz1_GjLabO7GndyzvRhtozSthfbOO2TqQ8CKJvVclYZUkyaDUmkxTh5H0SLF6s5_tIxGMz6tZwGRTgzE9K&_nc_zt=23&_nc_ht=scontent.flhe2-4.fna&_nc_gid=_lAvK1oc9m4jSnW4dJbq0Q&_nc_ss=7a3a8&oh=00_Af2NYOvP0tORsqGCH-AX7LLTu4dY5IJG0rdwD3eCIZINpg&oe=69D612CA"
+                src="logo.png"
                 alt="AL Noor Solar Energy"
                 onerror="this.style.display='none'">
             <h1>AL Noor Solar Energy</h1>
@@ -704,44 +814,34 @@ function doExit() {
         
         // Function jo Firebase se data laayega
         async function loadProductsFromFirebase() {
+            refreshProductList();
             if (!db) return;
             try {
                 const querySnapshot = await db.collection('products').get();
                 let fetchedProducts = [];
-                
-               querySnapshot.forEach((doc) => {
+                querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     fetchedProducts.push({
-                        id: doc.id, 
+                        id: doc.id,
                         name: data.name || 'Unnamed Product',
                         vendor: data.vendor || 'Generic',
                         price: Number(data.price) || 0,
                         oldPrice: Number(data.oldPrice) || null,
                         category: data.category || 'Other Accessories',
                         type: data.type || '',
-                        image: data.image || 'https://via.placeholder.com/150',
+                        image: data.image || 'logo.png',
                         description: data.description || 'Premium quality product.',
                         availability: data.availability || 'In stock',
-                        // --- NEW VARIABLES ADDED ---
-                        datasheetUrl: data.datasheetUrl || '', 
-                        longDescription: data.longDescription || '' 
+                        datasheetUrl: data.datasheetUrl || '',
+                        longDescription: data.longDescription || ''
                     });
                 });
-
-                // Special offer ko list mein daalna
-                fetchedProducts.push(specialOfferBase);
-
-                // Asal products ko Firebase wale products se update kar diya
-                products = fetchedProducts;
-
-                // Website Start Karna
+                refreshProductList(fetchedProducts);
                 const currentHash = window.location.hash.substring(1) || 'home';
                 renderPageFromHash(currentHash);
                 updateCartUI();
-
             } catch (error) {
-                console.error("Firebase se products laane mein error:", error);
-                alert("Please check your internet connection.");
+                console.warn("Background Firebase product sync notice:", error.message || error);
             }
         }
         
@@ -758,29 +858,59 @@ function doExit() {
             loadProductsFromFirebase();
         });
 
-        // Popstate event for browser back/forward buttons
-        window.addEventListener('popstate', (event) => {
-            const previousPageHash = event.state ? event.state.page : 'home';
-            const currentPageHash = window.location.hash.substring(1).split('?')[0];
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.substring(1) || 'home';
+            renderPageFromHash(hash);
+        });
 
-            if (currentPageHash === 'home' && previousPageHash === 'home') {
-                // User pressed back button while on the homepage (possibly trying to exit)
-                showExitPopup();
-            } else {
-                renderPageFromHash(previousPageHash);
-            }
+        // Popstate event for browser back/forward buttons
+        window.addEventListener('popstate', () => {
+            const hash = window.location.hash.substring(1) || 'home';
+            renderPageFromHash(hash);
         });
 
         function addGlobalEventListeners() {
-            // Event listener for all navigation links (desktop nav and footer)
+            // Event listener for all navigation links with dropdown & event.target.closest('a') bug fix
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const targetHash = event.target.getAttribute('href');
+                    const linkEl = event.currentTarget || event.target.closest('a');
+                    const targetHash = linkEl ? linkEl.getAttribute('href') : null;
+
+                    // If it's a desktop dropdown toggle, toggle .open on parent
+                    if (linkEl && linkEl.classList.contains('dropdown-toggle')) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        const parent = linkEl.closest('.nav-item.dropdown');
+                        if (parent) {
+                            const wasOpen = parent.classList.contains('open');
+                            document.querySelectorAll('.nav-item.dropdown').forEach(d => d.classList.remove('open'));
+                            if (!wasOpen) parent.classList.add('open');
+                        }
+                        return;
+                    }
+
                     if (targetHash) {
+                        event.preventDefault();
+                        // Close any open desktop dropdowns
+                        document.querySelectorAll('.nav-item.dropdown').forEach(d => d.classList.remove('open'));
+                        closeMobileMenu();
                         navigate(targetHash);
                     }
                 });
+            });
+
+            // Close desktop dropdowns when clicking anywhere outside
+            document.addEventListener('click', (event) => {
+                if (!event.target.closest('.nav-item.dropdown')) {
+                    document.querySelectorAll('.nav-item.dropdown').forEach(d => d.classList.remove('open'));
+                }
+            });
+
+            // Close desktop dropdowns on Escape key
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    document.querySelectorAll('.nav-item.dropdown').forEach(d => d.classList.remove('open'));
+                }
             });
 
             // Event listener for desktop search input (if exists)
@@ -1009,12 +1139,14 @@ function doExit() {
                 `<span class="price">${formatPrice(product.price)} <span class="old-price">${formatPrice(product.oldPrice)}</span></span>` :
                 `<span class="price">${formatPrice(product.price)}</span>`;
             const addToCartBtn = product.availability === 'In stock' ?
-                `<button class="primary" aria-label="Add ${product.name} to cart" onclick="event.stopPropagation(); addToCart('${product.id}')">Add to cart</button>` :
+                `<button class="primary" aria-label="Add ${product.name} to cart" onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}')">Add to cart</button>` :
                 `<button class="secondary" disabled aria-label="Out of stock">Notify me</button>`;
 
             return `
                 <a href="#product?id=${product.id}" class="product-card nav-link" style="animation: fadeInUp 0.6s ease backwards;">
-                    <img src="${product.image}" alt="${product.name} Image">
+                    <div class="card-img-wrap">
+                        <img src="${product.image || 'logo.png'}" alt="${product.name}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='logo.png';">
+                    </div>
                     <div class="product-card-content">
                         <h3>${product.name}</h3>
                         <p class="vendor">Vendor: ${product.vendor}</p>
@@ -1025,41 +1157,87 @@ function doExit() {
             `;
         }
 
+        function populateHomeCategoryCarousels() {
+            const categories = [
+                { id: 'ct-panels', category: 'Solar Panels' },
+                { id: 'ct-inverters', category: 'Solar Inverters' },
+                { id: 'ct-batteries', category: 'Lithium Batteries' },
+                { id: 'ct-vfd', category: 'VFD Inverters' }
+            ];
+
+            categories.forEach(cat => {
+                const track = document.getElementById(cat.id);
+                if (!track) return;
+                const catProducts = products.filter(p => p.category === cat.category && p.id !== 'so_base');
+                if (catProducts.length === 0) return;
+
+                const slides = [];
+                for (let i = 0; i < catProducts.length; i += 4) {
+                    slides.push(catProducts.slice(i, i + 4));
+                }
+
+                track.innerHTML = slides.map(slide => `
+                    <div class="cards-slide grid4">
+                        ${slide.map(p => productCardTemplate(p)).join('')}
+                    </div>
+                `).join('');
+            });
+        }
+
         function renderHome() {
-            // All home page content is static HTML in index.html, just need to activate the section
             document.getElementById('page-home').classList.add('active');
+            populateHomeCategoryCarousels();
             initHeroCarousel();
             initSpecialOfferCarousel();
             addHomeEventListeners();
         }
 
+        let heroCarouselInterval = null;
         function initHeroCarousel() {
             const carousel = document.getElementById('heroCarousel');
             if (!carousel) return;
 
-            let currentIndex = 0;
-            const images = carousel.querySelectorAll('img');
-
-            function showImage(index) {
-                images.forEach((img, i) => {
-                    img.classList.remove('active');
-                    img.style.zIndex = 1; // Reset z-index
-                    if (i === index) {
-                        img.classList.add('active');
-                        img.style.zIndex = 2; // Bring active image to front
-                    }
-                });
+            if (heroCarouselInterval) {
+                clearInterval(heroCarouselInterval);
+                heroCarouselInterval = null;
             }
+
+            const images = carousel.querySelectorAll('img');
+            if (images.length <= 1) {
+                if (images[0]) {
+                    images[0].classList.add('active');
+                    images[0].classList.remove('exit');
+                }
+                return; // Single image remains perfectly steady with zero jitter!
+            }
+
+            let currentIndex = 0;
+            images.forEach((img, idx) => {
+                if (idx === 0) {
+                    img.classList.add('active');
+                    img.classList.remove('exit');
+                } else {
+                    img.classList.remove('active');
+                    img.classList.remove('exit');
+                }
+            });
 
             function nextImage() {
+                const prev = currentIndex;
                 currentIndex = (currentIndex + 1) % images.length;
-                showImage(currentIndex);
+                if (prev === currentIndex) return;
+
+                images[prev].classList.remove('active');
+                images[prev].classList.add('exit');
+                images[currentIndex].classList.add('active');
+                images[currentIndex].classList.remove('exit');
+
+                setTimeout(() => {
+                    if (images[prev]) images[prev].classList.remove('exit');
+                }, 1000);
             }
 
-            showImage(currentIndex);
-            // Clear previous interval if any
-            if (carousel.dataset.intervalId) clearInterval(carousel.dataset.intervalId);
-            carousel.dataset.intervalId = setInterval(nextImage, 3000); // Change image every 3 seconds
+            heroCarouselInterval = setInterval(nextImage, 6000);
         }
 
         function initSpecialOfferCarousel() {
@@ -1481,7 +1659,11 @@ function doExit() {
             document.getElementById('detailBreadcrumb').textContent = product.name;
 
             // Populate main image, vendor, name, prices, description
-            document.getElementById('pdImg').style.backgroundImage = `url('${product.image}')`;
+            const pdImgEl = document.getElementById('pdImg');
+            if (pdImgEl) {
+                pdImgEl.innerHTML = `<img src="${product.image || 'logo.png'}" alt="${product.name}" onerror="this.onerror=null;this.src='logo.png';" loading="eager">`;
+                pdImgEl.style.backgroundImage = 'none';
+            }
             document.getElementById('pdVendor').textContent = `Vendor: ${product.vendor}`;
             document.getElementById('pdName').textContent = product.name;
             document.getElementById('pdPrice').textContent = formatPrice(product.price);
@@ -1854,7 +2036,7 @@ function doExit() {
                 <div class="container services-container" style="animation: fadeInUp 0.8s ease;">
                     <!-- Project 1 -->
                     <div class="project-horizontal-card">
-                        <img src="https://scontent.fmux1-1.fna.fbcdn.net/v/t39.30808-6/484018070_640331312080051_4784405304353724745_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=7b2446&_nc_ohc=qivD48UKsd8Q7kNvwECOa5b&_nc_oc=AdrTZrPNio1B-krYkts0MsLMD69dB2F_ICxL__LxWhreIbvf3rkRXvayLUTq0LwnKAo&_nc_zt=23&_nc_ht=scontent.fmux1-1.fna&_nc_gid=eEaBrWDhI6Y19YPuBaF9vg&_nc_ss=7a389&oh=00_Af3N8w5dP4Jdn9wHZtse6KPxGpyy92QDO9MkFyDt8fVtgg&oe=69D32104" alt="Residential Solar Installation Multan">
+                        <img src="assets/images/services/residential.png" alt="Residential Solar Installation Multan">
                         <div class="project-horizontal-info">
                             <span class="tag">Residential</span>
                             <h3>10kW Premium Home Solution</h3>
@@ -1864,7 +2046,7 @@ function doExit() {
 
                     <!-- Project 2 -->
                     <div class="project-horizontal-card">
-                        <img src="https://scontent.fmux1-1.fna.fbcdn.net/v/t39.30808-6/476805749_617770507669465_6322843823165756438_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=106&ccb=1-7&_nc_sid=13d280&_nc_ohc=3SG5CmOSMewQ7kNvwHcRbtr&_nc_oc=AdqwItMUCSMGvivSvTNqXqKc4CaQ-Yvok-Y3ivHN0n_gduTiUBqMTY36O3NerR0oOHI&_nc_zt=23&_nc_ht=scontent.fmux1-1.fna&_nc_gid=lePWULGCvpILG9W1BDS3uw&_nc_ss=7a389&oh=00_Af3PSTefHfKE09ZzPlF1VRAIEDVZuwtv7vAv_m40cp27QA&oe=69D3048B" alt="Industrial Solar Project Pakistan">
+                        <img src="assets/images/services/industrial.png" alt="Industrial Solar Project Pakistan">
                         <div class="project-horizontal-info">
                             <span class="tag">Industrial</span>
                             <h3>50kW Grid-Tied System</h3>
@@ -1874,7 +2056,7 @@ function doExit() {
 
                     <!-- Project 3 -->
                     <div class="project-horizontal-card">
-                        <img src="https://scontent.fmux1-1.fna.fbcdn.net/v/t39.30808-6/472371558_592258310220685_4674502125387108748_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=7b2446&_nc_ohc=D1nTpPPfygcQ7kNvwHvI_FC&_nc_oc=Adq2b-l8J_flDsMRL8C_hB7_JzCKuLcBFVPI011MVkHwrS_X1G9Mz0VO3h_4AjrtakU&_nc_zt=23&_nc_ht=scontent.fmux1-1.fna&_nc_gid=lcEEMkbldpkbfxsYK7S6dg&_nc_ss=7a389&oh=00_Af3Xw_WdXBPS5uATFfEcI-_mtzpfoO5ZoMUniqh1Yguv8A&oe=69D300E6" alt="Agricultural Solar Tube Well">
+                        <img src="assets/images/services/agricultural.png" alt="Agricultural Solar Tube Well">
                         <div class="project-horizontal-info">
                             <span class="tag">Agricultural</span>
                             <h3>Solar Water Pumping System</h3>
@@ -1884,7 +2066,7 @@ function doExit() {
 
                     <!-- Project 4 -->
                     <div class="project-horizontal-card">
-                        <img src="https://scontent.fmux1-1.fna.fbcdn.net/v/t39.30808-6/476126897_615440677902448_317776298442185842_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=13d280&_nc_ohc=R-H98zhqUqIQ7kNvwFFbpIk&_nc_oc=AdqfVvAIsawaAsIpK7tCDzwlQX3x1JC1e7BUlhiJDeSXDqxBmKpozEqwfVZ_1ttfAUE&_nc_zt=23&_nc_ht=scontent.fmux1-1.fna&_nc_gid=Z7bZ_txOA_xIwYMuQ9SEdQ&_nc_ss=7a389&oh=00_Af3w7okzCEFCJZkpuO0OyM98ER1QYv9voslSSxJYhDHtSg&oe=69D32D78" alt="Commercial Solar Installation Backup">
+                        <img src="assets/images/services/commercial.webp" alt="Commercial Solar Installation Backup">
                         <div class="project-horizontal-info">
                             <span class="tag">Commercial</span>
                             <h3>Corporate Backup Infrastructure</h3>
@@ -1939,7 +2121,7 @@ function renderAboutPage() {
                                     background:#0A3080;
                                 ">
                                     <img
-                                        src="https://scontent.flhe2-4.fna.fbcdn.net/v/t1.6435-9/49347963_1886595574799964_765262090091888640_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeGncmVH_MM5A8_lbXNOQpQhigiOgD-n8SCKCI6AP6fxIF03sMNb5X4P8DEXRsKTIanA4ZxAkePnSXzdD2d9pdo3&_nc_ohc=KNO_5cqmvikQ7kNvwFxg1l6&_nc_oc=AdoLmZ1USgi-jqFLWgjmkM3qXUfiOEkQzaBV0lyfyN0dmWTWnVbntfN6j8OCdqo6odM3xxmR-1Nuajy-G0Bg7470&_nc_zt=23&_nc_ht=scontent.flhe2-4.fna&_nc_gid=h_zHq0E99Ev8gEh_nMfZaQ&_nc_ss=7a32e&oh=00_Afx7aFqOjK9x10lHgNyZjAtjmg_6ul2wAhKNfHiYkTDDiQ&oe=69EAD243"
+                                        src="assets/images/ceo-hamid.png"
                                         alt="Engr. Muhammad Hamid CEO"
                                         style="width:100%;height:100%;object-fit:cover;display:block;"
                                         onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><rect width=%2280%22 height=%2280%22 fill=%22%231565C0%22/><text x=%2240%22 y=%2248%22 text-anchor=%22middle%22 font-size=%2228%22 fill=%22white%22>👤</text></svg>'"
